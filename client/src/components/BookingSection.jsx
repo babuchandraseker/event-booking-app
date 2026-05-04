@@ -4,12 +4,16 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const BOOKED_DAYS = new Set([3, 7, 14, 18, 22, 25]);
 const TIME_SLOTS = ['10:00 AM','11:30 AM','01:00 PM','02:30 PM','04:00 PM','05:30 PM','07:00 PM','08:30 PM'];
 const BOOKED_SLOTS = new Set(['01:00 PM','04:00 PM']);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export default function BookingSection() {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [contact, setContact] = useState({ name: '', phone: '', email: '' });
+  const [bookingStatus, setBookingStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -29,6 +33,59 @@ export default function BookingSection() {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleContactChange = (field) => (e) => {
+    setContact((current) => ({ ...current, [field]: e.target.value }));
+  };
+
+  const handleReserve = async () => {
+    if (!selectedDay || !selectedTime) {
+      setBookingStatus({ type: 'error', message: 'Please select a date and available time slot.' });
+      return;
+    }
+
+    if (!contact.name.trim() || !contact.phone.trim()) {
+      setBookingStatus({ type: 'error', message: 'Please enter your name and phone number.' });
+      return;
+    }
+
+    const eventDate = new Date(year, month, selectedDay).toISOString().slice(0, 10);
+    setIsSubmitting(true);
+    setBookingStatus({ type: '', message: '' });
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: contact.name.trim(),
+          phone: contact.phone.trim(),
+          email: contact.email.trim() || undefined,
+          eventType: 'Private event',
+          eventDate,
+          eventTime: selectedTime,
+          packageId: 'signature',
+          guestCount: 2,
+          notes: 'Reserved from website booking calendar',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Booking could not be created.');
+      }
+
+      setBookingStatus({ type: 'success', message: 'Reserved successfully. We will contact you shortly.' });
+      setContact({ name: '', phone: '', email: '' });
+      setSelectedDay(null);
+      setSelectedTime(null);
+    } catch (error) {
+      setBookingStatus({ type: 'error', message: error.message || 'Please check that the backend server is running.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Render calendar cells
@@ -155,12 +212,49 @@ export default function BookingSection() {
             <div style={{ background: 'rgba(201,168,76,0.07)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '14px 16px', marginBottom: '20px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               💳 30% advance (₹1,799) to confirm. Remaining on the day.
             </div>
+            <div className="booking-contact">
+              <label className="form-label" htmlFor="booking-name">Name</label>
+              <input
+                id="booking-name"
+                className="form-control"
+                type="text"
+                value={contact.name}
+                onChange={handleContactChange('name')}
+                placeholder="Your name"
+              />
+              <label className="form-label" htmlFor="booking-phone">Phone</label>
+              <input
+                id="booking-phone"
+                className="form-control"
+                type="tel"
+                value={contact.phone}
+                onChange={handleContactChange('phone')}
+                placeholder="Your phone number"
+              />
+              <label className="form-label" htmlFor="booking-email">Email</label>
+              <input
+                id="booking-email"
+                className="form-control"
+                type="email"
+                value={contact.email}
+                onChange={handleContactChange('email')}
+                placeholder="Optional"
+              />
+            </div>
             <button
+              type="button"
               className="btn btn-primary"
               style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '16px 32px' }}
+              onClick={handleReserve}
+              disabled={isSubmitting}
             >
-              <span>✦</span> Reserve Now
+              <span>✦</span> {isSubmitting ? 'Reserving...' : 'Reserve Now'}
             </button>
+            {bookingStatus.message && (
+              <p className={`booking-status ${bookingStatus.type}`}>
+                {bookingStatus.message}
+              </p>
+            )}
             <p className="summary-note">
               By reserving, you agree to our cancellation policy. Free cancellation up to 48 hours before the event.
             </p>

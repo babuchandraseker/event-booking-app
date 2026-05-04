@@ -1866,6 +1866,37 @@ img, video { max-width: 100%; display: block; }
   color: var(--gold-light);
 }
 
+.booking-contact {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.booking-contact .form-label {
+  margin: 8px 0 0;
+}
+
+.booking-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.booking-status.success {
+  border: 1px solid rgba(90, 180, 120, 0.45);
+  background: rgba(90, 180, 120, 0.12);
+  color: #9fe0b0;
+}
+
+.booking-status.error {
+  border: 1px solid rgba(220, 95, 95, 0.45);
+  background: rgba(220, 95, 95, 0.12);
+  color: #ffaaaa;
+}
+
 .summary-note {
   font-size: 0.7rem;
   color: var(--text-muted);
