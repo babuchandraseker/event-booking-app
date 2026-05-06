@@ -3,6 +3,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 const createHttpError = require("../utils/httpError");
 const { assertNumber, requireFields } = require("../utils/validation");
 const { notifyAdminAboutBooking } = require("../services/notificationService");
+const { appendBookingToSheet } = require("../services/bookingSheetService");
 
 const bookings = createRepository("bookings");
 
@@ -42,6 +43,12 @@ const createBooking = asyncHandler(async (req, res) => {
   });
 
   await notifyAdminAboutBooking(booking);
+
+  try {
+    await appendBookingToSheet(booking);
+  } catch (error) {
+    console.error("Booking Excel/CSV sync failed:", error.message);
+  }
 
   res.status(201).json({ success: true, data: booking });
 });

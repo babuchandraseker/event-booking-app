@@ -1,5 +1,6 @@
 const createRepository = require("../services/repository");
 const asyncHandler = require("../middleware/asyncHandler");
+const { buildBookingsExcelHtml } = require("../services/bookingSheetService");
 
 const bookings = createRepository("bookings");
 const contactMessages = createRepository("contactMessages");
@@ -49,7 +50,21 @@ const getAdminDashboard = asyncHandler(async (req, res) => {
   });
 });
 
+const exportAdminBookings = asyncHandler(async (req, res) => {
+  const allBookings = await bookings.list();
+  const excelHtml = buildBookingsExcelHtml(sortNewestFirst(allBookings));
+  const date = new Date().toISOString().slice(0, 10);
+
+  res.setHeader("Content-Type", "application/vnd.ms-excel; charset=utf-8");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="bookings-${date}.xls"`
+  );
+  res.send(excelHtml);
+});
+
 module.exports = {
+  exportAdminBookings,
   getAdminDashboard,
   listAdminBookings,
 };

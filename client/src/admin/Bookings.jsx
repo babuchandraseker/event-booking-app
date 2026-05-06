@@ -1,16 +1,163 @@
-import { useState, useMemo, Fragment } from 'react'
+import { useState, useMemo, Fragment, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import { StatusBadge, PaymentBadge } from '../components/Badges'
-import { bookings as initial } from '../data/bookings'
 
 const STATUS_OPTIONS = ['all', 'pending', 'confirmed', 'completed', 'cancelled']
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
+const ADMIN_API_KEY = import.meta.env.VITE_ADMIN_API_KEY || 'local-admin-123'
+const PACKAGE_AMOUNTS = {
+  signature: 5999,
+  romantic: 4999,
+  birthday: 6499,
+  surprise: 5999,
+}
+
+function cellText(value) {
+  return Array.isArray(value)
+    ? value.join(', ')
+    : value === null || value === undefined
+      ? ''
+      : String(value)
+}
+
+function htmlCell(value) {
+  return cellText(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+}
+
+function downloadExcel(filename, content) {
+  const blob = new Blob([content], { type: 'application/vnd.ms-excel;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
+function formatPackageName(packageId) {
+  if (!packageId) return 'Private event'
+  return String(packageId)
+    .replaceAll('-', ' ')
+    .replace(/\b\w/g, char => char.toUpperCase())
+}
+
+function normalizeBooking(booking) {
+  const packageId = booking.packageId || ''
+
+  return {
+    ...booking,
+    id: booking.id || '',
+    name: booking.name || '',
+    phone: booking.phone || '',
+    theme: booking.theme || booking.eventType || formatPackageName(packageId),
+    date: booking.date || booking.eventDate || '',
+    slot: booking.slot || booking.eventTime || '',
+    guests: booking.guests ?? booking.guestCount ?? 1,
+    amount: booking.amount ?? PACKAGE_AMOUNTS[packageId] ?? 0,
+    paymentStatus: booking.paymentStatus === 'not_started' ? 'unpaid' : (booking.paymentStatus || 'unpaid'),
+    status: booking.status || 'pending',
+    addons: Array.isArray(booking.addons) ? booking.addons : [],
+    notes: booking.notes || '',
+  }
+}
+
+function buildLocalBookingsExcel(bookings) {
+  const headers = [
+    'Booking ID',
+    'Name',
+    'Phone',
+    'Theme',
+    'Date',
+    'Slot',
+    'Guests',
+    'Amount',
+    'Payment Status',
+    'Status',
+    'Add-ons',
+    'Notes',
+  ]
+
+  const rows = bookings.map(b => [b.id, b.name, b.phone, b.theme, b.date, b.slot, b.guests, b.amount, b.paymentStatus, b.status, b.addons, b.notes])
+  const headerHtml = headers.map(h => `<th>${htmlCell(h)}</th>`).join('')
+  const rowsHtml = rows
+    .map(row => `<tr>${row.map(value => `<td class="text">${htmlCell(value)}</td>`).join('')}</tr>`)
+    .join('')
+
+  return `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    table { border-collapse: collapse; font-family: Calibri, Arial, sans-serif; font-size: 11pt; }
+    th { background: #f2f2f2; font-weight: 700; }
+    th, td { border: 1px solid #d9d9d9; padding: 6px 8px; mso-number-format: "\\@"; white-space: nowrap; }
+    .text { mso-number-format: "\\@"; }
+  </style>
+</head>
+<body>
+  <table>
+    <thead><tr>${headerHtml}</tr></thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>
+</body>
+</html>`
+}
 
 export default function Bookings() {
-  const [bookings, setBookings] = useState(initial)
+  const [bookings, setBookings] = useState([])
   const [statusFilter, setStatusFilter] = useState('all')
   const [dateFilter, setDateFilter] = useState('')
   const [search, setSearch] = useState('')
   const [expanded, setExpanded] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadBookings() {
+      setIsLoading(true)
+      setError('')
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/bookings`, {
+          headers: {
+            'x-admin-api-key': ADMIN_API_KEY,
+          },
+        })
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Could not load bookings.')
+        }
+
+        if (!ignore) {
+          setBookings(result.data.map(normalizeBooking))
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err.message || 'Could not load bookings.')
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadBookings()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   const filtered = useMemo(() => {
     return bookings.filter(b => {
@@ -22,14 +169,55 @@ export default function Bookings() {
     })
   }, [bookings, statusFilter, dateFilter, search])
 
-  function updateStatus(id, newStatus) {
+  async function updateStatus(id, newStatus) {
+    const previous = bookings
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b))
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      })
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Could not update booking status.')
+      }
+
+      setBookings(prev => prev.map(b => b.id === id ? normalizeBooking(result.data) : b))
+    } catch (err) {
+      setBookings(previous)
+      alert(err.message || 'Could not update booking status.')
+    }
   }
 
   function clearFilters() {
     setStatusFilter('all')
     setDateFilter('')
     setSearch('')
+  }
+
+  async function exportExcel() {
+    const filename = `bookings-${new Date().toISOString().slice(0, 10)}.xls`
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/bookings/export`, {
+        headers: {
+          'x-admin-api-key': ADMIN_API_KEY,
+        },
+      })
+
+      if (response.ok) {
+        const excel = await response.text()
+        downloadExcel(filename, excel)
+        return
+      }
+    } catch {
+      // Fall back to the bookings already loaded in the admin table.
+    }
+
+    downloadExcel(filename, buildLocalBookingsExcel(filtered))
   }
 
   const hasFilters = statusFilter !== 'all' || dateFilter || search
@@ -45,6 +233,9 @@ export default function Bookings() {
               <h1 style={styles.pageTitle}>Bookings</h1>
               <p style={styles.pageSub}>{filtered.length} of {bookings.length} bookings</p>
             </div>
+            <button onClick={exportExcel} style={styles.exportBtn}>
+              Export Excel
+            </button>
           </div>
 
           {/* Filters bar */}
@@ -96,7 +287,15 @@ export default function Bookings() {
 
           {/* Table */}
           <div style={styles.tableWrap}>
-            {filtered.length === 0 ? (
+            {isLoading ? (
+              <div style={styles.empty}>
+                <p>Loading bookings...</p>
+              </div>
+            ) : error ? (
+              <div style={styles.empty}>
+                <p>{error}</p>
+              </div>
+            ) : filtered.length === 0 ? (
               <div style={styles.empty}>
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -131,7 +330,7 @@ export default function Bookings() {
                           <span style={styles.themeCell}>{b.theme}</span>
                         </td>
                         <td style={styles.td}>
-                          <div style={styles.dateVal}>{new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                          <div style={styles.dateVal}>{b.date ? new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</div>
                           <div style={styles.slotVal}>{b.slot}</div>
                         </td>
                         <td style={{ ...styles.td, textAlign: 'center', color: 'var(--text-secondary)', fontSize: 13 }}>
@@ -338,6 +537,18 @@ const styles = {
     fontSize: 12.5,
     cursor: 'pointer',
     fontFamily: 'var(--font-body)',
+  },
+  exportBtn: {
+    background: 'var(--accent)',
+    border: '1px solid var(--accent)',
+    color: 'var(--bg-1)',
+    borderRadius: 'var(--radius-sm)',
+    padding: '9px 16px',
+    fontSize: 12.5,
+    fontWeight: 700,
+    cursor: 'pointer',
+    fontFamily: 'var(--font-body)',
+    whiteSpace: 'nowrap',
   },
   tableWrap: {
     background: 'var(--bg-2)',

@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  exportAdminBookings,
   getAdminDashboard,
   listAdminBookings,
 } = require("../controllers/adminController");
@@ -11,5 +12,6 @@ router.use(requireAdminApiKey);
 
 router.get("/dashboard", getAdminDashboard);
 router.get("/bookings", listAdminBookings);
+router.get("/bookings/export", exportAdminBookings);
 
 module.exports = router;
