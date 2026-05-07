@@ -6,15 +6,17 @@ import HeroSection from "./components/HeroSection";
 import ThemeSection from "./components/ThemeSection";
 import CinematicModal from "./components/CinematicModal";
 import CelebrationsSection from "./components/CelebrationsSection";
-import PricingSection from "./components/PricingSection";
-import PriceEstimator from "./components/PriceEstimator";
 import BookingSection from "./components/BookingSection";
-import AddonsSection from "./components/AddonsSection";
+import PackagesSection from "./components/PackagesSection";
 import HowItWorks from "./components/HowItWorks";
 import TrustSection from "./components/TrustSection";
 import MemoryGallery from "./components/MemoryGallery";
 import CtaSection from "./components/CtaSection";
 import Footer from "./components/Footer";
+
+import RomanticScrollytelling from "./components/RomanticScrollytelling";
+import BirthdayScrollytelling from "./components/BirthdayScrollytelling";
+import SurpriseScrollytelling from "./components/SurpriseScrollytelling";
 
 import Login from "./admin/Login";
 import Dashboard from "./admin/Dashboard";
@@ -36,12 +38,10 @@ function HomePage() {
 
       <main>
         <HeroSection />
-        <ThemeSection onOpenModal={setActiveTheme} />
+        <ThemeSection />
         <CelebrationsSection />
-        <PricingSection />
-        <PriceEstimator />
+        <PackagesSection />
         <BookingSection />
-        <AddonsSection />
         <HowItWorks />
         <TrustSection />
         <MemoryGallery />
@@ -75,6 +75,10 @@ export default function App() {
       <Routes>
 
         <Route path="/" element={<HomePage />} />
+
+        <Route path="/experience/romantic" element={<RomanticScrollytelling />} />
+        <Route path="/experience/birthday" element={<BirthdayScrollytelling />} />
+        <Route path="/experience/surprise" element={<SurpriseScrollytelling />} />
 
         <Route path={`${BASE}/login`} element={<Login />} />
 
