@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const celebItems = [
   { caption: 'Her reaction was priceless 💖', type: 'image', img: '/themes/romantic/romantic1.jpg', alt: 'Romantic surprise moment', fallback: '💑' },
@@ -16,9 +16,26 @@ export default function CelebrationsSection() {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const openModal = (i) => { setCurrentIndex(i); setModalOpen(true); document.body.style.overflow = 'hidden'; };
-  const closeModal = () => { setModalOpen(false); document.body.style.overflow = ''; };
-  const navigate = (dir) => setCurrentIndex(prev => (prev + dir + celebItems.length) % celebItems.length);
+  const openModal = useCallback((i) => {
+    setCurrentIndex(i);
+    setModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+  }, []);
+
+  const navigate = useCallback((dir) => {
+    setCurrentIndex((prev) => (prev + dir + celebItems.length) % celebItems.length);
+  }, []);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [modalOpen]);
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -29,7 +46,7 @@ export default function CelebrationsSection() {
     };
     document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
-  }, [modalOpen]);
+  }, [modalOpen, closeModal, navigate]);
 
   const currentItem = celebItems[currentIndex];
 

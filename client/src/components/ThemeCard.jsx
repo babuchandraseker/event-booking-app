@@ -1,4 +1,7 @@
-export default function ThemeCard({ theme, onOpen, revealDelay }) {
+import { useNavigate } from 'react-router-dom';
+
+export default function ThemeCard({ theme, revealDelay }) {
+  const navigate = useNavigate();
   const { key, tag, emoji, img, title, desc, price, priceSub, features, mediaStyle } = theme;
 
   return (
@@ -8,8 +11,8 @@ export default function ThemeCard({ theme, onOpen, revealDelay }) {
       role="button"
       tabIndex={0}
       aria-label={`View ${title} theme details`}
-      onClick={() => onOpen(key)}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onOpen(key)}
+      onClick={() => navigate(`/experience/${key}`)}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && navigate(`/experience/${key}`)}
     >
       <div className="theme-card-media">
         {img ? (
@@ -35,7 +38,11 @@ export default function ThemeCard({ theme, onOpen, revealDelay }) {
           <div className="theme-card-features">
             {features.map(f => <span key={f} className="feature-chip">{f}</span>)}
           </div>
-          <button className="btn btn-ghost" data-theme={key} onClick={e => { e.stopPropagation(); onOpen(key); }}>
+          <button
+            className="btn btn-ghost"
+            data-theme={key}
+            onClick={(e) => { e.stopPropagation(); navigate(`/experience/${key}`); }}
+          >
             Experience
           </button>
         </div>

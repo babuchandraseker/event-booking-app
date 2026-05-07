@@ -92,7 +92,13 @@ export default function CinematicModal({ themeKey, onClose }) {
         audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
       }
       // Stop existing
-      oscillatorsRef.current.forEach(o => { try { o.stop(); } catch(e){} });
+      oscillatorsRef.current.forEach((o) => {
+        try {
+          o.stop();
+        } catch {
+          // ignore
+        }
+      });
       oscillatorsRef.current = [];
 
       gainNodeRef.current = audioCtxRef.current.createGain();
@@ -110,16 +116,36 @@ export default function CinematicModal({ themeKey, onClose }) {
         osc.start();
         oscillatorsRef.current.push(osc);
       });
-    } catch(e) {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   const stopAmbientAudio = useCallback(() => {
-    oscillatorsRef.current.forEach(o => { try { o.stop(); } catch(e){} });
+    oscillatorsRef.current.forEach((o) => {
+      try {
+        o.stop();
+      } catch {
+        // ignore
+      }
+    });
     oscillatorsRef.current = [];
     if (gainNodeRef.current && audioCtxRef.current) {
       gainNodeRef.current.gain.linearRampToValueAtTime(0, audioCtxRef.current.currentTime + 0.5);
     }
   }, []);
+
+  const handleClose = useCallback(() => {
+    stopParticles();
+    stopAmbientAudio();
+    setAudioEnabled(false);
+    if (cineVideoRef.current) {
+      cineVideoRef.current.pause();
+      cineVideoRef.current.currentTime = 0;
+    }
+    document.body.style.overflow = '';
+    onClose();
+  }, [stopParticles, stopAmbientAudio, onClose]);
 
   useEffect(() => {
     if (!themeKey) return;
@@ -135,19 +161,7 @@ export default function CinematicModal({ themeKey, onClose }) {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  });
-
-  const handleClose = useCallback(() => {
-    stopParticles();
-    stopAmbientAudio();
-    setAudioEnabled(false);
-    if (cineVideoRef.current) {
-      cineVideoRef.current.pause();
-      cineVideoRef.current.currentTime = 0;
-    }
-    document.body.style.overflow = '';
-    onClose();
-  }, [stopParticles, stopAmbientAudio, onClose]);
+  }, [handleClose]);
 
   const toggleAudio = () => {
     if (!audioEnabled) {
