@@ -18,6 +18,16 @@ const OCCASIONS = [
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
+const PACKAGE_BY_OCCASION = {
+  Birthday: 'birthday',
+  'Romantic Date': 'romantic',
+  Anniversary: 'romantic',
+  Proposal: 'romantic',
+  'Surprise Party': 'surprise',
+};
+
+const getPackageId = (occasion) => PACKAGE_BY_OCCASION[occasion] || 'signature';
+
 export default function BookingSection() {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -25,6 +35,7 @@ export default function BookingSection() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [form, setForm] = useState({
     bookingName: '',
+    phone: '',
     fromLocation: '',
     occasion: '',
     specialPersonName: '',
@@ -43,7 +54,7 @@ export default function BookingSection() {
   const handleDayClick = (d) => {
     const clickedDate = new Date(year, month, d);
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    if (clickedDate < todayStart) return;
+    if (clickedDate <= todayStart) return;
     setSelectedDay(d);
     setErrors((prev) => ({ ...prev, date: '' }));
   };
@@ -56,6 +67,11 @@ export default function BookingSection() {
   const validate = () => {
     const errs = {};
     if (!form.bookingName.trim()) errs.bookingName = 'Name of booking is required';
+    if (!form.phone.trim()) {
+      errs.phone = 'Phone number is required';
+    } else if (form.phone.replace(/\D/g, '').length < 10) {
+      errs.phone = 'Enter a valid phone number';
+    }
     if (!form.fromLocation.trim()) errs.fromLocation = 'Location is required';
     if (!selectedDay) errs.date = 'Please select a date';
     if (!selectedSlot) errs.slot = 'Please select a time slot';
@@ -79,13 +95,18 @@ export default function BookingSection() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.bookingName.trim(),
-          fromLocation: form.fromLocation.trim(),
+          phone: form.phone.trim(),
+          eventType: form.occasion,
           eventDate,
           eventTime: slotInfo?.label,
-          slotId: selectedSlot,
-          occasion: form.occasion,
-          specialPersonName: form.specialPersonName.trim(),
-          notes: form.notes.trim() || undefined,
+          packageId: getPackageId(form.occasion),
+          guestCount: 1,
+          location: form.fromLocation.trim(),
+          addons: [],
+          notes: [
+            `Special person: ${form.specialPersonName.trim()}`,
+            form.notes.trim(),
+          ].filter(Boolean).join('\n') || undefined,
         }),
       });
 
@@ -96,7 +117,7 @@ export default function BookingSection() {
       }
 
       setBookingStatus({ type: 'success', message: '🎉 Reserved successfully! We will contact you shortly to confirm.' });
-      setForm({ bookingName: '', fromLocation: '', occasion: '', specialPersonName: '', notes: '' });
+      setForm({ bookingName: '', phone: '', fromLocation: '', occasion: '', specialPersonName: '', notes: '' });
       setSelectedDay(null);
       setSelectedSlot(null);
     } catch (error) {
@@ -118,7 +139,7 @@ export default function BookingSection() {
     const date = new Date(year, month, d);
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-    const isPast = date < todayStart;
+    const isPast = date <= todayStart;
     const isSelected = selectedDay === d;
 
     let cls = 'cal-day';
@@ -191,6 +212,21 @@ export default function BookingSection() {
                   placeholder="e.g. Chennai, Tamil Nadu"
                 />
                 {errors.fromLocation && <span className="bk-err-msg">{errors.fromLocation}</span>}
+              </div>
+
+              <div className="bk-field">
+                <label className="form-label" htmlFor="bk-phone">
+                  Phone <span className="bk-req">*</span>
+                </label>
+                <input
+                  id="bk-phone"
+                  className={`form-control${errors.phone ? ' form-error' : ''}`}
+                  type="tel"
+                  value={form.phone}
+                  onChange={handleFieldChange('phone')}
+                  placeholder="e.g. 9876543210"
+                />
+                {errors.phone && <span className="bk-err-msg">{errors.phone}</span>}
               </div>
 
               {/* Occasion */}
@@ -297,6 +333,7 @@ export default function BookingSection() {
             <h3 className="summary-title">Your Booking Summary</h3>
             {[
               { label: 'Booking Name', value: form.bookingName || '—' },
+              { label: 'Phone', value: form.phone || '—' },
               { label: 'Location', value: form.fromLocation || '—' },
               { label: 'Date', value: summaryDate },
               { label: 'Time Slot', value: summarySlot },
