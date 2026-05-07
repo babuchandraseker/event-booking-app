@@ -4,6 +4,17 @@ const store = {
   bookings: [],
   packages: [
     {
+      id: "signature",
+      title: "Signature",
+      price: 5999,
+      duration: "2 hours",
+      maxGuests: 2,
+      description: "Signature private event package.",
+      active: true,
+      createdAt: now(),
+      updatedAt: now(),
+    },
+    {
       id: "pkg-romantic-dinner",
       title: "Romantic Dinner",
       price: 4999,

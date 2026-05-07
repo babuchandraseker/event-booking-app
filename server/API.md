@@ -34,13 +34,27 @@ If `BOOKING_NOTIFICATION_WEBHOOK` is configured, the backend also sends a POST n
 
 ## Admin Dashboard
 
+Create an admin token:
+
+```http
+POST /admin/login
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "admin@velvetnights.in",
+  "password": "admin123"
+}
+```
+
 Admin routes require this header:
 
 ```http
-x-admin-api-key: local-admin-123
+Authorization: Bearer <jwt-token>
 ```
 
-Use a stronger key in production.
+Set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `JWT_SECRET` in production.
 
 ```http
 GET /admin/dashboard
@@ -78,3 +92,27 @@ Allowed statuses:
 ```text
 pending, confirmed, cancelled, completed
 ```
+
+## Update Booking
+
+Admin token required.
+
+```http
+PATCH /bookings/:id
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+```json
+{
+  "eventDate": "2026-05-29",
+  "eventTime": "08:30 PM",
+  "guestCount": 4,
+  "packageId": "signature",
+  "addons": ["addon-cake"],
+  "notes": "Updated notes",
+  "location": "Chennai"
+}
+```
+
+Booking creation and updates validate phone, email, future event date, positive guest count, package ID, and add-on IDs. Pending/confirmed bookings cannot share the same date, time, package, and location.

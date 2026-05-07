@@ -3,6 +3,8 @@ const admin = require("firebase-admin");
 let db = null;
 
 const hasFirebaseConfig =
+  process.env.NODE_ENV !== "test" &&
+  process.env.FIREBASE_DISABLED !== "true" &&
   process.env.FIREBASE_PROJECT_ID &&
   process.env.FIREBASE_CLIENT_EMAIL &&
   process.env.FIREBASE_PRIVATE_KEY;

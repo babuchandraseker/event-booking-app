@@ -23,7 +23,7 @@ import ProtectedRoute from "./admin/ProtectedRoute";
 
 import { useReveal } from "./hooks/useReveal";
 
-const BASE = "/control-panel-7x92";
+const BASE = "/control-panel-7x9";
 
 function HomePage() {
   const [activeTheme, setActiveTheme] = useState(null);
@@ -70,11 +70,14 @@ function HomePage() {
 }
 
 export default function App() {
+  const path = window.location.pathname;
+  const isAdminPath = path === BASE || path.startsWith(`${BASE}/`);
+
   return (
     <BrowserRouter>
       <Routes>
 
-        <Route path="/" element={<HomePage />} />
+        {!isAdminPath && <Route path="*" element={<HomePage />} />}
 
         <Route path={`${BASE}/login`} element={<Login />} />
 

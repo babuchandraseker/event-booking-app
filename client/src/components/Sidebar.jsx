@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 
-const BASE = '/control-panel-7x92'
+const BASE = '/control-panel-7x9'
 
 const NAV = [
   {
@@ -57,7 +57,8 @@ export default function Sidebar() {
 
   function handleLogout() {
     localStorage.removeItem('adminToken')
-    navigate('/control-panel-7x92/login')
+    localStorage.removeItem('adminUser')
+    navigate(`${BASE}/login`)
   }
 
   return (

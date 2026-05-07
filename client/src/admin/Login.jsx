@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
+const ADMIN_BASE = '/control-panel-7x9'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -11,11 +15,11 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('adminToken')) {
-      navigate('/control-panel-7x92/dashboard', { replace: true })
+      navigate(`${ADMIN_BASE}/dashboard`, { replace: true })
     }
   }, [navigate])
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
 
@@ -26,15 +30,27 @@ export default function Login() {
 
     setLoading(true)
 
-    setTimeout(() => {
-      if (email === 'admin@velvetnights.in' && password === 'admin123') {
-        localStorage.setItem('adminToken', 'demo-token')
-        navigate('/control-panel-7x92/dashboard', { replace: true })
-      } else {
-        setError('Invalid credentials. Try admin@velvetnights.in / admin123')
-        setLoading(false)
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Invalid admin credentials.')
       }
-    }, 800)
+
+      localStorage.setItem('adminToken', result.data.token)
+      localStorage.setItem('adminUser', JSON.stringify(result.data.admin))
+
+      const redirectTo = location.state?.from?.pathname || `${ADMIN_BASE}/dashboard`
+      navigate(redirectTo, { replace: true })
+    } catch (err) {
+      setError(err.message || 'Could not sign in. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (

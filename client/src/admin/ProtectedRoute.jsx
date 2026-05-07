@@ -5,7 +5,7 @@ export default function ProtectedRoute({ children }) {
   const location = useLocation()
 
   if (!token) {
-    return <Navigate to="/control-panel-7x92/login" state={{ from: location }} replace />
+    return <Navigate to="/control-panel-7x9/login" state={{ from: location }} replace />
   }
 
   return children

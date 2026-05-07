@@ -4,7 +4,6 @@ import { StatusBadge, PaymentBadge } from '../components/Badges'
 
 const STATUS_OPTIONS = ['all', 'pending', 'confirmed', 'completed', 'cancelled']
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
-const ADMIN_API_KEY = import.meta.env.VITE_ADMIN_API_KEY || 'local-admin-123'
 const PACKAGE_AMOUNTS = {
   signature: 5999,
   romantic: 4999,
@@ -121,6 +120,7 @@ export default function Bookings() {
 
   useEffect(() => {
     let ignore = false
+    const token = localStorage.getItem('adminToken')
 
     async function loadBookings() {
       setIsLoading(true)
@@ -129,7 +129,7 @@ export default function Bookings() {
       try {
         const response = await fetch(`${API_BASE_URL}/admin/bookings`, {
           headers: {
-            'x-admin-api-key': ADMIN_API_KEY,
+            Authorization: `Bearer ${token}`,
           },
         })
         const result = await response.json()
@@ -171,12 +171,16 @@ export default function Bookings() {
 
   async function updateStatus(id, newStatus) {
     const previous = bookings
+    const token = localStorage.getItem('adminToken')
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b))
 
     try {
       const response = await fetch(`${API_BASE_URL}/bookings/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ status: newStatus }),
       })
       const result = await response.json()
@@ -200,11 +204,12 @@ export default function Bookings() {
 
   async function exportExcel() {
     const filename = `bookings-${new Date().toISOString().slice(0, 10)}.xls`
+    const token = localStorage.getItem('adminToken')
 
     try {
       const response = await fetch(`${API_BASE_URL}/admin/bookings/export`, {
         headers: {
-          'x-admin-api-key': ADMIN_API_KEY,
+          Authorization: `Bearer ${token}`,
         },
       })
 
