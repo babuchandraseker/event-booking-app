@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const BASE_PRICES = { romantic: 4999, birthday: 6499, surprise: 5999, '': 0 };
 const GUEST_MULT = { '2': 1, '4': 1.2, '6': 1.4, '10': 1.6, '15': 2, '20+': 2.5 };

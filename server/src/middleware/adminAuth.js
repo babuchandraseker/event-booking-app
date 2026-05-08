@@ -1,19 +1,24 @@
+const jwt = require("jsonwebtoken");
 const createHttpError = require("../utils/httpError");
 
-const requireAdminApiKey = (req, res, next) => {
-  const configuredKey = process.env.ADMIN_API_KEY;
+const getJwtSecret = () =>
+  process.env.JWT_SECRET || "local-dev-jwt-secret";
 
-  if (!configuredKey) {
-    throw createHttpError(500, "ADMIN_API_KEY is not configured");
+const requireAdminAuth = (req, res, next) => {
+  const authHeader = req.header("authorization") || "";
+  const [scheme, token] = authHeader.split(" ");
+
+  if (scheme !== "Bearer" || !token) {
+    throw createHttpError(401, "Admin token is required");
   }
 
-  const providedKey = req.header("x-admin-api-key");
-
-  if (providedKey !== configuredKey) {
-    throw createHttpError(401, "Invalid admin API key");
+  try {
+    req.admin = jwt.verify(token, getJwtSecret());
+    next();
+  } catch {
+    throw createHttpError(401, "Invalid or expired admin token");
   }
-
-  next();
 };
 
-module.exports = requireAdminApiKey;
+module.exports = requireAdminAuth;
+module.exports.getJwtSecret = getJwtSecret;
