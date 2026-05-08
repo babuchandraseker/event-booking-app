@@ -31,8 +31,8 @@ export default function Navbar() {
     <>
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`} id="navbar" role="navigation" aria-label="Main navigation">
         <div className="navbar-inner">
-          <a href="#" className="nav-logo" aria-label="Velvet Nights Home" onClick={e => handleAnchorClick(e, '#home')}>
-            <span className="nav-logo-name">Velvet Nights</span>
+          <a href="#" className="nav-logo" aria-label="WonderOne-Suprises Home" onClick={e => handleAnchorClick(e, '#home')}>
+            <span className="nav-logo-name">WonderOne-Suprises</span>
             <span className="nav-logo-tagline">Private Event Studio</span>
           </a>
 

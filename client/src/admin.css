@@ -9,15 +9,15 @@
   --gold-light:     #f0d98c;
   --gold-dim:       rgba(201, 168, 76, 0.15);
   --gold-border:    rgba(201, 168, 76, 0.35);
-  --purple:         #7c3aed;
+  --purple:         #ed3ae4;
   --purple-light:   #a78bfa;
-  --purple-dim:     rgba(124, 58, 237, 0.1);
-  --purple-border:  rgba(124, 58, 237, 0.25);
+  --purple-dim:     #500050;
+  --purple-border:  #ffffff;
 
   /* Surfaces — PURPLE THEME */
-  --bg-main:        #2d1b69;       /* deep purple page background */
+  --bg-main:        #500050;      /* deep purple page background */
   --bg-card:        #ffffff;       /* white cards */
-  --bg-sidebar:     #1e1152;       /* darker purple sidebar */
+  --bg-sidebar:     #83007c;       /* darker purple sidebar */
   --bg-input:       #f5f3ff;
   --bg-muted:       #3d2b85;       /* muted purple for table headers etc */
   --bg-hover:       #3a2580;
@@ -27,10 +27,10 @@
   --secondary:      #d4af37;
 
   /* Text */
-  --text-main:      #1c1830;
-  --text-secondary: #4b4468;
-  --text-muted:     #8b82a8;
-  --text-on-gold:   #3d2a00;
+  --text-main:      #ffffff;
+  --text-secondary: #ffffff;
+  --text-muted:     #c224c2;
+  --text-on-gold:   #ffffff;
   --text-on-purple: #ffffff;
   --text-sidebar:   rgba(255, 255, 255, 0.75);
   --text-sidebar-active: #ffffff;

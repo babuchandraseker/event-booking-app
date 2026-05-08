@@ -162,7 +162,7 @@ export default function RomanticScrollytelling() {
       <nav className="sst-nav">
         <button className="sst-nav-back" onClick={() => navigate(-1)}>← Back</button>
         <div className="sst-nav-brand">
-          <span className="sst-nav-name">Velvet Nights</span>
+          <span className="sst-nav-name">WonderOne-Suprises</span>
           <span className="sst-nav-dot">·</span>
           <span className="sst-nav-theme">Roses & Candlelight</span>
         </div>

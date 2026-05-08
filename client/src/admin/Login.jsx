@@ -33,8 +33,8 @@ export default function Login() {
       <div className="fade-up login-card">
         {/* Header */}
         <div style={styles.cardHeader}>
-          <div style={styles.logoMark}>VN</div>
-          <h1 style={styles.title}>Velvet Nights</h1>
+          <div style={styles.logoMark}>WOS</div>
+          <h1 style={styles.title}>WonderOne-Suprises</h1>
           <p style={styles.subtitle}>Admin Console — Restricted Access</p>
         </div>
 
@@ -43,7 +43,7 @@ export default function Login() {
             <label style={styles.label}>Email address</label>
             <input
               type="email"
-              placeholder="admin@velvetnights.in"
+              placeholder="WonderOne-Suprises"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={styles.input}
@@ -107,7 +107,7 @@ export default function Login() {
         </form>
 
         <p style={styles.hint}>
-          Demo credentials: <code style={styles.code}>admin@velvetnights.in</code> / <code style={styles.code}>admin123</code>
+          Demo credentials: <code style={styles.code}>WonderOne-Suprises</code> / <code style={styles.code}>admin123</code>
         </p>
       </div>
     </div>

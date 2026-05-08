@@ -34,9 +34,9 @@ export default function CtaSection() {
               <span className="cta-contact-icon">📞</span>
               +91 99999 99999
             </a>
-            <a href="mailto:hello@velvetnights.in" className="cta-contact-item">
+            <a href="mailto:hello@WonderOne-Suprises.in" className="cta-contact-item">
               <span className="cta-contact-icon">✉️</span>
-              hello@velvetnights.in
+              WonderOne-Suprises.in
             </a>
             <div className="cta-contact-item">
               <span className="cta-contact-icon">📍</span>

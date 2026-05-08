@@ -236,7 +236,7 @@ export default function CinematicModal({ themeKey, onClose }) {
 
       {/* Top controls */}
       <div className="cine-top-bar">
-        <div className="cine-logo-mark">Velvet Nights</div>
+        <div className="cine-logo-mark">WonderOne-Suprises</div>
         <div className="cine-top-actions">
           <button
             className={`cine-audio-btn${audioEnabled ? ' active' : ''}`}
