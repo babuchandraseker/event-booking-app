@@ -70,15 +70,9 @@ function HomePage() {
 }
 
 export default function App() {
-  const path = window.location.pathname;
-  const isAdminPath = path === BASE || path.startsWith(`${BASE}/`);
-
   return (
     <BrowserRouter>
       <Routes>
-
-        {!isAdminPath && <Route path="*" element={<HomePage />} />}
-
         <Route path="/experience/romantic" element={<RomanticScrollytelling />} />
         <Route path="/experience/birthday" element={<BirthdayScrollytelling />} />
         <Route path="/experience/surprise" element={<SurpriseScrollytelling />} />
@@ -105,6 +99,8 @@ export default function App() {
 
         <Route path={BASE} element={<Navigate to={`${BASE}/login`} replace />} />
         <Route path={`${BASE}/*`} element={<Navigate to={`${BASE}/login`} replace />} />
+
+        <Route path="*" element={<HomePage />} />
 
       </Routes>
     </BrowserRouter>
