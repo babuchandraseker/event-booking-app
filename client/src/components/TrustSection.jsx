@@ -26,7 +26,7 @@ const testimonials = [
   },
   {
     stars: '★★★★★',
-    quote: 'Pulled off the most perfect surprise proposal with WonderOne-Suprises. They coordinated everything secretly and the reveal was absolutely cinematic.',
+    quote: 'Pulled off the most perfect surprise proposal with Velvet Nights. They coordinated everything secretly and the reveal was absolutely cinematic.',
     avatar: '💍',
     name: 'Ravi M.',
     event: 'Proposal · Surprise Theme',

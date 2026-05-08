@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import "../admin.css";
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
+const ADMIN_BASE = '/control-panel-7x9'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -12,29 +15,53 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('adminToken')) {
-      navigate('/control-panel-7x92/dashboard', { replace: true })
+      navigate(`${ADMIN_BASE}/dashboard`, { replace: true })
     }
   }, [navigate])
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    localStorage.setItem("adminToken", "demo-token");
-    navigate("/control-panel-7x92/dashboard");
-  };
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+
+    if (!email || !password) {
+      setError('Please fill in all fields.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Invalid admin credentials.')
+      }
+
+      localStorage.setItem('adminToken', result.data.token)
+      localStorage.setItem('adminUser', JSON.stringify(result.data.admin))
+
+      const redirectTo = location.state?.from?.pathname || `${ADMIN_BASE}/dashboard`
+      navigate(redirectTo, { replace: true })
+    } catch (err) {
+      setError(err.message || 'Could not sign in. Please try again.')
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="login-page">
-      {/* Grid background */}
+    <div style={styles.page}>
       <div style={styles.grid} aria-hidden="true" />
-
-      {/* Glow */}
       <div style={styles.glow} aria-hidden="true" />
 
-      <div className="fade-up login-card">
-        {/* Header */}
+      <div className="fade-up" style={styles.card}>
         <div style={styles.cardHeader}>
-          <div style={styles.logoMark}>WOS</div>
-          <h1 style={styles.title}>WonderOne-Suprises</h1>
+          <div style={styles.logoMark}>VN</div>
+          <h1 style={styles.title}>Velvet Nights</h1>
           <p style={styles.subtitle}>Admin Console — Restricted Access</p>
         </div>
 
@@ -43,7 +70,7 @@ export default function Login() {
             <label style={styles.label}>Email address</label>
             <input
               type="email"
-              placeholder="WonderOne-Suprises"
+              placeholder="admin@velvetnights.in"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={styles.input}
@@ -107,7 +134,7 @@ export default function Login() {
         </form>
 
         <p style={styles.hint}>
-          Demo credentials: <code style={styles.code}>WonderOne-Suprises</code> / <code style={styles.code}>admin123</code>
+          Demo credentials: <code style={styles.code}>admin@velvetnights.in</code> / <code style={styles.code}>admin123</code>
         </p>
       </div>
     </div>

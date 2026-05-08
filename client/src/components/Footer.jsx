@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <div className="footer-brand-name">WonderOne-Suprises</div>
+            <div className="footer-brand-name">Velvet Nights</div>
             <p className="footer-brand-desc">
               Chennai's premier indoor private event studio, crafting unforgettable moments for every occasion. Premium, intimate, and entirely yours.
             </p>
@@ -53,7 +53,7 @@ export default function Footer() {
             </div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">✉️</span>
-              <a href="mailto:hello@WonderOne-Suprises.in">hello@WonderOne-Suprises.in</a>
+              <a href="mailto:hello@velvetnights.in">hello@velvetnights.in</a>
             </div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">🕐</span>
@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 WonderOne-Suprises. All rights reserved.</span>
+          <span>© 2026 Velvet Nights. All rights reserved.</span>
           <div className="footer-bottom-links">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>

@@ -1,29 +1,31 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import ThemeSection from "./components/ThemeSection";
 import CinematicModal from "./components/CinematicModal";
 import CelebrationsSection from "./components/CelebrationsSection";
-import PricingSection from "./components/PricingSection";
-import PriceEstimator from "./components/PriceEstimator";
 import BookingSection from "./components/BookingSection";
-import AddonsSection from "./components/AddonsSection";
+import PackagesSection from "./components/PackagesSection";
 import HowItWorks from "./components/HowItWorks";
 import TrustSection from "./components/TrustSection";
 import MemoryGallery from "./components/MemoryGallery";
 import CtaSection from "./components/CtaSection";
 import Footer from "./components/Footer";
 
+import RomanticScrollytelling from "./components/RomanticScrollytelling";
+import BirthdayScrollytelling from "./components/BirthdayScrollytelling";
+import SurpriseScrollytelling from "./components/SurpriseScrollytelling";
+
 import Login from "./admin/Login";
 import Dashboard from "./admin/Dashboard";
 import Bookings from "./admin/Bookings";
-import Automation from "./admin/Automation";
 import ProtectedRoute from "./admin/ProtectedRoute";
 
 import { useReveal } from "./hooks/useReveal";
 
-const BASE = "/control-panel-7x92";
+const BASE = "/control-panel-7x9";
 
 function HomePage() {
   const [activeTheme, setActiveTheme] = useState(null);
@@ -36,12 +38,10 @@ function HomePage() {
 
       <main>
         <HeroSection />
-        <ThemeSection onOpenModal={setActiveTheme} />
+        <ThemeSection />
         <CelebrationsSection />
-        <PricingSection />
-        <PriceEstimator />
+        <PackagesSection />
         <BookingSection />
-        <AddonsSection />
         <HowItWorks />
         <TrustSection />
         <MemoryGallery />
@@ -70,50 +70,43 @@ function HomePage() {
 }
 
 export default function App() {
+  const path = window.location.pathname;
+  const isAdminPath = path === BASE || path.startsWith(`${BASE}/`);
+
   return (
-   <BrowserRouter>
-  <Routes>
+    <BrowserRouter>
+      <Routes>
 
-    {/* Public website */}
-    <Route path="/" element={<HomePage />} />
+        {!isAdminPath && <Route path="*" element={<HomePage />} />}
 
-    {/* Admin login */}
-    <Route
-      path="/control-panel-7x92/login"
-      element={<Login />}
-    />
+        <Route path="/experience/romantic" element={<RomanticScrollytelling />} />
+        <Route path="/experience/birthday" element={<BirthdayScrollytelling />} />
+        <Route path="/experience/surprise" element={<SurpriseScrollytelling />} />
 
-    {/* Dashboard */}
-    <Route
-      path="/control-panel-7x92/dashboard"
-      element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      }
-    />
+        <Route path={`${BASE}/login`} element={<Login />} />
 
-    {/* Bookings */}
-    <Route
-      path="/control-panel-7x92/bookings"
-      element={
-        <ProtectedRoute>
-          <Bookings />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path={`${BASE}/dashboard`}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* Automation */}
-    <Route
-      path="/control-panel-7x92/automation"
-      element={
-        <ProtectedRoute>
-          <Automation />
-        </ProtectedRoute>
-      }
-    />
+        <Route
+          path={`${BASE}/bookings`}
+          element={
+            <ProtectedRoute>
+              <Bookings />
+            </ProtectedRoute>
+          }
+        />
 
-  </Routes>
-</BrowserRouter>
+        <Route path={BASE} element={<Navigate to={`${BASE}/login`} replace />} />
+        <Route path={`${BASE}/*`} element={<Navigate to={`${BASE}/login`} replace />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }

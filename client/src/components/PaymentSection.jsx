@@ -10,7 +10,7 @@ export default function PaymentSection() {
       key: 'rzp_test_YourTestKeyHere', // Replace with your Razorpay test key
       amount: 179900, // 30% of ₹5,999 = ₹1,799 in paise
       currency: 'INR',
-      name: 'WonderOne-Suprises',
+      name: 'Velvet Nights',
       description: 'Event Booking Advance (30%)',
       image: '/themes/romantic/romantic1.jpg',
       handler: function (response) {

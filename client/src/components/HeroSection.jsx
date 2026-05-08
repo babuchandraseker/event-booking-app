@@ -73,7 +73,7 @@ export default function HeroSection() {
       <div className="hero-overlay-bottom" aria-hidden="true"></div>
 
       <div className="hero-content">
-        
+        <div className="hero-badge"><span>Premium Indoor Events</span></div>
 
         <h1 className="hero-title">
           Moments That<br />

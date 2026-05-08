@@ -1,12 +1,12 @@
-import { Navigate } from "react-router-dom";
-import "../admin.css";
+import { Navigate, useLocation } from 'react-router-dom'
 
 export default function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem('adminToken')
+  const location = useLocation()
 
   if (!token) {
-    return <Navigate to="/control-panel-7x92/login" replace />;
+    return <Navigate to="/control-panel-7x9/login" state={{ from: location }} replace />
   }
 
-  return children;
+  return children
 }
