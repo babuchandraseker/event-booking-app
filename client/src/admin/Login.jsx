@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import "../admin.css";
 
 export default function Login() {
   const navigate = useNavigate()
@@ -15,34 +16,22 @@ export default function Login() {
     }
   }, [navigate])
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    setError('')
-
-    if (!email || !password) {
-      setError('Please fill in all fields.')
-      return
-    }
-
-    setLoading(true)
-
-    setTimeout(() => {
-      if (email === 'admin@velvetnights.in' && password === 'admin123') {
-        localStorage.setItem('adminToken', 'demo-token')
-        navigate('/control-panel-7x92/dashboard', { replace: true })
-      } else {
-        setError('Invalid credentials. Try admin@velvetnights.in / admin123')
-        setLoading(false)
-      }
-    }, 800)
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("adminToken", "demo-token");
+    navigate("/control-panel-7x92/dashboard");
+  };
 
   return (
-    <div style={styles.page}>
+    <div className="login-page">
+      {/* Grid background */}
       <div style={styles.grid} aria-hidden="true" />
+
+      {/* Glow */}
       <div style={styles.glow} aria-hidden="true" />
 
-      <div className="fade-up" style={styles.card}>
+      <div className="fade-up login-card">
+        {/* Header */}
         <div style={styles.cardHeader}>
           <div style={styles.logoMark}>VN</div>
           <h1 style={styles.title}>Velvet Nights</h1>

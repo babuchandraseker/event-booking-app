@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import ThemeSection from "./components/ThemeSection";
@@ -19,6 +18,7 @@ import Footer from "./components/Footer";
 import Login from "./admin/Login";
 import Dashboard from "./admin/Dashboard";
 import Bookings from "./admin/Bookings";
+import Automation from "./admin/Automation";
 import ProtectedRoute from "./admin/ProtectedRoute";
 
 import { useReveal } from "./hooks/useReveal";
@@ -71,35 +71,49 @@ function HomePage() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+   <BrowserRouter>
+  <Routes>
 
-        <Route path="/" element={<HomePage />} />
+    {/* Public website */}
+    <Route path="/" element={<HomePage />} />
 
-        <Route path={`${BASE}/login`} element={<Login />} />
+    {/* Admin login */}
+    <Route
+      path="/control-panel-7x92/login"
+      element={<Login />}
+    />
 
-        <Route
-          path={`${BASE}/dashboard`}
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+    {/* Dashboard */}
+    <Route
+      path="/control-panel-7x92/dashboard"
+      element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }
+    />
 
-        <Route
-          path={`${BASE}/bookings`}
-          element={
-            <ProtectedRoute>
-              <Bookings />
-            </ProtectedRoute>
-          }
-        />
+    {/* Bookings */}
+    <Route
+      path="/control-panel-7x92/bookings"
+      element={
+        <ProtectedRoute>
+          <Bookings />
+        </ProtectedRoute>
+      }
+    />
 
-        <Route path={BASE} element={<Navigate to={`${BASE}/login`} replace />} />
-        <Route path={`${BASE}/*`} element={<Navigate to={`${BASE}/login`} replace />} />
+    {/* Automation */}
+    <Route
+      path="/control-panel-7x92/automation"
+      element={
+        <ProtectedRoute>
+          <Automation />
+        </ProtectedRoute>
+      }
+    />
 
-      </Routes>
-    </BrowserRouter>
+  </Routes>
+</BrowserRouter>
   );
 }

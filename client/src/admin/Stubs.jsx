@@ -1,18 +1,40 @@
-import Sidebar from '../components/Sidebar'
+import AdminLayout from '../components/AdminLayout'
+import "../admin.css";
 
 function ComingSoon({ title, icon }) {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar />
-      <main style={{ flex: 1, padding: '32px 36px', display: 'flex', flexDirection: 'column' }}>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em', marginBottom: 8 }}>{title}</h1>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, color: 'var(--text-muted)' }}>
-          <span style={{ fontSize: 40 }}>{icon}</span>
-          <p style={{ fontSize: 14 }}>This section is under construction.</p>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', opacity: 0.6 }}>Ready for backend integration.</p>
+    <AdminLayout>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <h1 style={{
+          fontSize: 26,
+          fontWeight: 700,
+          color: 'var(--text-main)',
+          letterSpacing: '-0.02em',
+          marginBottom: 8,
+        }}>
+          {title}
+        </h1>
+        <div style={{
+          flex: 1,
+          minHeight: 320,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: 14,
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          marginTop: 24,
+          boxShadow: 'var(--shadow-sm)',
+          color: 'var(--text-muted)',
+        }}>
+          <span style={{ fontSize: 42 }}>{icon}</span>
+          <p style={{ fontSize: 14, fontWeight: 500 }}>This section is under construction.</p>
+          <p style={{ fontSize: 13, opacity: 0.6 }}>Ready for backend integration.</p>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   )
 }
 
