@@ -11,6 +11,12 @@ const THEME_INFO = {
   surprise:  { name: 'Partition Theme', price: 5999, label: 'Surprise Experience',  emoji: '✨', color: '#C9A84C' },
 };
 
+const PACKAGE_NAMES = {
+  basic: 'Basic Package',
+  premium: 'Premium Package',
+  luxury: 'Luxury Package',
+};
+
 const SLOT_MAP = {
   slot1: '10:00 AM – 11:30 AM', slot2: '12:00 PM – 1:30 PM',
   slot3: '2:00 PM – 3:30 PM',   slot4: '4:00 PM – 5:30 PM',
@@ -236,7 +242,7 @@ function PaymentSummary({ booking, themeInfo, onDone }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const totalPrice = themeInfo.price;
+  const totalPrice = booking.grandTotal || booking.packagePrice || themeInfo.price;
   const advance = Math.round(totalPrice * 0.3);
   const remaining = totalPrice - advance;
 
@@ -262,12 +268,14 @@ function PaymentSummary({ booking, themeInfo, onDone }) {
           eventType: booking.occasion,
           eventDate,
           eventTime: slotStr,
-          packageId: booking.theme,
+          packageId: booking.packageId || booking.theme,
           guestCount: 1,
           location: booking.location,
-          addons: [],
+          addons: (booking.addons || []).map(a => a.id || a.text),
           notes: [
             `Special person: ${booking.specialPerson}`,
+            booking.packageName ? `Package: ${booking.packageName}` : '',
+            booking.addons?.length ? `Add-ons: ${booking.addons.map(a => a.text).join(', ')}` : '',
             booking.notes,
           ].filter(Boolean).join('\n') || undefined,
         }),
@@ -341,6 +349,7 @@ function PaymentSummary({ booking, themeInfo, onDone }) {
           ['Date', dateStr],
           ['Time', slotStr],
           ['Theme', themeInfo.name],
+          ['Package', booking.packageName ? PACKAGE_NAMES[booking.packageId] || booking.packageName : '—'],
         ].map(([label, val]) => (
           <div key={label} className="reserve-pay-row">
             <span>{label}</span>
@@ -348,15 +357,36 @@ function PaymentSummary({ booking, themeInfo, onDone }) {
           </div>
         ))}
 
+        {booking.addons?.length > 0 && (
+          <>
+            <div className="reserve-pay-row" style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(201,168,76,0.1)' }}>
+              <span style={{ color: 'var(--gold)', fontWeight: 600 }}>Add-Ons Selected</span>
+              <span />
+            </div>
+            {booking.addons.map(a => (
+              <div key={a.id} className="reserve-pay-row reserve-pay-row--addon">
+                <span>+ {a.text}</span>
+                <strong>₹{(a.price || 0).toLocaleString('en-IN')}</strong>
+              </div>
+            ))}
+          </>
+        )}
+
         <div className="reserve-pay-divider" />
 
         <div className="reserve-pay-row">
-          <span>Theme Price</span>
-          <strong>₹{totalPrice.toLocaleString('en-IN')}</strong>
+          <span>Package Price</span>
+          <strong>₹{(booking.packagePrice || themeInfo.price).toLocaleString('en-IN')}</strong>
         </div>
+        {booking.addonTotal > 0 && (
+          <div className="reserve-pay-row">
+            <span>Add-Ons Total</span>
+            <strong>₹{booking.addonTotal.toLocaleString('en-IN')}</strong>
+          </div>
+        )}
         <div className="reserve-pay-total-row">
           <span>Total</span>
-          <strong className="reserve-pay-total-amount">₹{totalPrice.toLocaleString('en-IN')}</strong>
+          <strong className="reserve-pay-total-amount">₹{(booking.grandTotal || booking.packagePrice || themeInfo.price).toLocaleString('en-IN')}</strong>
         </div>
 
         <div className="reserve-advance-box">
@@ -409,6 +439,12 @@ export default function ReservePage() {
     let date = null;
     let slot = null;
     let extraTime = false;
+    let packageId = null;
+    let packageName = null;
+    let packagePrice = 0;
+    let addons = [];
+    let addonTotal = 0;
+    let grandTotal = 0;
     try {
       const raw = sessionStorage.getItem('vn_booking_context');
       if (raw) {
@@ -416,6 +452,12 @@ export default function ReservePage() {
         date = parsed.date || null;
         slot = parsed.slot || null;
         extraTime = parsed.extraTime || false;
+        packageId = parsed.packageId || null;
+        packageName = parsed.packageName || null;
+        packagePrice = parsed.packagePrice || 0;
+        addons = parsed.addons || [];
+        addonTotal = parsed.addonTotal || 0;
+        grandTotal = parsed.grandTotal || 0;
       }
     } catch (_) {}
     return {
@@ -423,6 +465,12 @@ export default function ReservePage() {
       date,
       slot,
       extraTime,
+      packageId,
+      packageName,
+      packagePrice,
+      addons,
+      addonTotal,
+      grandTotal,
       name: '', phone: '', location: '', occasion: '',
       specialPerson: '', notes: '',
     };

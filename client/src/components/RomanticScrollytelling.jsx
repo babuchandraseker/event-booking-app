@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PackagesSection from './PackagesSection';
 
 const SCENES = [
   {
@@ -213,17 +214,7 @@ export default function RomanticScrollytelling() {
         </section>
       ))}
 
-      <section className="sst-includes">
-        <div className="sst-includes-inner">
-          <p className="sst-includes-label">What's Included</p>
-          <h2 className="sst-includes-title">Every Detail <em>for Romance</em></h2>
-          <div className="sst-includes-grid">
-            {INCLUDES.map((label) => (
-              <div key={label} className="sst-include-card"><span>{label}</span></div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <PackagesSection themeKey="romantic" />
 
       <div className="sst-footer-nav">
         <button className="sst-btn-ghost" onClick={() => navigate(-1)}>← Go Back</button>
