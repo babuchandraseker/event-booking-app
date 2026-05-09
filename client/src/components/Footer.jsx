@@ -1,9 +1,9 @@
+import { motion } from 'framer-motion';
+
 export default function Footer() {
-  const handleAnchorClick = (e, href) => {
-    if (!href.startsWith('#')) return;
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollTo = (id) => {
+    const el = document.querySelector(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -19,15 +19,16 @@ export default function Footer() {
               <a href="#" className="social-link" aria-label="Instagram">📷</a>
               <a href="#" className="social-link" aria-label="Facebook">📘</a>
               <a href="#" className="social-link" aria-label="YouTube">▶️</a>
-              <a href="https://wa.me/919999999999" className="social-link" aria-label="WhatsApp" target="_blank" rel="noopener">💬</a>
             </div>
           </div>
 
           <div>
             <div className="footer-col-title">Experiences</div>
             <ul className="footer-links">
-              {[['#themes','Romantic Theme'],['#themes','Birthday Theme'],['#themes','Surprise Theme'],['#pricing','View Pricing'],['#addons','Add-ons']].map(([href, label]) => (
-                <li key={label}><a href={href} onClick={e => handleAnchorClick(e, href)}>{label}</a></li>
+              {[['#themes','Romantic Theme'],['#themes','Birthday Theme'],['#themes','Surprise Theme']].map(([href, label]) => (
+                <li key={label}>
+                  <a href={href} onClick={e => { e.preventDefault(); scrollTo(href); }}>{label}</a>
+                </li>
               ))}
             </ul>
           </div>
@@ -35,7 +36,7 @@ export default function Footer() {
           <div>
             <div className="footer-col-title">Company</div>
             <ul className="footer-links">
-              {['About Us','Our Story','How It Works','Gallery','Careers'].map(label => (
+              {['About Us','Our Story','Gallery'].map(label => (
                 <li key={label}><a href="#">{label}</a></li>
               ))}
             </ul>
@@ -45,7 +46,7 @@ export default function Footer() {
             <div className="footer-col-title">Contact</div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">📍</span>
-              <span>123 Dream Street, T. Nagar, Chennai — 600017</span>
+              <span>T. Nagar, Chennai — 600017</span>
             </div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">📞</span>

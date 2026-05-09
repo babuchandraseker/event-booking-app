@@ -1,68 +1,81 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Navbar() {
+export default function Navbar({ onBook }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handler = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  const closeMenu = () => {
+  const scrollTo = (id) => {
+    const el = document.querySelector(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMobileOpen(false);
     document.body.style.overflow = '';
   };
 
-  const openMenu = () => {
-    setMobileOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const handleAnchorClick = (e, href) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    closeMenu();
-  };
-
   return (
     <>
-      <nav className={`navbar${scrolled ? ' scrolled' : ''}`} id="navbar" role="navigation" aria-label="Main navigation">
+      <motion.nav
+        className={`navbar${scrolled ? ' scrolled' : ''}`}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        id="navbar"
+      >
         <div className="navbar-inner">
-          <a href="#" className="nav-logo" aria-label="Velvet Nights Home" onClick={e => handleAnchorClick(e, '#home')}>
+          <a href="#" className="nav-logo" onClick={e => { e.preventDefault(); scrollTo('#home'); }}>
             <span className="nav-logo-name">Velvet Nights</span>
             <span className="nav-logo-tagline">Private Event Studio</span>
           </a>
 
-          <ul className="nav-links" role="list">
-            {[['#themes','Themes'],['#celebrations','Gallery'],['#pricing','Pricing'],['#booking','Booking'],['#addons','Add-ons'],['#gallery','Gallery'],['#trust','Reviews']].map(([href, label]) => (
-              <li key={href}><a href={href} onClick={e => handleAnchorClick(e, href)}>{label}</a></li>
+          <ul className="nav-links">
+            {[['#home','Home'],['#themes','Themes'],['#booking','Bookings']].map(([href, label]) => (
+              <li key={href}>
+                <a href={href} onClick={e => { e.preventDefault(); scrollTo(href); }}>{label}</a>
+              </li>
             ))}
           </ul>
 
           <div className="nav-cta">
-            <a href="https://wa.me/919999999999" className="btn btn-outline" target="_blank" rel="noopener">
-              <span>📞</span> WhatsApp
-            </a>
-            <a href="#booking" className="btn btn-primary" onClick={e => handleAnchorClick(e, '#booking')}>Book Now</a>
+            <button className="btn btn-primary" onClick={() => onBook()}>
+              <span>✦</span> Reserve Now
+            </button>
           </div>
 
-          <button className="hamburger" aria-label="Open menu" aria-expanded={mobileOpen} onClick={openMenu}>
-            <span></span><span></span><span></span>
+          <button
+            className="hamburger"
+            aria-label="Open menu"
+            onClick={() => { setMobileOpen(true); document.body.style.overflow = 'hidden'; }}
+          >
+            <span/><span/><span/>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Mobile Nav */}
-      <div className={`mobile-nav${mobileOpen ? ' open' : ''}`} role="dialog" aria-modal="true" aria-label="Mobile navigation">
-        <button className="mobile-nav-close" aria-label="Close menu" onClick={closeMenu}>✕</button>
-        {[['#themes','Themes'],['#pricing','Pricing'],['#booking','Booking'],['#addons','Add-ons'],['#gallery','Gallery'],['#trust','Reviews']].map(([href, label]) => (
-          <a key={href} href={href} onClick={e => handleAnchorClick(e, href)}>{label}</a>
-        ))}
-        <a href="#booking" className="btn btn-primary" style={{marginTop:'20px'}} onClick={e => handleAnchorClick(e, '#booking')}>Book Now</a>
-      </div>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            className="mobile-nav open"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+          >
+            <button className="mobile-nav-close" onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; }}>✕</button>
+            {[['#home','Home'],['#themes','Themes']].map(([href, label]) => (
+              <a key={href} href={href} onClick={e => { e.preventDefault(); scrollTo(href); }}>{label}</a>
+            ))}
+            <button className="btn btn-primary" style={{ marginTop: 20 }} onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; onBook(); }}>
+              ✦ Reserve Now
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

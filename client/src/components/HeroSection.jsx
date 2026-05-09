@@ -1,118 +1,90 @@
 import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
-const stats = [
-  { count: 1200, suffix: '+', label: 'Events Hosted' },
-  { count: 98, suffix: '%', label: '5-Star Reviews' },
-  { count: 3, suffix: '', label: 'Signature Themes' },
-  { count: 50, suffix: '+', label: 'Add-on Options' },
-];
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 40 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] },
+});
 
-export default function HeroSection() {
-  const statRefs = useRef([]);
+export default function HeroSection({ onBook }) {
+  const videoRef = useRef(null);
 
-  const handleAnchorClick = (e, href) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  // Parallax on scroll
   useEffect(() => {
-    const video = document.querySelector('.hero-video');
+    const video = videoRef.current;
     const handleScroll = () => {
       if (!video) return;
-      const scrolled = window.pageYOffset;
-      if (scrolled < window.innerHeight) {
-        video.style.transform = `translateY(${scrolled * 0.3}px)`;
-      }
+      const s = window.pageYOffset;
+      if (s < window.innerHeight) video.style.transform = `translateY(${s * 0.3}px) scale(1.05)`;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Counter animations
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = parseInt(el.dataset.count, 10);
-        const suffix = el.dataset.suffix || '';
-        let current = 0;
-        const duration = 1800;
-        const step = target / (duration / 16);
-        const interval = setInterval(() => {
-          current = Math.min(current + step, target);
-          el.textContent = Math.floor(current).toLocaleString('en-IN') + suffix;
-          if (current >= target) clearInterval(interval);
-        }, 16);
-        observer.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-
-    statRefs.current.forEach(el => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const scrollToThemes = () => {
+    const el = document.querySelector('#themes');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section className="hero" id="home" aria-label="Hero">
+    <section className="hero" id="home">
       <div className="hero-video-wrap" aria-hidden="true">
         <video
+          ref={videoRef}
           className="hero-video"
-          autoPlay
-          muted
-          loop
-          playsInline
+          autoPlay muted loop playsInline
           poster="/themes/romantic/romantic1.jpg"
         >
           <source src="/themes/romantic/romantic.mp4" type="video/mp4" />
         </video>
       </div>
 
-      <div className="hero-overlay" aria-hidden="true"></div>
-      <div className="hero-overlay-bottom" aria-hidden="true"></div>
+      <div className="hero-overlay" aria-hidden="true" />
+      <div className="hero-overlay-bottom" aria-hidden="true" />
+
+      {/* Ambient glow orbs */}
+      <div className="hero-glow hero-glow--gold" aria-hidden="true" />
+      <div className="hero-glow hero-glow--rose" aria-hidden="true" />
 
       <div className="hero-content">
-        <div className="hero-badge"><span>Premium Indoor Events</span></div>
+        <motion.div className="hero-badge" {...fadeUp(0.2)}>
+          <span>✦ Premium Private Events · Chennai</span>
+        </motion.div>
 
-        <h1 className="hero-title">
-          Moments That<br />
-          <strong>Live Forever</strong>
-        </h1>
+        <motion.h1 className="hero-title" {...fadeUp(0.4)}>
+          Make Moments<br />
+          <em>Feel Eternal</em>
+        </motion.h1>
 
-        <p className="hero-subtitle">
-          Curated private experiences for the ones who matter most.
-          From candlelit romance to grand celebrations — we craft the extraordinary.
-        </p>
+        <motion.p className="hero-subtitle" {...fadeUp(0.6)}>
+          Premium private experiences crafted for unforgettable memories.
+        </motion.p>
 
-        <div className="hero-cta">
-          <a href="#booking" className="btn btn-primary" onClick={e => handleAnchorClick(e, '#booking')}>
-            <span>✦</span> Book Your Experience
-          </a>
-          <a href="#themes" className="btn btn-outline" onClick={e => handleAnchorClick(e, '#themes')}>
+        <motion.div className="hero-cta" {...fadeUp(0.8)}>
+          <button className="btn btn-primary btn-hero" onClick={() => onBook()}>
+            <span>✦</span> Book Your Day
+          </button>
+          <button className="btn btn-glass" onClick={scrollToThemes}>
             Explore Themes
-          </a>
-        </div>
+          </button>
+        </motion.div>
 
-        <div className="hero-stats">
-          {stats.map((s, i) => (
-            <div key={i}>
-              <div
-                className="hero-stat-num"
-                data-count={s.count}
-                data-suffix={s.suffix}
-                ref={el => statRefs.current[i] = el}
-              >
-                0{s.suffix}
-              </div>
+        <motion.div className="hero-stats" {...fadeUp(1.0)}>
+          {[
+            { num: '1200+', label: 'Events Hosted' },
+            { num: '98%', label: '5-Star Reviews' },
+            { num: '3', label: 'Signature Themes' },
+          ].map(s => (
+            <div key={s.label} className="hero-stat-item">
+              <div className="hero-stat-num">{s.num}</div>
               <div className="hero-stat-label">{s.label}</div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       <div className="hero-scroll-hint" aria-hidden="true">
-        <div className="scroll-line"></div>
+        <div className="scroll-line" />
         <span>Scroll</span>
       </div>
     </section>

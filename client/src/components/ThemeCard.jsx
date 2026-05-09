@@ -1,35 +1,45 @@
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-export default function ThemeCard({ theme, revealDelay }) {
+export default function ThemeCard({ theme, index, inView, onBook }) {
   const navigate = useNavigate();
   const { key, tag, emoji, img, title, desc, price, priceSub, features, mediaStyle } = theme;
 
+  const goToExperience = () => navigate(`/experience/${key}`);
+
   return (
-    <div
-      className={`theme-card reveal reveal-delay-${revealDelay}`}
+    <motion.div
+      className="theme-card"
       data-theme={key}
-      role="button"
-      tabIndex={0}
-      aria-label={`View ${title} theme details`}
-      onClick={() => navigate(`/experience/${key}`)}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && navigate(`/experience/${key}`)}
+      initial={{ opacity: 0, y: 60 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+      role="article"
+      aria-label={`${title} theme`}
     >
-      <div className="theme-card-media">
+      <div
+        className="theme-card-media"
+        onClick={goToExperience}
+        style={{ cursor: 'pointer' }}
+      >
         {img ? (
           <img
             className="theme-card-img"
             src={img}
             alt={`${title} event setup`}
             loading="lazy"
-            onError={e => { e.target.src = `/assets/placeholders/placeholder-${key}.svg`; e.target.onerror = null; }}
+            onError={e => { e.target.src = ''; e.target.onerror = null; }}
           />
         ) : (
           <div className="theme-card-img" style={mediaStyle}>{emoji}</div>
         )}
-        <div className="theme-card-media-overlay" aria-hidden="true"></div>
+        <div className="theme-card-media-overlay" aria-hidden="true" />
         <div className="theme-card-play" aria-hidden="true">▶</div>
         <div className="theme-card-tag">{tag}</div>
+        <div className="theme-card-glow-border" aria-hidden="true" />
       </div>
+
       <div className="theme-card-body">
         <h3 className="theme-card-title">{title}</h3>
         <p className="theme-card-desc">{desc}</p>
@@ -40,13 +50,13 @@ export default function ThemeCard({ theme, revealDelay }) {
           </div>
           <button
             className="btn btn-ghost"
-            data-theme={key}
-            onClick={(e) => { e.stopPropagation(); navigate(`/experience/${key}`); }}
+            onClick={goToExperience}
+            aria-label={`Explore ${title} theme`}
           >
-            Experience
+            Explore →
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

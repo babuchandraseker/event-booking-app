@@ -149,7 +149,7 @@ export default function RomanticScrollytelling() {
   }, [animate]);
 
   const handleBookNow = () => {
-    navigate('/#booking');
+    navigate('/reserve/romantic');
     setTimeout(() => {
       document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);

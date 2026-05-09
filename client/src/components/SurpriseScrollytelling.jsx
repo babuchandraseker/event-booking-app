@@ -153,7 +153,7 @@ export default function SurpriseScrollytelling() {
   }, [animate]);
 
   const handleBookNow = () => {
-    navigate('/#booking');
+    navigate('/reserve/surprise');
     setTimeout(() => {
       document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
