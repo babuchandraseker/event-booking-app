@@ -88,7 +88,7 @@ const THEMES = [
   },
 ];
 
-export default function ThemeExplorer({ booking, onReserve, onBack }) {
+export default function ThemeExplorer({ onReserve, onBack }) {
   const [activeTheme, setActiveTheme] = useState(null);
   const [activeImg, setActiveImg] = useState(0);
   const detailRef = useRef(null);

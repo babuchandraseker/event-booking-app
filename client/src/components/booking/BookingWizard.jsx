@@ -41,7 +41,9 @@ export default function BookingWizard({ initialTheme, onClose }) {
         slot: booking.slot,
         extraTime: booking.extraTime,
       }));
-    } catch (_) {}
+    } catch (error) {
+      console.warn('Could not save booking context.', error);
+    }
     onClose();
     navigate('/#themes');
     setTimeout(() => {

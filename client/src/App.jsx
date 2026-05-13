@@ -15,6 +15,9 @@ import SurpriseScrollytelling from "./components/SurpriseScrollytelling";
 import Login from "./admin/Login";
 import Dashboard from "./admin/Dashboard";
 import Bookings from "./admin/Bookings";
+import Addons from "./admin/Addons";
+import Reviews from "./admin/Reviews";
+import Settings from "./admin/Settings";
 import ProtectedRoute from "./admin/ProtectedRoute";
 
 const BASE = "/control-panel-7x9";
@@ -53,8 +56,51 @@ export default function App() {
 
         {/* Admin */}
         <Route path={`${BASE}/login`} element={<Login />} />
-        <Route path={`${BASE}/dashboard`} element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path={`${BASE}/bookings`} element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+
+        <Route
+          path={`${BASE}/dashboard`}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`${BASE}/bookings`}
+          element={
+            <ProtectedRoute>
+              <Bookings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`${BASE}/addons`}
+          element={
+            <ProtectedRoute>
+              <Addons />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`${BASE}/reviews`}
+          element={
+            <ProtectedRoute>
+              <Reviews />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={`${BASE}/settings`}
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
         <Route path={BASE} element={<Navigate to={`${BASE}/login`} replace />} />
         <Route path={`${BASE}/*`} element={<Navigate to={`${BASE}/login`} replace />} />
 

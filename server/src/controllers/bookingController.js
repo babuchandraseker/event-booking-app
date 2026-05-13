@@ -10,11 +10,12 @@ const {
 } = require("../utils/validation");
 const { notifyAdminAboutBooking } = require("../services/notificationService");
 const { appendBookingToSheet } = require("../services/bookingSheetService");
+const { DEFAULT_PACKAGE_IDS, defaultPackages } = require("../data/defaultCatalog");
 
 const bookings = createRepository("bookings");
 const packages = createRepository("packages");
 const addons = createRepository("addons");
-const BUILT_IN_PACKAGE_IDS = new Set(["signature", "romantic", "birthday", "surprise"]);
+const LEGACY_PACKAGE_IDS = new Set(["signature", "romantic", "birthday", "surprise"]);
 const BUILT_IN_ADDON_IDS = new Set(["cake", "photography", "addon-cake", "addon-photography"]);
 const BOOKING_LOCK_STATUSES = new Set(["pending", "confirmed"]);
 
@@ -28,8 +29,19 @@ const normalizeAddons = (value) => {
   return Array.isArray(value) ? value : [];
 };
 
+const mergePackagesWithDefaults = async () => {
+  const storedPackages = await packages.list();
+  const byId = new Map(storedPackages.map((pkg) => [pkg.id, pkg]));
+  return defaultPackages.map((pkg) => ({ ...pkg, ...(byId.get(pkg.id) || {}) }));
+};
+
+const getPackageForBooking = async (packageId) => {
+  const catalogPackage = (await mergePackagesWithDefaults()).find((pkg) => pkg.id === packageId);
+  return catalogPackage || await packages.getById(packageId);
+};
+
 const packageExists = async (packageId) => {
-  if (BUILT_IN_PACKAGE_IDS.has(packageId)) {
+  if (DEFAULT_PACKAGE_IDS.has(packageId) || LEGACY_PACKAGE_IDS.has(packageId)) {
     return true;
   }
 
@@ -42,15 +54,17 @@ const assertPackageExists = async (packageId) => {
   }
 };
 
-const assertAddonsExist = async (addonIds = []) => {
+const assertAddonsExist = async (addonIds = [], packageId = null) => {
   if (!Array.isArray(addonIds)) {
     throw createHttpError(400, "addons must be an array");
   }
 
   const missing = [];
+  const packageInfo = packageId ? await getPackageForBooking(packageId) : null;
+  const packageAddonNames = new Set((packageInfo?.addons || []).map((addon) => addon.name));
 
   for (const addonId of addonIds) {
-    if (BUILT_IN_ADDON_IDS.has(addonId)) {
+    if (BUILT_IN_ADDON_IDS.has(addonId) || packageAddonNames.has(addonId)) {
       continue;
     }
 
@@ -63,6 +77,19 @@ const assertAddonsExist = async (addonIds = []) => {
   if (missing.length) {
     throw createHttpError(400, `addons must reference existing add-ons: ${missing.join(", ")}`);
   }
+};
+
+const normalizeAddonDetails = (packageInfo, addonNames = []) => {
+  const selectedNames = Array.isArray(addonNames) ? addonNames : [];
+  const packageAddons = Array.isArray(packageInfo?.addons) ? packageInfo.addons : [];
+
+  return selectedNames.map((name) => {
+    const matched = packageAddons.find((addon) => addon.name === name);
+    return {
+      name,
+      price: Number(matched?.price || 0),
+    };
+  });
 };
 
 const assertSlotAvailable = async (candidate, ignoreId = null) => {
@@ -123,7 +150,7 @@ const validateBookingPayload = async (payload, { partial = false } = {}) => {
   }
 
   if (payload.addons !== undefined) {
-    await assertAddonsExist(payload.addons);
+    await assertAddonsExist(payload.addons, payload.packageId);
   }
 };
 
@@ -144,6 +171,15 @@ const getBooking = asyncHandler(async (req, res) => {
 
 const createBooking = asyncHandler(async (req, res) => {
   await validateBookingPayload(req.body);
+  const packageInfo = await getPackageForBooking(req.body.packageId);
+  const addonDetails = Array.isArray(req.body.addonsDetailed)
+    ? req.body.addonsDetailed.map((addon) => ({
+      name: addon.name,
+      price: Number(addon.price || 0),
+    })).filter((addon) => addon.name)
+    : normalizeAddonDetails(packageInfo, req.body.addons);
+  const amount = Number(req.body.amount || 0) || Number(packageInfo?.price || 0)
+    + addonDetails.reduce((sum, addon) => sum + Number(addon.price || 0), 0);
 
   const payload = {
     name: req.body.name,
@@ -153,9 +189,12 @@ const createBooking = asyncHandler(async (req, res) => {
     eventDate: req.body.eventDate,
     eventTime: req.body.eventTime || null,
     packageId: req.body.packageId,
+    packageTitle: req.body.packageTitle || packageInfo?.title || req.body.packageId,
+    amount,
     guestCount: Number(req.body.guestCount || 1),
     location: req.body.location || null,
     addons: normalizeAddons(req.body.addons) || [],
+    addonsDetailed: addonDetails,
     notes: req.body.notes || null,
     status: "pending",
     paymentStatus: "not_started",

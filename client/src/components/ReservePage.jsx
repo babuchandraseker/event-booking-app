@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -459,7 +459,9 @@ export default function ReservePage() {
         addonTotal = parsed.addonTotal || 0;
         grandTotal = parsed.grandTotal || 0;
       }
-    } catch (_) {}
+    } catch (error) {
+      console.warn('Could not read booking context.', error);
+    }
     return {
       theme: themeKey,
       date,

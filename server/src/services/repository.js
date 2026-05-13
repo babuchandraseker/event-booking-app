@@ -72,6 +72,28 @@ const createRepository = (collectionName) => ({
     return items[index];
   },
 
+  async set(id, data) {
+    const existing = await this.getById(id);
+    const payload = withTimestamps(data, !existing);
+
+    if (isFirebaseEnabled) {
+      await db.collection(collectionName).doc(id).set(payload, { merge: true });
+      return { id, ...(existing || {}), ...payload };
+    }
+
+    const items = memoryStore[collectionName] || [];
+    const index = items.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      const item = { id, ...payload };
+      items.push(item);
+      return item;
+    }
+
+    items[index] = { ...items[index], ...payload };
+    return items[index];
+  },
+
   async remove(id) {
     if (isFirebaseEnabled) {
       const docRef = db.collection(collectionName).doc(id);

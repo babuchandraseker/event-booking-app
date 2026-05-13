@@ -5,6 +5,11 @@ const {
   listAdminBookings,
   loginAdmin,
 } = require("../controllers/adminController");
+const {
+  getBusinessSettings,
+  updateAdminPassword,
+  updateBusinessSettings,
+} = require("../controllers/settingsController");
 const requireAdminAuth = require("../middleware/adminAuth");
 const createRateLimiter = require("../middleware/rateLimiter");
 
@@ -22,5 +27,8 @@ router.use(requireAdminAuth);
 router.get("/dashboard", getAdminDashboard);
 router.get("/bookings", listAdminBookings);
 router.get("/bookings/export", exportAdminBookings);
+router.get("/settings", getBusinessSettings);
+router.patch("/settings", updateBusinessSettings);
+router.patch("/settings/password", updateAdminPassword);
 
 module.exports = router;

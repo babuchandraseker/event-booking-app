@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { API_BASE_URL } from '../data/packageCatalog';
 
 const trustStats = [
   { count: 1200, suffix: '+', label: 'Events Hosted' },
@@ -34,8 +35,16 @@ const testimonials = [
   },
 ];
 
+const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
+
+function resolveImageUrl(url) {
+  if (!url) return '';
+  return url.startsWith('/uploads/') ? `${API_ORIGIN}${url}` : url;
+}
+
 export default function TrustSection() {
   const statRefs = useRef([]);
+  const [reviews, setReviews] = useState(testimonials);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -58,6 +67,31 @@ export default function TrustSection() {
 
     statRefs.current.forEach(el => el && observer.observe(el));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetch(`${API_BASE_URL}/reviews`)
+      .then((response) => response.json())
+      .then((result) => {
+        if (!ignore && result.success && result.data.length > 0) {
+          setReviews(result.data.slice(0, 3).map((review, index) => ({
+            stars: '★'.repeat(Number(review.rating || 5)),
+            quote: review.message,
+            avatar: '',
+            photo: resolveImageUrl(review.imageUrl),
+            name: review.customerName,
+            event: review.eventType,
+            delay: index + 1,
+          })));
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (
@@ -88,17 +122,19 @@ export default function TrustSection() {
         </div>
 
         <div className="testimonials-grid">
-          {testimonials.map(t => (
+          {reviews.map(t => (
             <div key={t.name} className={`testimonial-card reveal reveal-delay-${t.delay}`}>
-              <div className="testimonial-stars">{t.stars}</div>
-              <p className="testimonial-quote">{t.quote}</p>
-              <div className="testimonial-author">
-                <div className="author-avatar">{t.avatar}</div>
+              <div className="testimonial-author testimonial-author--stacked">
+                <div className="author-avatar">
+                  {t.photo ? <img src={t.photo} alt={t.name} loading="lazy" /> : t.avatar}
+                </div>
                 <div>
                   <div className="author-name">{t.name}</div>
                   <div className="author-event">{t.event}</div>
                 </div>
               </div>
+              <div className="testimonial-stars">{t.stars}</div>
+              <p className="testimonial-quote">{t.quote}</p>
             </div>
           ))}
         </div>

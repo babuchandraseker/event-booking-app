@@ -46,12 +46,6 @@ const SCENES = [
   },
 ];
 
-const INCLUDES = [
-  'Custom Cake', 'Balloon Arch', 'Gift Station',
-  'Confetti Rain', 'Photo Booth', 'Music',
-  'Sparkling Toast', 'Themed Decor',
-];
-
 /* ── Star Particle System ── */
 function createStars(count) {
   return Array.from({ length: count }, () => ({

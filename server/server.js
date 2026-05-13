@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -9,6 +10,8 @@ const bookingRoutes = require("./src/routes/bookingRoutes");
 const packageRoutes = require("./src/routes/packageRoutes");
 const addonRoutes = require("./src/routes/addonRoutes");
 const contactRoutes = require("./src/routes/contactRoutes");
+const reviewRoutes = require("./src/routes/reviewRoutes");
+const settingsRoutes = require("./src/routes/settingsRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
 const { notFound, errorHandler } = require("./src/middleware/errorMiddleware");
 
@@ -19,7 +22,11 @@ const allowedOrigins = (process.env.CLIENT_ORIGINS || process.env.CLIENT_ORIGIN 
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 app.use(
   cors({
     origin(origin, callback) {
@@ -32,8 +39,9 @@ app.use(
     },
   })
 );
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "8mb" }));
 app.use(morgan("dev"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
   res.json({
@@ -54,6 +62,8 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/packages", packageRoutes);
 app.use("/api/addons", addonRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/settings", settingsRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use(notFound);

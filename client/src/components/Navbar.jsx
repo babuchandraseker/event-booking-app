@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import useBusinessSettings from '../hooks/useBusinessSettings';
 
 export default function Navbar({ onBook }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const settings = useBusinessSettings();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
@@ -29,8 +31,8 @@ export default function Navbar({ onBook }) {
       >
         <div className="navbar-inner">
           <a href="#" className="nav-logo" onClick={e => { e.preventDefault(); scrollTo('#home'); }}>
-            <span className="nav-logo-name">Velvet Nights</span>
-            <span className="nav-logo-tagline">Private Event Studio</span>
+            <span className="nav-logo-name">{settings.businessName}</span>
+            <span className="nav-logo-tagline">{settings.tagline}</span>
           </a>
 
           <ul className="nav-links">

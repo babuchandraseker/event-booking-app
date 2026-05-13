@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { DEFAULT_PACKAGES, fetchPackages, formatMoney } from '../data/packageCatalog';
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -18,18 +19,11 @@ const OCCASIONS = [
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-const PACKAGE_BY_OCCASION = {
-  Birthday: 'birthday',
-  'Romantic Date': 'romantic',
-  Anniversary: 'romantic',
-  Proposal: 'romantic',
-  'Surprise Party': 'surprise',
-};
-
-const getPackageId = (occasion) => PACKAGE_BY_OCCASION[occasion] || 'signature';
-
-export default function BookingSection() {
+export default function BookingSection({ selectedPackageId = 'premium' }) {
   const today = new Date();
+  const [packages, setPackages] = useState(DEFAULT_PACKAGES);
+  const [packageId, setPackageId] = useState(selectedPackageId);
+  const [selectedAddons, setSelectedAddons] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -44,6 +38,33 @@ export default function BookingSection() {
   const [errors, setErrors] = useState({});
   const [bookingStatus, setBookingStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetchPackages()
+      .then((data) => {
+        if (!ignore) setPackages(data);
+      })
+      .catch(() => {
+        if (!ignore) setPackages(DEFAULT_PACKAGES);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const selectedPackage = useMemo(
+    () => packages.find((pkg) => pkg.id === packageId) || packages[0] || DEFAULT_PACKAGES[0],
+    [packages, packageId]
+  );
+  const selectedAddonItems = useMemo(
+    () => selectedPackage.addons.filter((addon) => selectedAddons.includes(addon.name)),
+    [selectedPackage, selectedAddons]
+  );
+  const totalAmount = selectedPackage.price + selectedAddonItems.reduce((sum, addon) => sum + Number(addon.price || 0), 0);
+  const advanceAmount = Math.round(totalAmount * 0.3);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -62,6 +83,19 @@ export default function BookingSection() {
   const handleFieldChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }));
+  };
+
+  const handlePackageChange = (e) => {
+    setPackageId(e.target.value);
+    setSelectedAddons([]);
+  };
+
+  const toggleAddon = (addonName) => {
+    setSelectedAddons((prev) =>
+      prev.includes(addonName)
+        ? prev.filter((name) => name !== addonName)
+        : [...prev, addonName]
+    );
   };
 
   const validate = () => {
@@ -99,10 +133,16 @@ export default function BookingSection() {
           eventType: form.occasion,
           eventDate,
           eventTime: slotInfo?.label,
-          packageId: getPackageId(form.occasion),
-          guestCount: 1,
+          packageId,
+          packageTitle: selectedPackage.title,
+          amount: totalAmount,
+          guestCount: selectedPackage.maxGuests || 1,
           location: form.fromLocation.trim(),
-          addons: [],
+          addons: selectedAddonItems.map((addon) => addon.name),
+          addonsDetailed: selectedAddonItems.map((addon) => ({
+            name: addon.name,
+            price: Number(addon.price || 0),
+          })),
           notes: [
             `Special person: ${form.specialPersonName.trim()}`,
             form.notes.trim(),
@@ -120,6 +160,7 @@ export default function BookingSection() {
       setForm({ bookingName: '', phone: '', fromLocation: '', occasion: '', specialPersonName: '', notes: '' });
       setSelectedDay(null);
       setSelectedSlot(null);
+      setSelectedAddons([]);
     } catch (error) {
       setBookingStatus({ type: 'error', message: error.message || 'Something went wrong. Please try again.' });
     } finally {
@@ -278,6 +319,39 @@ export default function BookingSection() {
                   placeholder="Any special requests, dietary needs, decorations, etc."
                 />
               </div>
+              <div className="bk-field">
+                <label className="form-label" htmlFor="bk-package">
+                  Package <span className="bk-req">*</span>
+                </label>
+                <select
+                  id="bk-package"
+                  className="form-control form-select"
+                  value={packageId}
+                  onChange={handlePackageChange}
+                >
+                  {packages.map((pkg) => (
+                    <option key={pkg.id} value={pkg.id}>
+                      {pkg.title} - Rs {formatMoney(pkg.price)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {selectedPackage.addons.length > 0 && (
+                <div className="bk-field">
+                  <label className="form-label">Package Add-ons</label>
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    {selectedPackage.addons.map((addon) => (
+                      <label key={addon.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.025)', cursor: 'pointer' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                          <input type="checkbox" checked={selectedAddons.includes(addon.name)} onChange={() => toggleAddon(addon.name)} />
+                          {addon.name}
+                        </span>
+                        <span style={{ color: 'var(--gold-light)', fontWeight: 700, fontSize: '0.85rem' }}>Rs {formatMoney(addon.price)}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Calendar */}
@@ -338,8 +412,9 @@ export default function BookingSection() {
               { label: 'Date', value: summaryDate },
               { label: 'Time Slot', value: summarySlot },
               { label: 'Occasion', value: form.occasion || '—', className: 'gold' },
+              { label: 'Package', value: selectedPackage.title, className: 'gold' },
               { label: 'Special Person', value: form.specialPersonName || '—' },
-              { label: 'Duration', value: '1.5 hours' },
+              { label: 'Duration', value: selectedPackage.duration },
             ].map(row => (
               <div key={row.label} className="summary-row">
                 <span className="summary-row-label">{row.label}</span>
@@ -354,16 +429,28 @@ export default function BookingSection() {
               </div>
             )}
 
+            {selectedAddonItems.length > 0 && (
+              <div className="summary-row" style={{ flexDirection: 'column', gap: '6px', alignItems: 'stretch' }}>
+                <span className="summary-row-label">Selected Add-ons</span>
+                {selectedAddonItems.map((addon) => (
+                  <span key={addon.name} className="summary-row-value" style={{ maxWidth: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <span>{addon.name}</span>
+                    <span>Rs {formatMoney(addon.price)}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div className="summary-total">
               <div>
                 <div>Total Estimate</div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '2px' }}>incl. taxes &amp; fees</div>
               </div>
-              <div className="summary-total-price">₹5,999</div>
+              <div className="summary-total-price">Rs {formatMoney(totalAmount)}</div>
             </div>
 
             <div style={{ background: 'rgba(201,168,76,0.07)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '14px 16px', marginBottom: '20px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-              💳 30% advance (₹1,799) to confirm. Remaining on the day.
+              30% advance (Rs {formatMoney(advanceAmount)}) to confirm. Remaining on the day.
             </div>
 
             <button

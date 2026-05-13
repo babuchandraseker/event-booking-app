@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-export default function ThemeCard({ theme, index, inView, onBook }) {
+export default function ThemeCard({ theme, index, inView }) {
   const navigate = useNavigate();
   const { key, tag, emoji, img, title, desc, price, priceSub, features, mediaStyle } = theme;
 

@@ -38,12 +38,6 @@ const SCENES = [
   },
 ];
 
-const INCLUDES = [
-  'Fresh Rose Petals', '100+ Candles', 'Welcome Drinks',
-  'Photo Assist', 'Private Music', 'Custom Menu',
-  'Dessert Platter', 'Ambient Lighting',
-];
-
 /* ── Heart particle system ── */
 function createHearts(count) {
   return Array.from({ length: count }, () => ({

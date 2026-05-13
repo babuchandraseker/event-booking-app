@@ -42,7 +42,9 @@ function getBookingContext() {
   try {
     const raw = sessionStorage.getItem('vn_booking_context');
     if (raw) return JSON.parse(raw);
-  } catch (_) {}
+  } catch (error) {
+    console.warn('Could not read booking context.', error);
+  }
   return null;
 }
 

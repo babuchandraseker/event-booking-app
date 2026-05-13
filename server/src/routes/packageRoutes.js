@@ -5,10 +5,13 @@ const {
   listPackages,
   updatePackage,
 } = require("../controllers/packageController");
+const requireAdminAuth = require("../middleware/adminAuth");
 
 const router = express.Router();
 
-router.route("/").get(listPackages).post(createPackage);
-router.route("/:id").patch(updatePackage).delete(deletePackage);
+router.get("/", listPackages);
+router.post("/", requireAdminAuth, createPackage);
+router.patch("/:id", requireAdminAuth, updatePackage);
+router.delete("/:id", requireAdminAuth, deletePackage);
 
 module.exports = router;

@@ -38,12 +38,6 @@ const SCENES = [
   },
 ];
 
-const INCLUDES = [
-  'Stealth Setup', 'Blindfold Reveal', 'Private Location',
-  'Reaction Capture', 'Secret Catering', 'Hidden Music',
-  'Custom Surprise Decor', 'Complete Coordination',
-];
-
 /* ── Confetti / popper particle system ── */
 const CONFETTI_COLORS = [
   '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff',

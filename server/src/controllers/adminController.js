@@ -5,6 +5,7 @@ const createHttpError = require("../utils/httpError");
 const { requireFields } = require("../utils/validation");
 const { buildBookingsExcelHtml } = require("../services/bookingSheetService");
 const { getJwtSecret } = require("../middleware/adminAuth");
+const { getStoredSettings } = require("./settingsController");
 
 const bookings = createRepository("bookings");
 const contactMessages = createRepository("contactMessages");
@@ -15,10 +16,15 @@ const sortNewestFirst = (items) =>
 const loginAdmin = asyncHandler(async (req, res) => {
   requireFields(req.body, ["email", "password"]);
 
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@velvetnights.in";
-  const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+  const businessSettings = await getStoredSettings();
+  const defaultAdminEmail = process.env.ADMIN_EMAIL || "admin@velvetnights.in";
+  const allowedEmails = new Set([
+    defaultAdminEmail,
+    businessSettings.profileEmail,
+  ].filter(Boolean));
+  const adminPassword = businessSettings.adminPassword || process.env.ADMIN_PASSWORD || "admin123";
 
-  if (req.body.email !== adminEmail || req.body.password !== adminPassword) {
+  if (!allowedEmails.has(req.body.email) || req.body.password !== adminPassword) {
     throw createHttpError(401, "Invalid admin credentials");
   }
 
@@ -26,7 +32,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
   const token = jwt.sign(
     {
       role: "admin",
-      email: adminEmail,
+      email: req.body.email,
     },
     getJwtSecret(),
     {
@@ -41,7 +47,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
       token,
       expiresIn,
       admin: {
-        email: adminEmail,
+        email: req.body.email,
         role: "admin",
       },
     },

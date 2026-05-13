@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
+import useBusinessSettings from '../hooks/useBusinessSettings'
 
 const BASE = '/control-panel-7x9'
 
@@ -41,6 +42,15 @@ const NAV = [
     ),
   },
   {
+    to: `${BASE}/reviews`,
+    label: 'Reviews',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ),
+  },
+  {
     to: `${BASE}/settings`,
     label: 'Settings',
     icon: (
@@ -54,6 +64,7 @@ const NAV = [
 
 export default function Sidebar() {
   const navigate = useNavigate()
+  const settings = useBusinessSettings()
 
   function handleLogout() {
     localStorage.removeItem('adminToken')
@@ -67,7 +78,7 @@ export default function Sidebar() {
       <div style={styles.logo}>
         <div style={styles.logoMark}>VN</div>
         <div>
-          <div style={styles.logoTitle}>Velvet Nights</div>
+          <div style={styles.logoTitle}>{settings.businessName}</div>
           <div style={styles.logoSub}>Admin Console</div>
         </div>
       </div>
@@ -75,7 +86,7 @@ export default function Sidebar() {
       {/* Status pill */}
       <div style={styles.statusPill}>
         <span style={styles.dot} />
-        Live · Chennai
+        Live - {settings.city}
       </div>
 
       {/* Nav */}
@@ -104,8 +115,8 @@ export default function Sidebar() {
         <div style={styles.adminCard}>
           <div style={styles.avatar}>A</div>
           <div>
-            <div style={styles.adminName}>Admin</div>
-            <div style={styles.adminEmail}>owner@velvetnights.in</div>
+            <div style={styles.adminName}>{settings.profileName}</div>
+            <div style={styles.adminEmail}>{settings.profileEmail}</div>
           </div>
         </div>
         <button onClick={handleLogout} style={styles.logoutBtn}>

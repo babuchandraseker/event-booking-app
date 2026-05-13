@@ -1,42 +1,9 @@
 const now = () => new Date().toISOString();
+const { defaultPackages } = require("./defaultCatalog");
 
 const store = {
   bookings: [],
-  packages: [
-    {
-      id: "signature",
-      title: "Signature",
-      price: 5999,
-      duration: "2 hours",
-      maxGuests: 2,
-      description: "Signature private event package.",
-      active: true,
-      createdAt: now(),
-      updatedAt: now(),
-    },
-    {
-      id: "pkg-romantic-dinner",
-      title: "Romantic Dinner",
-      price: 4999,
-      duration: "2 hours",
-      maxGuests: 2,
-      description: "Private candle light dinner setup.",
-      active: true,
-      createdAt: now(),
-      updatedAt: now(),
-    },
-    {
-      id: "pkg-birthday",
-      title: "Birthday Celebration",
-      price: 7999,
-      duration: "3 hours",
-      maxGuests: 20,
-      description: "Decor, cake table, lights, and private celebration setup.",
-      active: true,
-      createdAt: now(),
-      updatedAt: now(),
-    },
-  ],
+  packages: defaultPackages.map((pkg) => ({ ...pkg, createdAt: now(), updatedAt: now() })),
   addons: [
     {
       id: "addon-cake",
@@ -57,7 +24,28 @@ const store = {
       updatedAt: now(),
     },
   ],
+  reviews: [],
   contactMessages: [],
+  settings: [
+    {
+      id: "business",
+      profileName: "Admin",
+      profileEmail: "admin@velvetnights.in",
+      businessName: "Velvet Nights",
+      tagline: "Private Event Studio",
+      description: "Chennai's premier indoor private event studio, crafting unforgettable moments for every occasion. Premium, intimate, and entirely yours.",
+      city: "Chennai",
+      address: "T. Nagar, Chennai - 600017",
+      openingHours: "9 AM - 11 PM",
+      phone: "+91 99999 99999",
+      whatsapp: "+91 99999 99999",
+      email: "hello@velvetnights.in",
+      instagram: "@velvetnights",
+      adminPassword: "admin123",
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
 };
 
 module.exports = store;

@@ -12,7 +12,12 @@ const PACKAGE_AMOUNTS = {
   romantic: 4999,
   birthday: 6499,
   surprise: 5999,
+  basic: 4999,
+  premium: 6999,
+  luxury: 9999,
 }
+
+const DAILY_SLOT_CAPACITY = 12
 
 function formatPackageName(packageId) {
   if (!packageId) return 'Private event'
@@ -30,8 +35,10 @@ function normalizeBooking(booking) {
     name: booking.name || '',
     phone: booking.phone || '',
     theme: booking.theme || booking.eventType || formatPackageName(packageId),
+    packageName: booking.packageTitle || booking.package || formatPackageName(packageId),
     date: booking.date || booking.eventDate || '',
     slot: booking.slot || booking.eventTime || '',
+    extraTime: booking.extraTime || booking.extraTimeMinutes || booking.extension || '',
     guests: booking.guests ?? booking.guestCount ?? 1,
     amount: booking.amount ?? PACKAGE_AMOUNTS[packageId] ?? 0,
     paymentStatus: booking.paymentStatus === 'not_started' ? 'unpaid' : (booking.paymentStatus || 'unpaid'),
@@ -94,12 +101,16 @@ export default function Dashboard() {
   const stats = useMemo(() => {
     const total = bookings.length
     const todayCount = bookings.filter(b => b.date === TODAY).length
+    const upcoming = bookings.filter(b => b.date >= TODAY && b.status !== 'cancelled').length
     const revenue = bookings
-      .filter(b => b.paymentStatus === 'paid')
+      .filter(b => ['paid', 'partial'].includes(b.paymentStatus))
       .reduce((sum, b) => sum + b.amount, 0)
-    const pending = bookings.filter(b => b.status === 'pending').length
+    const pendingPayments = bookings.filter(b => ['unpaid', 'partial', 'not_started'].includes(b.paymentStatus)).length
+    const activeOffers = 3
+    const occupiedSlots = bookings.filter(b => b.date === TODAY && b.status !== 'cancelled').length
+    const availableSlots = Math.max(DAILY_SLOT_CAPACITY - occupiedSlots, 0)
 
-    return { total, todayCount, revenue, pending }
+    return { total, todayCount, upcoming, revenue, pendingPayments, activeOffers, availableSlots, occupiedSlots }
   }, [bookings])
 
   const recent = bookings.slice(0, 5)
@@ -123,9 +134,12 @@ export default function Dashboard() {
 
           <div style={styles.statsGrid}>
             <Card label="Total Bookings" value={isLoading ? '...' : stats.total} sub={error || 'All time'} accent icon={<CalendarIcon color="var(--accent)" />} />
-            <Card label="Today's Bookings" value={isLoading ? '...' : stats.todayCount} sub={stats.todayCount === 0 ? 'No events today' : 'Events scheduled'} icon={<ClockIcon />} />
-            <Card label="Revenue Collected" value={isLoading ? '...' : `Rs ${stats.revenue.toLocaleString('en-IN')}`} sub="From paid bookings" trend="up" icon={<MoneyIcon />} />
-            <Card label="Pending Confirmations" value={isLoading ? '...' : stats.pending} sub="Requires action" icon={<CheckIcon />} />
+            <Card label="Today Bookings" value={isLoading ? '...' : stats.todayCount} sub={stats.todayCount === 0 ? 'No events today' : 'Events scheduled'} icon={<ClockIcon />} />
+            <Card label="Upcoming Events" value={isLoading ? '...' : stats.upcoming} sub="Confirmed and pending" icon={<CalendarIcon />} />
+            <Card label="Revenue Overview" value={isLoading ? '...' : `Rs ${stats.revenue.toLocaleString('en-IN')}`} sub="Paid and partial payments" trend="up" icon={<MoneyIcon />} />
+            <Card label="Pending Payments" value={isLoading ? '...' : stats.pendingPayments} sub="Unpaid or partial" icon={<MoneyIcon />} />
+            <Card label="Active Offers" value={isLoading ? '...' : stats.activeOffers} sub="Visible packages/offers" icon={<CheckIcon />} />
+            <Card label="Available Slots" value={isLoading ? '...' : stats.availableSlots} sub={`${stats.occupiedSlots} occupied today`} icon={<ClockIcon />} />
           </div>
 
           <div style={styles.section}>
@@ -162,7 +176,7 @@ export default function Dashboard() {
                       <td style={styles.td}><span style={styles.themeCell}>{b.theme}</span></td>
                       <td style={styles.td}>
                         <div style={styles.dateCell}>{b.date ? new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</div>
-                        <div style={styles.slotCell}>{b.slot}</div>
+                        <div style={styles.slotCell}>{b.slot} {b.extraTime ? `+ ${b.extraTime}` : ''}</div>
                       </td>
                       <td style={styles.td}><StatusBadge status={b.status} /></td>
                       <td style={styles.td}><PaymentBadge status={b.paymentStatus} /></td>
@@ -173,9 +187,11 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div style={styles.twoCol}>
+          <div style={styles.widgetsGrid}>
             <ThemeBreakdown bookings={bookings} />
+            <SlotOccupancy bookings={bookings} />
             <UpcomingSlots bookings={bookings} />
+            <QuickActions />
           </div>
         </div>
       </main>
@@ -220,6 +236,29 @@ function ThemeBreakdown({ bookings }) {
   )
 }
 
+function SlotOccupancy({ bookings }) {
+  const occupied = bookings.filter(b => b.date === TODAY && b.status !== 'cancelled').length
+  const percent = Math.min(Math.round((occupied / DAILY_SLOT_CAPACITY) * 100), 100)
+
+  return (
+    <div style={styles.panel}>
+      <div style={styles.panelTitle}>Slot Occupancy</div>
+      <div style={styles.occupancyTrack}>
+        <div style={{ ...styles.occupancyFill, width: `${percent}%` }} />
+      </div>
+      <div style={styles.occupancyMeta}>
+        <span>{occupied} booked</span>
+        <span>{DAILY_SLOT_CAPACITY - occupied} available</span>
+      </div>
+      <div style={styles.slotGrid}>
+        {Array.from({ length: DAILY_SLOT_CAPACITY }).map((_, index) => (
+          <span key={index} style={{ ...styles.slotDot, ...(index < occupied ? styles.slotDotBusy : {}) }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function UpcomingSlots({ bookings }) {
   const upcoming = bookings
     .filter(b => b.date >= TODAY && b.status !== 'cancelled')
@@ -251,6 +290,19 @@ function UpcomingSlots({ bookings }) {
   )
 }
 
+function QuickActions() {
+  return (
+    <div style={styles.panel}>
+      <div style={styles.panelTitle}>Quick Actions</div>
+      <div style={styles.quickActions}>
+        <Link to={`${ADMIN_BASE}/bookings`} style={styles.quickAction}>Review bookings</Link>
+        <Link to={`${ADMIN_BASE}/addons`} style={styles.quickAction}>Manage offers</Link>
+        <Link to={`${ADMIN_BASE}/settings`} style={styles.quickAction}>Business settings</Link>
+      </div>
+    </div>
+  )
+}
+
 function CalendarIcon({ color = 'var(--text-secondary)' }) {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
 }
@@ -274,7 +326,7 @@ const styles = {
   pageTitle: { fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.2 },
   pageDate: { fontSize: 13, color: 'var(--text-muted)', marginTop: 4 },
   newBtn: { background: 'transparent', border: '1px solid var(--border)', color: 'var(--accent)', borderRadius: 'var(--radius-sm)', padding: '9px 18px', fontSize: 13, cursor: 'pointer', textDecoration: 'none', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' },
-  statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 32 },
+  statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 14, marginBottom: 32 },
   section: { marginBottom: 28 },
   sectionHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   sectionTitle: { fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' },
@@ -291,7 +343,7 @@ const styles = {
   themeCell: { color: 'var(--text-secondary)', fontSize: 13 },
   dateCell: { color: 'var(--text-primary)', fontWeight: 500, fontSize: 13 },
   slotCell: { color: 'var(--text-muted)', fontSize: 12, marginTop: 1 },
-  twoCol: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 },
+  widgetsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 },
   panel: { background: 'var(--bg-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '22px 24px' },
   panelTitle: { fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-0.01em' },
   panelEmpty: { color: 'var(--text-muted)', fontSize: 13 },
@@ -308,4 +360,12 @@ const styles = {
   upcomingMonth: { fontSize: 9, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1, lineHeight: 1, marginTop: 2 },
   upcomingName: { fontSize: 13, fontWeight: 500, color: 'var(--text-primary)' },
   upcomingTheme: { fontSize: 12, color: 'var(--text-muted)', marginTop: 1 },
+  occupancyTrack: { height: 8, background: 'var(--bg-4)', borderRadius: 99, overflow: 'hidden', border: '1px solid var(--border)' },
+  occupancyFill: { height: '100%', background: 'linear-gradient(90deg, var(--accent), var(--green))', borderRadius: 99 },
+  occupancyMeta: { display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: 12, marginTop: 10 },
+  slotGrid: { display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6, marginTop: 18 },
+  slotDot: { height: 18, borderRadius: 4, background: 'var(--bg-4)', border: '1px solid var(--border)' },
+  slotDotBusy: { background: 'var(--accent-dim)', borderColor: 'rgba(201,169,110,0.4)' },
+  quickActions: { display: 'grid', gap: 10 },
+  quickAction: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '12px 14px', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 13, fontWeight: 600 },
 }
