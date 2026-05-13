@@ -1,43 +1,22 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import useBusinessSettings from '../hooks/useBusinessSettings'
 
-const trustStats = [
-  { count: 1200, suffix: '+', label: 'Events Hosted' },
-  { count: 98, suffix: '%', label: '5-Star Reviews' },
-  { count: 50, suffix: '+', label: 'Add-on Options' },
-  { count: 4, suffix: '', label: 'Years of Excellence' },
-]
+const toStatNumber = (value, fallback) => {
+  const parsed = Number.parseInt(value, 10)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback
+}
 
 export default function TrustSection() {
-  const statRefs = useRef([])
+  const settings = useBusinessSettings()
   const sectionRef = useRef(null)
   const inView = useInView(sectionRef, { once: true, margin: '-60px' })
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          const el = entry.target
-          const target = parseInt(el.dataset.count, 10)
-          const suffix = el.dataset.suffix || ''
-          let current = 0
-          const duration = 1800
-          const step = target / (duration / 16)
-          const interval = setInterval(() => {
-            current = Math.min(current + step, target)
-            el.textContent = Math.floor(current).toLocaleString('en-IN') + suffix
-            if (current >= target) clearInterval(interval)
-          }, 16)
-          observer.unobserve(el)
-        })
-      },
-      { threshold: 0.45 }
-    )
-
-    statRefs.current.forEach((el) => el && observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  const trustStats = [
+    { count: toStatNumber(settings.eventsHosted, 1200), suffix: '+', label: 'Events Hosted' },
+    { count: toStatNumber(settings.fiveStarReviews, 98), suffix: '%', label: '5-Star Reviews' },
+    { count: toStatNumber(settings.addonOptions, 50), suffix: '+', label: 'Add-on Options' },
+    { count: toStatNumber(settings.yearsOfExcellence, 4), suffix: '', label: 'Years of Excellence' },
+  ]
 
   return (
     <section
@@ -55,17 +34,15 @@ export default function TrustSection() {
         >
           {trustStats.map((s, i) => (
             <div key={s.label} className="trust-stat">
-              <div
+              <motion.div
                 className="trust-stat-num"
-                data-count={s.count}
-                data-suffix={s.suffix}
-                ref={(el) => {
-                  statRefs.current[i] = el
-                }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.35, delay: 0.08 * i }}
               >
-                {s.count}
+                {s.count.toLocaleString('en-IN')}
                 {s.suffix}
-              </div>
+              </motion.div>
               <div className="trust-stat-label">{s.label}</div>
             </div>
           ))}

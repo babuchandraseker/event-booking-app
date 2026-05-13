@@ -69,22 +69,6 @@ export default function HeroSection({ onBook }) {
           </button>
         </motion.div>
 
-        <motion.div className="hero-stats" {...fadeUp(1.0)}>
-          {[
-            { num: '1200+', label: 'Events Hosted' },
-            { num: '98%', label: '5-Star Reviews' },
-            { num: '3', label: 'Signature Themes' },
-          ].map((s) => (
-            <motion.div
-              key={s.label}
-              className="hero-stat-item"
-              whileHover={{ y: -3, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-            >
-              <div className="hero-stat-num">{s.num}</div>
-              <div className="hero-stat-label">{s.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
 
       <div className="hero-scroll-hint" aria-hidden="true">

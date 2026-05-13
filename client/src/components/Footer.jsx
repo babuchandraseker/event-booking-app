@@ -1,5 +1,5 @@
 import useBusinessSettings from '../hooks/useBusinessSettings'
-import { whatsappHref } from '../utils/contact'
+import { instagramHref, whatsappHref } from '../utils/contact'
 
 export default function Footer() {
   const settings = useBusinessSettings()
@@ -10,8 +10,11 @@ export default function Footer() {
   }
 
   const phoneHref = settings.phone.replace(/[^\d+]/g, '')
-  const instagramHandle = settings.instagram.replace('@', '')
+  const instagramHandle = 'awonderonesuprise'
+  const instagramUrl = instagramHref(instagramHandle)
   const waUrl = whatsappHref(settings.whatsapp)
+  const mapAddress = settings.address || 'No.3 ,Railway Colony , 1st Street ,Aminjikarai , Nelson Manickam Road ,Chennai, India, 600029'
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
 
   const quick = [
     ['#themes', 'Themes & packages'],
@@ -36,13 +39,14 @@ export default function Footer() {
             <p className="footer-brand-desc">{settings.description}</p>
             <div className="social-links mt-6 flex flex-wrap gap-3">
               <a
-                href={`https://instagram.com/${instagramHandle}`}
+                href={instagramUrl}
                 className="social-link transition-colors hover:border-[rgba(201,168,76,0.45)] hover:text-gold-light"
-                aria-label="Instagram"
+                aria-label={`Instagram ${instagramHandle}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Instagram
+                <span className="social-link-mark">IG</span>
+                <span>Instagram</span>
               </a>
               <a
                 href={waUrl}
@@ -51,7 +55,18 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                WhatsApp
+                <span className="social-link-mark">WA</span>
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={mapUrl}
+                className="social-link transition-colors hover:border-[rgba(201,168,76,0.45)] hover:text-gold-light"
+                aria-label="Open location in Google Maps"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="social-link-mark">LO</span>
+                <span>Location</span>
               </a>
             </div>
           </div>
@@ -104,7 +119,9 @@ export default function Footer() {
             <div className="footer-col-title">Contact</div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">Location</span>
-              <span>{settings.address}</span>
+              <a href={mapUrl} className="transition-colors hover:text-gold-light" target="_blank" rel="noopener noreferrer">
+                {mapAddress}
+              </a>
             </div>
             <div className="footer-contact-item">
               <span className="footer-contact-icon">City</span>

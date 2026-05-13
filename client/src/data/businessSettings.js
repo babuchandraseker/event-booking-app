@@ -7,12 +7,16 @@ export const DEFAULT_BUSINESS_SETTINGS = {
   tagline: 'Private Event Studio',
   description: "Chennai's premier indoor private event studio, crafting unforgettable moments for every occasion. Premium, intimate, and entirely yours.",
   city: 'Chennai',
-  address: 'T. Nagar, Chennai - 600017',
+  address: 'No.3 ,Railway Colony , 1st Street ,Aminjikarai , Nelson Manickam Road ,Chennai, India, 600029',
   openingHours: '9 AM - 11 PM',
   phone: '+91 99999 99999',
   whatsapp: '+91 99999 99999',
   email: 'hello@velvetnights.in',
   instagram: '@velvetnights',
+  eventsHosted: '1200',
+  fiveStarReviews: '98',
+  addonOptions: '50',
+  yearsOfExcellence: '4',
 }
 
 export function normalizeBusinessSettings(settings = {}) {
