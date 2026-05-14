@@ -6,26 +6,26 @@ const testimonials = [
   {
     stars: 5,
     quote:
-      'The romantic setup completely exceeded our expectations. Every detail was thoughtful and beautiful. My partner was in tears — the best kind.',
-    avatar: '💑',
+      'The romantic setup completely exceeded our expectations. Every detail was thoughtful and beautiful. My partner was in tears - the best kind.',
+    avatar: '\u2665',
     name: 'Priya & Arjun',
-    event: 'Anniversary · Romantic Theme',
+    event: 'Anniversary - Romantic Theme',
   },
   {
     stars: 5,
     quote:
       "We booked the birthday experience for our mom's 50th and she was absolutely speechless. The attention to detail was incredible. Worth every rupee!",
-    avatar: '🎂',
+    avatar: '\u2605',
     name: 'Karthik S.',
-    event: 'Birthday · Grand Package',
+    event: 'Birthday - Grand Package',
   },
   {
     stars: 5,
     quote:
       'Pulled off the most perfect surprise proposal with Velvet Nights. They coordinated everything secretly and the reveal was absolutely cinematic.',
-    avatar: '💍',
+    avatar: '\u25C6',
     name: 'Ravi M.',
-    event: 'Proposal · Surprise Theme',
+    event: 'Proposal - Surprise Theme',
   },
 ]
 
@@ -82,7 +82,7 @@ export default function CustomerReviewsSection() {
   }, [reviews.length])
 
   const active = reviews[index] || reviews[0]
-  const starString = (n) => '★'.repeat(Math.min(5, Math.max(1, n)))
+  const starString = (n) => '\u2605'.repeat(Math.min(5, Math.max(1, n)))
 
   const showReview = (nextIndex) => {
     setIndex(nextIndex)
@@ -115,7 +115,7 @@ export default function CustomerReviewsSection() {
             Celebrations they still <em>talk about</em>
           </h2>
           <p className="section-subtitle mx-auto max-w-xl text-[var(--text-secondary)]">
-            Real guests. Real tears, laughter, and gasps — captured in words, not scripts.
+            Real guests. Real tears, laughter, and gasps - captured in words, not scripts.
           </p>
         </motion.div>
 
@@ -157,7 +157,7 @@ export default function CustomerReviewsSection() {
                   </div>
                 </div>
                 <blockquote className="review-quote">
-                  “{active.quote}”
+                  "{active.quote}"
                 </blockquote>
               </motion.article>
             )}

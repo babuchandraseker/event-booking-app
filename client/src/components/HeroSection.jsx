@@ -42,13 +42,12 @@ export default function HeroSection({ onBook }) {
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-overlay-bottom" aria-hidden="true" />
 
-      {/* Ambient glow orbs */}
       <div className="hero-glow hero-glow--gold" aria-hidden="true" />
       <div className="hero-glow hero-glow--rose" aria-hidden="true" />
 
       <div className="hero-content">
         <motion.div className="hero-badge" {...fadeUp(0.2)}>
-          <span>✦ Premium Private Events · Chennai</span>
+          <span>{'\u2726'} Premium Private Events - Chennai</span>
         </motion.div>
 
         <motion.h1 className="hero-title" {...fadeUp(0.4)}>
@@ -62,7 +61,7 @@ export default function HeroSection({ onBook }) {
 
         <motion.div className="hero-cta" {...fadeUp(0.8)}>
           <button className="btn btn-primary btn-hero" onClick={() => onBook()}>
-            <span>✦</span> Book Your Day
+            <span>{'\u2726'}</span> Book Your Day
           </button>
           <button className="btn btn-glass" onClick={scrollToThemes}>
             Explore Themes

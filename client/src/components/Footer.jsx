@@ -13,6 +13,7 @@ export default function Footer() {
   const instagramHandle = 'awonderonesuprise'
   const instagramUrl = instagramHref(instagramHandle)
   const waUrl = whatsappHref(settings.whatsapp)
+  const emailUrl = `mailto:${settings.email}`
   const mapAddress = settings.address || 'No.3 ,Railway Colony , 1st Street ,Aminjikarai , Nelson Manickam Road ,Chennai, India, 600029'
   const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
 
@@ -68,6 +69,14 @@ export default function Footer() {
                 <span className="social-link-mark">LO</span>
                 <span>Location</span>
               </a>
+              <a
+                href={emailUrl}
+                className="social-link transition-colors hover:border-[rgba(201,168,76,0.45)] hover:text-gold-light"
+                aria-label={`Email ${settings.email}`}
+              >
+                <span className="social-link-mark">EM</span>
+                <span>Email</span>
+              </a>
             </div>
           </div>
 
@@ -117,43 +126,31 @@ export default function Footer() {
 
           <div>
             <div className="footer-col-title">Contact</div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">Location</span>
-              <a href={mapUrl} className="transition-colors hover:text-gold-light" target="_blank" rel="noopener noreferrer">
-                {mapAddress}
+            <div className="footer-contact-row footer-contact-row--actions">
+              <a href={`tel:${phoneHref}`} className="footer-contact-action transition-colors hover:text-gold-light">
+                <span className="footer-contact-icon">Phone</span>
+                <span>{settings.phone}</span>
+              </a>
+              <a href={waUrl} className="footer-contact-action transition-colors hover:text-gold-light" target="_blank" rel="noopener noreferrer">
+                <span className="footer-contact-icon">WhatsApp</span>
+                <span>{settings.whatsapp}</span>
               </a>
             </div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">City</span>
-              <span>{settings.city}</span>
-            </div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">Phone</span>
-              <a href={`tel:${phoneHref}`} className="transition-colors hover:text-gold-light">
-                {settings.phone}
-              </a>
-            </div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">WhatsApp</span>
-              <a href={waUrl} className="transition-colors hover:text-gold-light" target="_blank" rel="noopener noreferrer">
-                {settings.whatsapp}
-              </a>
-            </div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">Email</span>
-              <a href={`mailto:${settings.email}`} className="transition-colors hover:text-gold-light">
-                {settings.email}
-              </a>
-            </div>
-            <div className="footer-contact-item">
-              <span className="footer-contact-icon">Hours</span>
-              <span>Open daily — {settings.openingHours}</span>
+            <div className="footer-contact-row footer-contact-row--meta">
+              <div className="footer-contact-meta">
+                <span className="footer-contact-icon">City</span>
+                <span>{settings.city}</span>
+              </div>
+              <div className="footer-contact-meta">
+                <span className="footer-contact-icon">Hours</span>
+                <span>Open daily - {settings.openingHours}</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom mt-12 flex flex-col gap-4 border-t border-[rgba(201,168,76,0.1)] pt-8 text-sm text-[var(--text-muted)] sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 {settings.businessName}. All rights reserved.</span>
+          <span>{'\u00A9'} 2026 {settings.businessName}. All rights reserved.</span>
           <div className="footer-bottom-links flex flex-wrap gap-x-6 gap-y-2">
             <a href="#" className="transition-colors hover:text-gold-light">
               Privacy Policy
