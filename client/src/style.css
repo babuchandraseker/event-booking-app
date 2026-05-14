@@ -2399,7 +2399,7 @@ footer {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1.35fr;
   gap: 48px;
   margin-bottom: 64px;
 }
@@ -2513,13 +2513,13 @@ footer {
 }
 
 .footer-contact-row--actions {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(105px, 1fr) minmax(130px, 1fr);
   align-items: stretch;
   margin-bottom: 16px;
 }
 
 .footer-contact-row--meta {
-  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(105px, 1fr) minmax(130px, 1fr);
   align-items: start;
 }
 
@@ -2537,6 +2537,12 @@ footer {
 .footer-contact-action span:last-child,
 .footer-contact-meta span:last-child {
   overflow-wrap: anywhere;
+}
+
+@media (min-width: 769px) {
+  .footer-contact-action span:last-child {
+    white-space: nowrap;
+  }
 }
 
 .footer-bottom {
