@@ -1,16 +1,13 @@
 import { useState, useRef } from 'react';
 
 const ADDONS = [
-  { emoji: '💐', name: 'Flower Bouquet', desc: 'Fresh premium bouquet with seasonal blooms, wrapped elegantly.', price: '+ ₹799', img: '/addons/bouquet_gen.png' },
-  { emoji: '🎂', name: 'Custom Cake', desc: 'Handcrafted fondant or cream cake with personalized design and message.', price: '+ ₹999', img: '/addons/cake.png' },
-  { emoji: '📸', name: 'Photographer', desc: 'Professional candid shoot for 2 hours. 100+ edited photos delivered in 48hrs.', price: '+ ₹1,999', img: '/addons/photographer.png' },
-  { emoji: '🌫️', name: 'Fog Machine', desc: 'Dramatic low-lying fog effect that turns every room into a dreamscape.', price: '+ ₹599', img: '/addons/fog_gen.png' },
-  { emoji: '💡', name: 'LED Light Setup', desc: 'Color-changing LED strips and spotlights to match your theme perfectly.', price: '+ ₹499', img: '/addons/red_carpet.png' },
-  { emoji: '🎵', name: 'DJ & Music', desc: 'Live DJ or curated Spotify playlist with premium speaker system.', price: '+ ₹2,499', img: '/addons/dj.png' },
-  { emoji: '🤳', name: 'Photo Booth', desc: 'Instant print photo booth with props, frames, and digital copies included.', price: '+ ₹1,499', img: '/addons/photo_hanging.png' },
-  { emoji: '🥂', name: 'Welcome Drinks', desc: 'Chilled mocktail welcome drinks for all guests on arrival — served elegantly.', price: '+ ₹699', img: '/addons/bouquet.png' },
-  { emoji: '🕯️', name: 'Candle Path', desc: 'A dramatic pathway of tea-light candles leading to your private setup.', price: '+ ₹449', img: '/addons/candle_path.png' },
-  { emoji: '🎈', name: 'Balloon Arch', desc: 'Custom balloon arch in your chosen colors — the perfect photo backdrop.', price: '+ ₹899', img: '/addons/balloons.png' },
+  { emoji: '🎈', name: 'Room Filled with Balloon', desc: 'Transform your room into a sea of celebration balloons.', price: '+ ₹350', img: '/addons/balloons.png', video: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.mp4' },
+  { emoji: '💐', name: 'Flower Bouquet', desc: 'Fresh hand-crafted floral bouquet to cherish the moment.', price: '+ ₹300', img: '/addons/bouquet_gen.png', video: 'https://media.giphy.com/media/26tP4gFBQewkLnMv6/giphy.mp4' },
+  { emoji: '🖼️', name: '15 Photo Hanging', desc: 'Display your favourite 15 memories on a lit string wall.', price: '+ ₹250', img: '/addons/photo_hanging.png', video: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.mp4' },
+  { emoji: '🎬', name: 'Entry Video & 15min Group Photos', desc: 'Capture your grand entry on video plus 15 min group photo session.', price: '+ ₹350', img: '/addons/photographer.png', video: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.mp4' },
+  { emoji: '🌫️', name: 'Fog Entry', desc: 'Dramatic fog machine entry for a breathtaking entrance.', price: '+ ₹500', img: '/addons/fog_gen.png', video: 'https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.mp4' },
+  { emoji: '🟥', name: 'Red Carpet Path', desc: 'Walk in like a star with a VIP red carpet entrance.', price: '+ ₹300', img: '/addons/red_carpet.png', video: 'https://media.giphy.com/media/3o6fJ1BM7R2EBRDnxK/giphy.mp4' },
+  { emoji: '🕯️', name: 'Candle Path Way', desc: 'Romantic tealight candles lining your path into the room.', price: '+ ₹500', img: '/addons/candle_path.png', video: 'https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.mp4' },
 ];
 
 /* Ken Burns animation directions for variety */
@@ -66,17 +63,47 @@ export default function AddonsSection() {
           {ADDONS.map((addon, i) => (
             <div key={addon.name} className="addon-card addon-card-animated">
               <div className="addon-img-wrap addon-cinemagraph">
-                {/* Animated image with Ken Burns effect */}
-                <img
-                  src={addon.img}
-                  alt={addon.name}
-                  loading="lazy"
-                  className={`addon-kb-img ${KB_VARIANTS[i % KB_VARIANTS.length]}`}
-                  onError={e => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
+                {/* Animated video or image with Ken Burns effect */}
+                {addon.video ? (
+                  <>
+                    <video
+                      src={addon.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className={`addon-kb-img ${KB_VARIANTS[i % KB_VARIANTS.length]}`}
+                      poster={addon.img}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const img = e.target.parentNode.querySelector('img');
+                        if (img) img.style.display = 'block';
+                      }}
+                    />
+                    <img
+                      src={addon.img}
+                      alt={addon.name}
+                      loading="lazy"
+                      className={`addon-kb-img ${KB_VARIANTS[i % KB_VARIANTS.length]}`}
+                      style={{ display: 'none' }}
+                      onError={e => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  </>
+                ) : (
+                  <img
+                    src={addon.img}
+                    alt={addon.name}
+                    loading="lazy"
+                    className={`addon-kb-img ${KB_VARIANTS[i % KB_VARIANTS.length]}`}
+                    onError={e => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                )}
                 <div className="addon-emoji" style={{ display: 'none' }}>{addon.emoji}</div>
 
                 {/* Shimmer overlay */}

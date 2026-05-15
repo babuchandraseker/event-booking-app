@@ -57,7 +57,7 @@ export default function CtaSection({ onBook }) {
             <em>evening awaits</em>
           </h2>
           <p className="cta-desc relative mx-auto mt-4 max-w-xl">
-            Reserve your private studio window — we will guide you through theme, package, and add-ons in one
+            Reserve your private studio window - we will guide you through theme, package, and add-ons in one
             seamless flow.
           </p>
           <div className="cta-actions relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -69,7 +69,7 @@ export default function CtaSection({ onBook }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span>✦</span> Book your experience
+              <span>{'\u2726'}</span> Book your experience
             </motion.button>
             <motion.a
               href={waUrl}
@@ -95,18 +95,18 @@ export default function CtaSection({ onBook }) {
           </div>
           <div className="cta-contact relative mt-10 flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row sm:gap-8">
             <a href={telHref} className="cta-contact-item transition-colors hover:text-gold-light">
-              <span className="cta-contact-icon">📞</span>
+              <span className="cta-contact-icon" aria-hidden="true">{'\u260E'}</span>
               {settings.phone}
             </a>
             <a
               href={`mailto:${settings.email}`}
               className="cta-contact-item transition-colors hover:text-gold-light"
             >
-              <span className="cta-contact-icon">✉️</span>
+              <span className="cta-contact-icon" aria-hidden="true">{'\u2709'}</span>
               {settings.email}
             </a>
             <div className="cta-contact-item">
-              <span className="cta-contact-icon">📍</span>
+              <span className="cta-contact-icon" aria-hidden="true">{'\u25CF'}</span>
               {settings.address}
             </div>
           </div>

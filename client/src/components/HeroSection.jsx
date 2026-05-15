@@ -42,13 +42,12 @@ export default function HeroSection({ onBook }) {
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-overlay-bottom" aria-hidden="true" />
 
-      {/* Ambient glow orbs */}
       <div className="hero-glow hero-glow--gold" aria-hidden="true" />
       <div className="hero-glow hero-glow--rose" aria-hidden="true" />
 
       <div className="hero-content">
         <motion.div className="hero-badge" {...fadeUp(0.2)}>
-          <span>✦ Premium Private Events · Chennai</span>
+          <span>{'\u2726'} Premium Private Events - Chennai</span>
         </motion.div>
 
         <motion.h1 className="hero-title" {...fadeUp(0.4)}>
@@ -62,29 +61,13 @@ export default function HeroSection({ onBook }) {
 
         <motion.div className="hero-cta" {...fadeUp(0.8)}>
           <button className="btn btn-primary btn-hero" onClick={() => onBook()}>
-            <span>✦</span> Book Your Day
+            <span>{'\u2726'}</span> Book Your Experience
           </button>
           <button className="btn btn-glass" onClick={scrollToThemes}>
             Explore Themes
           </button>
         </motion.div>
 
-        <motion.div className="hero-stats" {...fadeUp(1.0)}>
-          {[
-            { num: '1200+', label: 'Events Hosted' },
-            { num: '98%', label: '5-Star Reviews' },
-            { num: '3', label: 'Signature Themes' },
-          ].map((s) => (
-            <motion.div
-              key={s.label}
-              className="hero-stat-item"
-              whileHover={{ y: -3, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-            >
-              <div className="hero-stat-num">{s.num}</div>
-              <div className="hero-stat-label">{s.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
 
       <div className="hero-scroll-hint" aria-hidden="true">

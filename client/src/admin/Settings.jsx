@@ -136,6 +136,14 @@ export default function Settings() {
               <Field label="Instagram" value={settings.instagram} onChange={value => updateField('instagram', value)} />
             </div>
 
+            <h2 style={styles.panelTitle}>Homepage Stats</h2>
+            <div style={styles.fieldGrid}>
+              <Field label="Events Hosted" type="number" min="0" value={settings.eventsHosted} onChange={value => updateField('eventsHosted', value)} />
+              <Field label="5-star reviews" type="number" min="0" max="100" value={settings.fiveStarReviews} onChange={value => updateField('fiveStarReviews', value)} />
+              <Field label="Add-on options" type="number" min="0" value={settings.addonOptions} onChange={value => updateField('addonOptions', value)} />
+              <Field label="Years of excellence" type="number" min="0" value={settings.yearsOfExcellence} onChange={value => updateField('yearsOfExcellence', value)} />
+            </div>
+
             <button type="submit" disabled={isSaving} style={styles.saveBtn}>{isSaving ? 'Saving...' : 'Save Settings'}</button>
           </form>
 
@@ -154,11 +162,11 @@ export default function Settings() {
   )
 }
 
-function Field({ label, value, onChange, type = 'text' }) {
+function Field({ label, value, onChange, type = 'text', ...inputProps }) {
   return (
     <label style={styles.field}>
       {label}
-      <input type={type} value={value} onChange={event => onChange(event.target.value)} style={styles.input} />
+      <input type={type} value={value} onChange={event => onChange(event.target.value)} style={styles.input} {...inputProps} />
     </label>
   )
 }

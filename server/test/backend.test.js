@@ -148,6 +148,17 @@ test("blocks duplicate pending or confirmed bookings for the same slot", async (
   assert.equal(differentTime.response.status, 201);
 });
 
+test("allows only one concurrent booking for the same slot", async () => {
+  const attempts = await Promise.all([
+    createBooking({ name: "Fast User One" }),
+    createBooking({ name: "Fast User Two" }),
+  ]);
+
+  const statuses = attempts.map(({ response }) => response.status).sort();
+  assert.deepEqual(statuses, [201, 409]);
+  assert.equal(memoryStore.bookings.length, 1);
+});
+
 test("requires admin JWT for protected admin routes", async () => {
   const unauthorized = await request("/api/admin/bookings");
   assert.equal(unauthorized.response.status, 401);

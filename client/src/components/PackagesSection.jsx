@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PACKAGES, fetchPackages, formatMoney } from '../data/packageCatalog';
 
 const ADDON_META = {
-  'Room Filled with Balloons': {
+  'Room Filled with Balloon': {
     id: 'balloons',
     img: '/addons/balloons.png',
     video: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.mp4',
@@ -12,7 +12,7 @@ const ADDON_META = {
   },
   'Flower Bouquet': {
     id: 'bouquet',
-    img: '/addons/bouquet.png',
+    img: '/addons/bouquet_gen.png',
     video: 'https://media.giphy.com/media/26tP4gFBQewkLnMv6/giphy.mp4',
     icon: '💐',
     desc: 'Fresh hand-crafted floral bouquet to cherish the moment.',
@@ -24,16 +24,16 @@ const ADDON_META = {
     icon: '🖼️',
     desc: 'Display your favourite 15 memories on a lit string wall.',
   },
-  'Entry Video & 15 min Group Photos': {
+  'Entry Video & 15min Group Photos': {
     id: 'entry_video',
-    img: '/addons/entry_video.png',
+    img: '/addons/photographer.png',
     video: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.mp4',
     icon: '🎬',
     desc: 'Capture your grand entry on video plus 15 min group photo session.',
   },
   'Fog Entry': {
     id: 'fog',
-    img: '/addons/fog.png',
+    img: '/addons/fog_gen.png',
     video: 'https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.mp4',
     icon: '🌫️',
     desc: 'Dramatic fog machine entry for a breathtaking entrance.',
@@ -45,12 +45,18 @@ const ADDON_META = {
     icon: '🟥',
     desc: 'Walk in like a star with a VIP red carpet entrance.',
   },
-  'Candle Pathway': {
+  'Candle Path Way': {
     id: 'candle_path',
     img: '/addons/candle_path.png',
     video: 'https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.mp4',
     icon: '🕯️',
     desc: 'Romantic tealight candles lining your path into the room.',
+  },
+  'Cake 1/2 KG': {
+    id: 'cake',
+    img: '/addons/cake.png',
+    icon: '🎂',
+    desc: 'Delicious half-kg celebration cake.',
   },
 };
 
@@ -185,6 +191,7 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
         })),
         addonTotal,
         grandTotal,
+        extraTime: selectedAddonItems.some((addon) => addon.name === 'Extra 30 Minutes'),
       }));
     } catch (err) {
       console.warn('Could not save booking context', err);
@@ -202,7 +209,7 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
           <div className="section-label">Packages &amp; Pricing</div>
           <h2 className="section-title">Choose Your <em>Package</em></h2>
           <p className="section-subtitle">
-            Select a package that suits your celebration — then personalise it with add-ons. Your total will appear at the bottom.
+            Silver, Gold, and Platinum can be updated from admin. Pick a package, then personalise with add-ons.
           </p>
         </div>
 
@@ -381,6 +388,12 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
         <div className={`pkg-summary-bar${pkgData ? ' pkg-summary-bar--visible' : ''}`}>
           <div className="pkg-summary-inner">
             <div className="pkg-summary-left">
+              <div className="pkg-summary-pkg">
+                <span className="pkg-summary-label">Live Cart</span>
+                <span className="pkg-summary-value">
+                  {themeKey ? `${themeKey.charAt(0).toUpperCase()}${themeKey.slice(1)} Theme` : 'Selected Theme'}
+                </span>
+              </div>
               <div className="pkg-summary-pkg">
                 <span className="pkg-summary-label">Package</span>
                 <span className="pkg-summary-value">{pkgData?.title || '—'}</span>

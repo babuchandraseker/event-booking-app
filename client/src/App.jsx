@@ -27,6 +27,7 @@ import Addons from "./admin/Addons";
 import Reviews from "./admin/Reviews";
 import Settings from "./admin/Settings";
 import ProtectedRoute from "./admin/ProtectedRoute";
+import { useReveal } from "./hooks/useReveal";
 
 const BASE = "/control-panel-7x9";
 
@@ -54,6 +55,7 @@ function HomePage({ onStartBooking }) {
 
 export default function App() {
   const [wizardOpen, setWizardOpen] = useState(false);
+  useReveal();
 
   const handleStartBooking = () => {
     setWizardOpen(true);

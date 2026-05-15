@@ -6,26 +6,26 @@ const testimonials = [
   {
     stars: 5,
     quote:
-      'The romantic setup completely exceeded our expectations. Every detail was thoughtful and beautiful. My partner was in tears — the best kind.',
-    avatar: '💑',
+      'The romantic setup completely exceeded our expectations. Every detail was thoughtful and beautiful. My partner was in tears - the best kind.',
+    avatar: '\u2665',
     name: 'Priya & Arjun',
-    event: 'Anniversary · Romantic Theme',
+    event: 'Anniversary - Romantic Theme',
   },
   {
     stars: 5,
     quote:
       "We booked the birthday experience for our mom's 50th and she was absolutely speechless. The attention to detail was incredible. Worth every rupee!",
-    avatar: '🎂',
+    avatar: '\u2605',
     name: 'Karthik S.',
-    event: 'Birthday · Grand Package',
+    event: 'Birthday - Grand Package',
   },
   {
     stars: 5,
     quote:
       'Pulled off the most perfect surprise proposal with Velvet Nights. They coordinated everything secretly and the reveal was absolutely cinematic.',
-    avatar: '💍',
+    avatar: '\u25C6',
     name: 'Ravi M.',
-    event: 'Proposal · Surprise Theme',
+    event: 'Proposal - Surprise Theme',
   },
 ]
 
@@ -89,6 +89,10 @@ export default function CustomerReviewsSection() {
     return '★'.repeat(count)
   }
 
+  const showReview = (nextIndex) => {
+    setIndex(nextIndex)
+  }
+
   return (
     <section
       ref={sectionRef}
@@ -116,34 +120,29 @@ export default function CustomerReviewsSection() {
             Celebrations they still <em>talk about</em>
           </h2>
           <p className="section-subtitle mx-auto max-w-xl text-[var(--text-secondary)]">
-            Real guests. Real tears, laughter, and gasps — captured in words, not scripts.
+            Real guests. Real tears, laughter, and gasps - captured in words, not scripts.
           </p>
         </motion.div>
 
-        <div className="relative mx-auto max-w-4xl">
+        <div className="relative mx-auto max-w-6xl">
           <AnimatePresence mode="wait">
             {active && (
               <motion.article
                 key={active.key || active.name}
                 role="article"
-                initial={{ opacity: 0, y: 28, filter: 'blur(6px)' }}
+                initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                exit={{ opacity: 0, y: -18, filter: 'blur(4px)' }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="relative rounded-2xl border border-[rgba(201,168,76,0.18)] bg-[rgba(15,15,26,0.65)] p-8 shadow-glow-gold backdrop-blur-md sm:p-12"
+                className="review-feature-card review-feature-card--spotlight"
               >
-                <div
-                  className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[rgba(201,168,76,0.08)] blur-3xl"
-                  aria-hidden
-                />
-                <div className="mb-6 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="flex items-center gap-4 text-left">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.06)] text-2xl shadow-inner">
+                <div className="review-card-top">
+                  <div className="review-author">
+                    <div className="review-avatar">
                       {active.photo ? (
                         <img
                           src={active.photo}
                           alt=""
-                          className="h-full w-full rounded-full object-cover"
                           loading="lazy"
                         />
                       ) : (
@@ -151,19 +150,19 @@ export default function CustomerReviewsSection() {
                       )}
                     </div>
                     <div>
-                      <div className="font-display text-xl text-[var(--text-primary)]">{active.name}</div>
-                      <div className="text-sm tracking-wide text-[var(--text-muted)]">{active.event}</div>
+                      <div className="review-author-name">{active.name}</div>
+                      <div className="review-event">{active.event}</div>
                     </div>
                   </div>
                   <div
-                    className="font-body text-sm tracking-[0.2em] text-gold-light"
+                    className="review-stars"
                     aria-label={`${active.stars} out of 5 stars`}
                   >
                     {typeof active.stars === 'number' ? starString(active.stars) : active.stars}
                   </div>
                 </div>
-                <blockquote className="font-display text-center text-xl leading-relaxed text-[var(--text-primary)] sm:text-left sm:text-2xl">
-                  “{active.quote}”
+                <blockquote className="review-quote">
+                  "{active.quote}"
                 </blockquote>
               </motion.article>
             )}
@@ -177,7 +176,7 @@ export default function CustomerReviewsSection() {
                   type="button"
                   aria-label={`Show review ${i + 1}`}
                   aria-current={i === index}
-                  onClick={() => setIndex(i)}
+                  onClick={() => showReview(i)}
                   className={`h-2.5 rounded-full transition-all duration-300 ease-luxury ${
                     i === index
                       ? 'w-10 bg-gradient-to-r from-gold-dark via-gold to-gold-light shadow-glow-gold'

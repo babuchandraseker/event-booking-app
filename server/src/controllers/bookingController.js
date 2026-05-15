@@ -16,10 +16,30 @@ const bookings = createRepository("bookings");
 const packages = createRepository("packages");
 const addons = createRepository("addons");
 const LEGACY_PACKAGE_IDS = new Set(["signature", "romantic", "birthday", "surprise"]);
-const BUILT_IN_ADDON_IDS = new Set(["cake", "photography", "addon-cake", "addon-photography"]);
+const BUILT_IN_ADDON_IDS = new Set([
+  "Cake",
+  "Fog Entry",
+  "Photography",
+  "Rose Pathway",
+  "Balloon Setup",
+  "Extra 30 Minutes",
+  "cake",
+  "fog-entry",
+  "photography",
+  "rose-pathway",
+  "balloon-setup",
+  "extra-30-minutes",
+  "addon-cake",
+  "addon-photography",
+]);
 const BOOKING_LOCK_STATUSES = new Set(["pending", "confirmed"]);
+let bookingWriteQueue = Promise.resolve();
 
-const normalizeLocation = (location) => String(location || "").trim().toLowerCase();
+const withBookingWriteLock = (operation) => {
+  const run = bookingWriteQueue.catch(() => undefined).then(operation);
+  bookingWriteQueue = run.catch(() => undefined);
+  return run;
+};
 
 const normalizeAddons = (value) => {
   if (value === undefined) {
@@ -97,7 +117,7 @@ const assertSlotAvailable = async (candidate, ignoreId = null) => {
     return;
   }
 
-  if (!candidate.eventDate || !candidate.eventTime || !candidate.packageId) {
+  if (!candidate.eventDate || !candidate.eventTime) {
     return;
   }
 
@@ -113,20 +133,18 @@ const assertSlotAvailable = async (candidate, ignoreId = null) => {
 
     return (
       booking.eventDate === candidate.eventDate &&
-      booking.eventTime === candidate.eventTime &&
-      booking.packageId === candidate.packageId &&
-      normalizeLocation(booking.location) === normalizeLocation(candidate.location)
+      booking.eventTime === candidate.eventTime
     );
   });
 
   if (duplicate) {
-    throw createHttpError(409, "This date, time, package, and location is already booked");
+    throw createHttpError(409, "This date and slot is already booked");
   }
 };
 
 const validateBookingPayload = async (payload, { partial = false } = {}) => {
   if (!partial) {
-    requireFields(payload, ["name", "phone", "eventType", "eventDate", "packageId"]);
+    requireFields(payload, ["name", "phone", "email", "eventType", "eventDate", "eventTime", "packageId"]);
   }
 
   if (payload.phone !== undefined) {
@@ -169,6 +187,27 @@ const getBooking = asyncHandler(async (req, res) => {
   res.json({ success: true, data: booking });
 });
 
+const getSlotAvailability = asyncHandler(async (req, res) => {
+  const eventDate = String(req.query.date || "").trim();
+
+  if (!eventDate) {
+    throw createHttpError(400, "date query parameter is required");
+  }
+
+  assertFutureDate(eventDate, "date");
+
+  const data = await bookings.list();
+  const bookedSlots = data
+    .filter((booking) => (
+      booking.eventDate === eventDate &&
+      BOOKING_LOCK_STATUSES.has(booking.status)
+    ))
+    .map((booking) => booking.eventTime)
+    .filter(Boolean);
+
+  res.json({ success: true, data: { eventDate, bookedSlots } });
+});
+
 const createBooking = asyncHandler(async (req, res) => {
   await validateBookingPayload(req.body);
   const packageInfo = await getPackageForBooking(req.body.packageId);
@@ -191,18 +230,21 @@ const createBooking = asyncHandler(async (req, res) => {
     packageId: req.body.packageId,
     packageTitle: req.body.packageTitle || packageInfo?.title || req.body.packageId,
     amount,
+    paidAmount: Number(req.body.paidAmount || 0),
+    paymentMode: req.body.paymentMode || null,
     guestCount: Number(req.body.guestCount || 1),
     location: req.body.location || null,
     addons: normalizeAddons(req.body.addons) || [],
     addonsDetailed: addonDetails,
     notes: req.body.notes || null,
     status: "pending",
-    paymentStatus: "not_started",
+    paymentStatus: req.body.paymentStatus || "not_started",
   };
 
-  await assertSlotAvailable(payload);
-
-  const booking = await bookings.create(payload);
+  const booking = await withBookingWriteLock(async () => {
+    await assertSlotAvailable(payload);
+    return bookings.create(payload);
+  });
 
   await notifyAdminAboutBooking(booking);
 
@@ -302,6 +344,7 @@ const deleteBooking = asyncHandler(async (req, res) => {
 module.exports = {
   listBookings,
   getBooking,
+  getSlotAvailability,
   createBooking,
   updateBooking,
   updateBookingStatus,
