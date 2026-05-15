@@ -1,0 +1,55 @@
+const now = () => new Date().toISOString();
+const { defaultPackages } = require("./defaultCatalog");
+
+const store = {
+  bookings: [],
+  packages: defaultPackages.map((pkg) => ({ ...pkg, createdAt: now(), updatedAt: now() })),
+  addons: [
+    {
+      id: "addon-cake",
+      name: "Cake",
+      price: 1200,
+      category: "food",
+      active: true,
+      createdAt: now(),
+      updatedAt: now(),
+    },
+    {
+      id: "addon-photography",
+      name: "Photography",
+      price: 2500,
+      category: "media",
+      active: true,
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
+  reviews: [],
+  contactMessages: [],
+  settings: [
+    {
+      id: "business",
+      profileName: "Admin",
+      profileEmail: "admin@velvetnights.in",
+      businessName: "Velvet Nights",
+      tagline: "Private Event Studio",
+      description: "Chennai's premier indoor private event studio, crafting unforgettable moments for every occasion. Premium, intimate, and entirely yours.",
+      city: "Chennai",
+      address: "No.3 ,Railway Colony , 1st Street ,Aminjikarai , Nelson Manickam Road ,Chennai, India, 600029",
+      openingHours: "9 AM - 11 PM",
+      phone: "+91 99999 99999",
+      whatsapp: "+91 99999 99999",
+      email: "hello@velvetnights.in",
+      instagram: "@velvetnights",
+      eventsHosted: "1200",
+      fiveStarReviews: "98",
+      addonOptions: "50",
+      yearsOfExcellence: "4",
+      adminPassword: "admin123",
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
+};
+
+module.exports = store;
