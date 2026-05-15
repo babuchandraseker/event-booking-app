@@ -53,7 +53,7 @@ export default function ThemeCard({ theme, index, inView }) {
             onClick={goToExperience}
             aria-label={`Explore ${title} theme`}
           >
-            Explore →
+            Explore Experience
           </button>
         </div>
       </div>

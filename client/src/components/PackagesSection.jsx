@@ -3,6 +3,36 @@ import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PACKAGES, fetchPackages, formatMoney } from '../data/packageCatalog';
 
 const ADDON_META = {
+  'Cake': {
+    id: 'cake',
+    img: '/themes/romantic/romantic2.jpg',
+    icon: '*',
+    desc: 'Celebration cake with a custom message.',
+  },
+  'Photography': {
+    id: 'photography',
+    img: '/addons/photo_hanging.png',
+    icon: '*',
+    desc: 'Professional captures during the experience.',
+  },
+  'Rose Pathway': {
+    id: 'rose-pathway',
+    img: '/themes/romantic/romantic1.jpg',
+    icon: '*',
+    desc: 'A rose pathway from entry to setup.',
+  },
+  'Balloon Setup': {
+    id: 'balloon-setup',
+    img: '/addons/balloons.png',
+    icon: '*',
+    desc: 'Premium balloon setup in your selected palette.',
+  },
+  'Extra 30 Minutes': {
+    id: 'extra-30-minutes',
+    img: null,
+    icon: '+30',
+    desc: 'Extend your room time using the built-in break window.',
+  },
   'Room Filled with Balloons': {
     id: 'balloons',
     img: '/addons/balloons.png',
@@ -148,6 +178,7 @@ export default function PackagesSection({
         })),
         addonTotal,
         grandTotal,
+        extraTime: selectedAddonItems.some((addon) => addon.name === 'Extra 30 Minutes'),
       }));
     } catch (error) {
       console.warn('Could not save package selection for reservation.', error);
@@ -165,7 +196,7 @@ export default function PackagesSection({
           <div className="section-label">Packages & Pricing</div>
           <h2 className="section-title">Choose Your <em>Package</em></h2>
           <p className="section-subtitle">
-            Basic, Premium, and Luxury can be updated from admin. Pick a package, then personalise with add-ons.
+            Silver, Gold, and Platinum can be updated from admin. Pick a package, then personalise with add-ons.
           </p>
         </div>
 
@@ -292,6 +323,12 @@ export default function PackagesSection({
         <div className={`pkg-summary-bar${pkgData ? ' pkg-summary-bar--visible' : ''}`}>
           <div className="pkg-summary-inner">
             <div className="pkg-summary-left">
+              <div className="pkg-summary-pkg">
+                <span className="pkg-summary-label">Live Cart</span>
+                <span className="pkg-summary-value">
+                  {themeKey ? `${themeKey.charAt(0).toUpperCase()}${themeKey.slice(1)} Theme` : 'Selected Theme'}
+                </span>
+              </div>
               <div className="pkg-summary-pkg">
                 <span className="pkg-summary-label">Package</span>
                 <span className="pkg-summary-value">{pkgData?.title || '-'}</span>

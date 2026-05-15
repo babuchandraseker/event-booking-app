@@ -61,7 +61,7 @@ export default function HeroSection({ onBook }) {
 
         <motion.div className="hero-cta" {...fadeUp(0.8)}>
           <button className="btn btn-primary btn-hero" onClick={() => onBook()}>
-            <span>{'\u2726'}</span> Book Your Day
+            <span>{'\u2726'}</span> Book Your Experience
           </button>
           <button className="btn btn-glass" onClick={scrollToThemes}>
             Explore Themes

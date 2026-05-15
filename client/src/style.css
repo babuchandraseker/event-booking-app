@@ -6962,6 +6962,12 @@ textarea.detail-input { resize: vertical; min-height: 80px; }
   font-family: var(--font-body);
 }
 
+.reserve-field-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
 /* CTA Button */
 .reserve-cta-btn {
   display: inline-flex;
