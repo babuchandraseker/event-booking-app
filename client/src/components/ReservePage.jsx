@@ -177,9 +177,9 @@ function TermsConfirm({ booking, themeInfo, onConfirm, onBack }) {
           <span className="reserve-snapshot-emoji">{themeInfo.emoji}</span>
           <div>
             <div className="reserve-snapshot-name">{themeInfo.label}</div>
-            <div className="reserve-snapshot-sub">{themeInfo.name}</div>
+            <div className="reserve-snapshot-sub">{booking.packageName || themeInfo.name}</div>
           </div>
-          <div className="reserve-snapshot-price">₹{themeInfo.price.toLocaleString('en-IN')}</div>
+          <div className="reserve-snapshot-price">₹{(booking.grandTotal || booking.packagePrice || themeInfo.price).toLocaleString('en-IN')}</div>
         </div>
         {(dateStr || slotStr) && (
           <div className="reserve-snapshot-row">
@@ -524,7 +524,32 @@ export default function ReservePage() {
             <div className="reserve-aside-emoji">{themeInfo.emoji}</div>
             <div className="reserve-aside-label">{themeInfo.label}</div>
             <h2 className="reserve-aside-title">{themeInfo.name}</h2>
-            <div className="reserve-aside-price">₹{themeInfo.price.toLocaleString('en-IN')}</div>
+
+            {/* Package & pricing summary from selection */}
+            {booking.packageName ? (
+              <div className="reserve-aside-pkg-summary">
+                <div className="reserve-aside-pkg-name">
+                  <span style={{ color: 'var(--gold)', fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>Package</span>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: 4, display: 'block' }}>{booking.packageName}</span>
+                </div>
+                <div className="reserve-aside-pkg-price">
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Base</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>₹{(booking.packagePrice || 0).toLocaleString('en-IN')}</span>
+                </div>
+                {booking.addons?.length > 0 && booking.addons.map(a => (
+                  <div key={a.id} className="reserve-aside-pkg-price">
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>+ {a.text}</span>
+                    <span style={{ color: 'var(--gold)', fontSize: '0.85rem' }}>₹{(a.price || 0).toLocaleString('en-IN')}</span>
+                  </div>
+                ))}
+                <div className="reserve-aside-pkg-price" style={{ borderTop: '1px solid rgba(201,168,76,0.15)', paddingTop: 8, marginTop: 4 }}>
+                  <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: '0.85rem' }}>Total</span>
+                  <span style={{ color: 'var(--gold-light)', fontWeight: 700, fontSize: '1.1rem' }}>₹{(booking.grandTotal || booking.packagePrice || 0).toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="reserve-aside-price">₹{themeInfo.price.toLocaleString('en-IN')}</div>
+            )}
 
             {(dateStr || slotStr) && (
               <div className="reserve-aside-context">

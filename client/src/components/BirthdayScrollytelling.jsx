@@ -85,8 +85,22 @@ export default function BirthdayScrollytelling() {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
   const starsRef = useRef(createStars(45));
+  const progressRef = useRef(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  /* ── Scroll progress bar ── */
+  useEffect(() => {
+    const onScroll = () => {
+      if (!progressRef.current) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+      progressRef.current.style.width = `${progress * 100}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   /* ── Intersection Observer for text reveal ── */
   useEffect(() => {
@@ -165,7 +179,10 @@ export default function BirthdayScrollytelling() {
 
   return (
     <div className="sst-page" data-theme="birthday">
-      {/* Particle canvas (fixed, covers viewport) */}
+      {/* Cinematic elements */}
+      <div ref={progressRef} className="sst-progress-bar" />
+      <div className="sst-letterbox-top" />
+      <div className="sst-letterbox-bottom" />
       <canvas ref={canvasRef} className="sst-particles" />
 
       {/* ── NAV ── */}
@@ -176,7 +193,6 @@ export default function BirthdayScrollytelling() {
           <span className="sst-nav-dot">·</span>
           <span className="sst-nav-theme">Birthday Celebration</span>
         </div>
-        <button className="sst-nav-cta" onClick={handleBookNow}>Reserve — ₹6,499</button>
       </nav>
 
       {/* ── INTRO VIDEO ── */}
@@ -229,7 +245,6 @@ export default function BirthdayScrollytelling() {
 
       <div className="sst-footer-nav">
         <button className="sst-btn-ghost" onClick={() => navigate(-1)}>← Go Back</button>
-        <button className="sst-btn-primary" onClick={handleBookNow}>Reserve Now</button>
       </div>
     </div>
   );
