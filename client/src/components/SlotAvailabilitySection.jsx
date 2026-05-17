@@ -1,7 +1,23 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { API_BASE_URL } from '../data/packageCatalog'
 
-/** Lightweight weekly snapshot for marketing urgency (replace with live API later). */
+const TOTAL_DAILY_SLOTS = 5
+const SLOT_LABELS = [
+  '10:00 AM - 11:30 AM',
+  '12:00 PM - 1:30 PM',
+  '2:00 PM - 3:30 PM',
+  '4:00 PM - 5:30 PM',
+  '6:00 PM - 7:30 PM',
+]
+
+function toLocalDateInput(date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 function buildWeekSlots() {
   const base = new Date()
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -11,16 +27,21 @@ function buildWeekSlots() {
     dt.setDate(base.getDate() + d)
     const name = dayNames[dt.getDay()]
     const label = `${name.slice(0, 3)} ${dt.getDate()}`
-    const urgency = d <= 2 ? Math.max(1, 4 - d) : Math.max(2, 6 - d)
     slots.push({
-      id: d,
+      id: toLocalDateInput(dt),
       label,
       fullDay: name,
-      left: urgency,
-      evening: d % 2 === 0,
+      left: TOTAL_DAILY_SLOTS,
+      evening: ['Friday', 'Saturday', 'Sunday'].includes(name),
+      loading: true,
     })
   }
   return slots
+}
+
+function countBookedSlots(bookedSlots = []) {
+  const valid = new Set(SLOT_LABELS)
+  return new Set(bookedSlots.filter((slot) => valid.has(slot))).size
 }
 
 const container = {
@@ -39,7 +60,41 @@ const item = {
 export default function SlotAvailabilitySection() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-  const rows = useMemo(() => buildWeekSlots(), [])
+  const baseRows = useMemo(() => buildWeekSlots(), [])
+  const [rows, setRows] = useState(baseRows)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadAvailability() {
+      const nextRows = await Promise.all(baseRows.map(async (row) => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/bookings/availability/slots?date=${row.id}`)
+          const result = await response.json()
+          const bookedCount = response.ok && result.success ? countBookedSlots(result.data.bookedSlots || []) : 0
+          return {
+            ...row,
+            left: Math.max(0, TOTAL_DAILY_SLOTS - bookedCount),
+            loading: false,
+          }
+        } catch {
+          return { ...row, loading: false, unavailable: true }
+        }
+      }))
+
+      if (!cancelled) setRows(nextRows)
+    }
+
+    loadAvailability()
+    const timer = window.setInterval(loadAvailability, 30000)
+    window.addEventListener('focus', loadAvailability)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+      window.removeEventListener('focus', loadAvailability)
+    }
+  }, [baseRows])
 
   return (
     <section
@@ -93,24 +148,30 @@ export default function SlotAvailabilitySection() {
                 <motion.div
                   layout
                   className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
-                    row.left <= 2
+                    row.unavailable || row.left <= 2
                       ? 'border border-[rgba(248,113,113,0.35)] bg-[rgba(248,113,113,0.08)] text-[#fecaca]'
                       : 'border border-[rgba(74,222,128,0.25)] bg-[rgba(74,222,128,0.06)] text-[#bbf7d0]'
                   }`}
                 >
                   <span
                     className={`relative flex h-2 w-2 rounded-full ${
-                      row.left <= 2 ? 'bg-red-400' : 'bg-emerald-400'
+                      row.unavailable || row.left <= 2 ? 'bg-red-400' : 'bg-emerald-400'
                     }`}
                   >
                     <span
                       className={`absolute inset-0 animate-ping rounded-full opacity-60 ${
-                        row.left <= 2 ? 'bg-red-400' : 'bg-emerald-400'
+                        row.unavailable || row.left <= 2 ? 'bg-red-400' : 'bg-emerald-400'
                       }`}
                       aria-hidden
                     />
                   </span>
-                  {row.left <= 2 ? (
+                  {row.loading ? (
+                    <span>Checking slots...</span>
+                  ) : row.unavailable ? (
+                    <span>Check at checkout</span>
+                  ) : row.left === 0 ? (
+                    <span>Fully booked</span>
+                  ) : row.left <= 2 ? (
                     <span>
                       Only <strong>{row.left}</strong> slots left
                     </span>

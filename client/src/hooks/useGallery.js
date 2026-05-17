@@ -1,23 +1,9 @@
-/**
- * useGallery — gallery data management hook.
- *
- * Currently uses localStorage for persistence (no backend required).
- * Firebase-ready: replace localStorage calls with Firestore reads/writes.
- *
- * Returns:
- *   items         — array of gallery items
- *   loading       — boolean
- *   addItem       — (item) => void
- *   updateItem    — (id, patch) => void
- *   deleteItem    — (id) => void
- *   reorderItems  — (newOrder: id[]) => void
- */
-
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { API_BASE_URL } from '../data/packageCatalog'
 
 const STORAGE_KEY = 'vn_gallery_items'
+const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '')
 
-// ─── Default seed items using existing public images ───────────────────────
 const DEFAULT_ITEMS = [
   {
     id: 'gal-1',
@@ -35,7 +21,7 @@ const DEFAULT_ITEMS = [
     id: 'gal-2',
     src: '/themes/romantic/romantic2.jpg',
     alt: 'Candlelit table decor',
-    title: 'Candlelit Séance',
+    title: 'Candlelit Seance',
     caption: 'Every candle placed with intention',
     category: 'Romantic',
     featured: false,
@@ -72,7 +58,7 @@ const DEFAULT_ITEMS = [
     src: '/themes/romantic/romantic4.jpg',
     alt: 'Surprise reveal moment',
     title: 'The Reveal',
-    caption: 'Tears of joy — every single time',
+    caption: 'Tears of joy every single time',
     category: 'Luxury Surprise',
     featured: false,
     visible: true,
@@ -133,48 +119,113 @@ function loadFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return JSON.parse(raw)
-  } catch (_) {}
+  } catch {
+    // Ignore corrupt local gallery data and fall back to defaults.
+  }
   return null
 }
 
 function saveToStorage(items) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-  } catch (_) {}
+  } catch {
+    // Storage can fail in private browsing or quota-limited contexts.
+  }
 }
 
 function generateId() {
   return `gal-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
 
+function authHeaders() {
+  const token = localStorage.getItem('adminToken')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+function absolutizeMediaUrl(url) {
+  if (!url || typeof url !== 'string') return url
+  if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`
+  return url
+}
+
+function normalizeRemoteItems(items = []) {
+  return items.map((item) => ({
+    ...item,
+    src: absolutizeMediaUrl(item.src),
+  }))
+}
+
+function mergeWithDefaultItems(remoteItems = []) {
+  const byId = new Map(normalizeRemoteItems(remoteItems).map((item) => [item.id, item]))
+  const mergedDefaults = DEFAULT_ITEMS.map((fallback) => ({
+    ...fallback,
+    ...(byId.get(fallback.id) || {}),
+  }))
+  const customItems = normalizeRemoteItems(remoteItems).filter((item) => !DEFAULT_ITEMS.some((fallback) => fallback.id === item.id))
+
+  return [...mergedDefaults, ...customItems].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+}
+
+async function fetchGalleryItems() {
+  const response = await fetch(`${API_BASE_URL}/gallery`)
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Could not load gallery.')
+  }
+  return mergeWithDefaultItems(result.data || [])
+}
+
+async function requestGallery(path = '', options = {}) {
+  const response = await fetch(`${API_BASE_URL}/gallery${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders(),
+      ...(options.headers || {}),
+    },
+  })
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Could not save gallery.')
+  }
+  return result.data
+}
+
 export function useGallery() {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(() => loadFromStorage() ?? DEFAULT_ITEMS)
   const [loading, setLoading] = useState(true)
 
-  // ── Load ──────────────────────────────────────────────────────────────────
   useEffect(() => {
-    const stored = loadFromStorage()
-    setItems(stored ?? DEFAULT_ITEMS)
-    setLoading(false)
+    let cancelled = false
 
-    // ── Firebase hook-in point ─────────────────────────────────────────────
-    // import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
-    // const q = query(collection(db, 'gallery'), orderBy('order'))
-    // const unsub = onSnapshot(q, snap => {
-    //   setItems(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-    //   setLoading(false)
-    // })
-    // return () => unsub()
+    async function load() {
+      try {
+        const remoteItems = await fetchGalleryItems()
+        if (cancelled) return
+        setItems(remoteItems.length ? remoteItems : DEFAULT_ITEMS)
+      } catch {
+        if (!cancelled) setItems(loadFromStorage() ?? DEFAULT_ITEMS)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    const timer = window.setInterval(load, 5000)
+    window.addEventListener('focus', load)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+      window.removeEventListener('focus', load)
+    }
   }, [])
 
-  // Persist on every change
   useEffect(() => {
     if (!loading) saveToStorage(items)
   }, [items, loading])
 
-  // ── CRUD ──────────────────────────────────────────────────────────────────
-
-  const addItem = useCallback((item) => {
+  const addItem = useCallback(async (item) => {
     const newItem = {
       id: generateId(),
       visible: true,
@@ -183,45 +234,60 @@ export function useGallery() {
       addedAt: new Date().toISOString(),
       ...item,
     }
-    setItems(prev => [...prev, newItem])
-
-    // Firebase: addDoc(collection(db, 'gallery'), newItem)
+    const saved = await requestGallery('', {
+      method: 'POST',
+      body: JSON.stringify(newItem),
+    })
+    setItems((prev) => mergeWithDefaultItems([...prev, saved]))
+    return saved
   }, [items.length])
 
-  const updateItem = useCallback((id, patch) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, ...patch } : i))
-
-    // Firebase: updateDoc(doc(db, 'gallery', id), patch)
-  }, [])
-
-  const deleteItem = useCallback((id) => {
-    setItems(prev => prev.filter(i => i.id !== id))
-
-    // Firebase: deleteDoc(doc(db, 'gallery', id))
-  }, [])
-
-  const reorderItems = useCallback((orderedIds) => {
-    setItems(prev => {
-      const map = Object.fromEntries(prev.map(i => [i.id, i]))
-      return orderedIds
-        .filter(id => map[id])
-        .map((id, idx) => ({ ...map[id], order: idx + 1 }))
-        .concat(prev.filter(i => !orderedIds.includes(i.id)))
+  const updateItem = useCallback(async (id, patch) => {
+    const saved = await requestGallery(`/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(patch),
     })
+    setItems((prev) => mergeWithDefaultItems(prev.map((i) => (i.id === id ? { ...i, ...saved } : i))))
+    return saved
   }, [])
 
-  const toggleVisibility = useCallback((id) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, visible: !i.visible } : i))
+  const deleteItem = useCallback(async (id) => {
+    await requestGallery(`/${id}`, { method: 'DELETE' })
+    setItems((prev) => prev.filter((i) => i.id !== id))
   }, [])
 
-  const toggleFeatured = useCallback((id) => {
-    setItems(prev => prev.map(i =>
-      i.id === id ? { ...i, featured: !i.featured } : i
-    ))
-  }, [])
+  const reorderItems = useCallback(async (orderedIds) => {
+    const map = Object.fromEntries(items.map((i) => [i.id, i]))
+    const nextItems = orderedIds
+      .filter((id) => map[id])
+      .map((id, idx) => ({ ...map[id], order: idx + 1 }))
+      .concat(items.filter((i) => !orderedIds.includes(i.id)))
 
-  const resetToDefaults = useCallback(() => {
-    setItems(DEFAULT_ITEMS)
+    setItems(nextItems)
+    await Promise.all(nextItems.map((item) => requestGallery(`/${item.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ order: item.order }),
+    })))
+  }, [items])
+
+  const toggleVisibility = useCallback(async (id) => {
+    const item = items.find((i) => i.id === id)
+    if (!item) return
+    await updateItem(id, { visible: item.visible === false })
+  }, [items, updateItem])
+
+  const toggleFeatured = useCallback(async (id) => {
+    const item = items.find((i) => i.id === id)
+    if (!item) return
+    await updateItem(id, { featured: !item.featured })
+  }, [items, updateItem])
+
+  const resetToDefaults = useCallback(async () => {
+    const saved = await requestGallery('/reset', {
+      method: 'POST',
+      body: JSON.stringify({ items: DEFAULT_ITEMS }),
+    })
+    setItems(mergeWithDefaultItems(saved.length ? saved : DEFAULT_ITEMS))
   }, [])
 
   return {

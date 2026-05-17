@@ -110,6 +110,7 @@ function ItemModal({ item, onSave, onClose }) {
     category: item?.category || 'Romantic',
     featured: item?.featured ?? false,
     visible: item?.visible ?? true,
+    imageDataUrl: '',
   })
   const fileRef = useRef(null)
 
@@ -121,13 +122,12 @@ function ItemModal({ item, onSave, onClose }) {
     const file = e.target.files[0]
     if (!file) return
 
-    // Preview using object URL (replace with Firebase Storage upload in production)
-    const url = URL.createObjectURL(file)
-    update('src', url)
-
-    // Firebase Storage hook-in:
-    // const ref = storageRef(storage, `gallery/${Date.now()}-${file.name}`)
-    // uploadBytes(ref, file).then(snap => getDownloadURL(snap.ref)).then(url => update('src', url))
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = String(reader.result || '')
+      setForm(prev => ({ ...prev, src: dataUrl, imageDataUrl: dataUrl }))
+    }
+    reader.readAsDataURL(file)
   }
 
   function handleSubmit() {
@@ -290,25 +290,33 @@ export default function GalleryAdmin() {
     setTimeout(() => setToast(''), 2800)
   }
 
-  function handleSave(formData) {
-    if (modal.mode === 'add') {
-      addItem(formData)
-      showToast('Image added to gallery ✓')
-    } else {
-      updateItem(modal.item.id, formData)
-      showToast('Image updated ✓')
+  async function handleSave(formData) {
+    try {
+      if (modal.mode === 'add') {
+        await addItem(formData)
+        showToast('Image added to gallery ✓')
+      } else {
+        await updateItem(modal.item.id, formData)
+        showToast('Image updated ✓')
+      }
+      setModal(null)
+    } catch (error) {
+      showToast(error.message || 'Could not save gallery image')
     }
-    setModal(null)
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     const item = items.find(i => i.id === id)
     if (!confirm(`Delete "${item?.title || 'this image'}"? This cannot be undone.`)) return
-    deleteItem(id)
-    showToast('Image removed from gallery')
+    try {
+      await deleteItem(id)
+      showToast('Image removed from gallery')
+    } catch (error) {
+      showToast(error.message || 'Could not delete image')
+    }
   }
 
-  function moveItem(index, direction) {
+  async function moveItem(index, direction) {
     const sorted = [...items].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
     const newIdx = index + direction
     if (newIdx < 0 || newIdx >= sorted.length) return
@@ -316,8 +324,12 @@ export default function GalleryAdmin() {
     const temp = ids[index]
     ids[index] = ids[newIdx]
     ids[newIdx] = temp
-    reorderItems(ids)
-    showToast('Order updated ✓')
+    try {
+      await reorderItems(ids)
+      showToast('Order updated ✓')
+    } catch (error) {
+      showToast(error.message || 'Could not update order')
+    }
   }
 
   // Filtered + searched view
@@ -396,7 +408,8 @@ export default function GalleryAdmin() {
           <button style={pageStyles.resetBtn} onClick={() => {
             if (confirm('Reset gallery to default images? All custom items will be lost.')) {
               resetToDefaults()
-              showToast('Gallery reset to defaults')
+                .then(() => showToast('Gallery reset to defaults'))
+                .catch((error) => showToast(error.message || 'Could not reset gallery'))
             }
           }}>
             Reset Defaults
@@ -421,7 +434,7 @@ export default function GalleryAdmin() {
               <p>No images found. {filterCat !== 'All' || search ? 'Try clearing filters.' : 'Add your first image above.'}</p>
             </div>
           ) : (
-            displayed.map((item, i) => {
+            displayed.map((item) => {
               // Find real index in sortedItems for move operations
               const realIdx = sortedItems.findIndex(x => x.id === item.id)
               return (
@@ -432,8 +445,16 @@ export default function GalleryAdmin() {
                   total={sortedItems.length}
                   onEdit={() => setModal({ mode: 'edit', item })}
                   onDelete={() => handleDelete(item.id)}
-                  onToggleVisible={() => { toggleVisibility(item.id); showToast('Visibility updated') }}
-                  onToggleFeatured={() => { toggleFeatured(item.id); showToast('Featured status updated') }}
+                  onToggleVisible={() => {
+                    toggleVisibility(item.id)
+                      .then(() => showToast('Visibility updated'))
+                      .catch((error) => showToast(error.message || 'Could not update visibility'))
+                  }}
+                  onToggleFeatured={() => {
+                    toggleFeatured(item.id)
+                      .then(() => showToast('Featured status updated'))
+                      .catch((error) => showToast(error.message || 'Could not update featured status'))
+                  }}
                   onMoveUp={() => moveItem(realIdx, -1)}
                   onMoveDown={() => moveItem(realIdx, 1)}
                 />

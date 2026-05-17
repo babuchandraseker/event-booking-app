@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar from '../components/Sidebar.jsx'
-import { useHeroContent } from '../context/HeroContentContext.jsx'
+import { useHeroContent } from '../hooks/useHeroContent.js'
 import { HERO_IDB_PREFIX } from '../lib/hero/constants.js'
 import { defaultPanelById } from '../lib/hero/defaultHeroPanels.js'
 import { deleteHeroBinaryIfStored, uploadHeroBinary } from '../lib/hero/heroMediaService.js'
@@ -150,7 +150,11 @@ export default function HeroSectionAdmin() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', minWidth: 220 }}>
-              <button type="button" onClick={publishLive} style={publishBtn}>
+              <button type="button" onClick={() => {
+                publishLive()
+                  .then(() => setMessage('Hero published to homepage.'))
+                  .catch((error) => setMessage(error.message || 'Could not publish hero.'))
+              }} style={publishBtn}>
                 Publish to homepage
               </button>
               <button type="button" onClick={discardDraftToPublished} style={ghostBtn}>

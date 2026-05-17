@@ -6,7 +6,6 @@ import HeroSection from "./components/HeroSection";
 import TrustSection from "./components/TrustSection";
 import ThemeSection from "./components/ThemeSection";
 import RealCelebrations from "./components/RealCelebrations";
-import MemoryGallery from "./components/MemoryGallery";
 import HowItWorks from "./components/HowItWorks";
 import CustomerReviewsSection from "./components/CustomerReviewsSection";
 import SlotAvailabilitySection from "./components/SlotAvailabilitySection";

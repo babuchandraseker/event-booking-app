@@ -1,5 +1,8 @@
 import { HERO_STORAGE_KEY } from './constants.js'
 import { buildDefaultHeroPanels } from './defaultHeroPanels.js'
+import { API_BASE_URL } from '../../data/packageCatalog.js'
+
+const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '')
 
 function sortPanels(list) {
   return [...list].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -45,6 +48,25 @@ function safeParse(raw) {
   }
 }
 
+function authHeaders() {
+  const token = localStorage.getItem('adminToken')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+function absolutizeMediaUrl(url) {
+  if (!url || typeof url !== 'string') return url
+  if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`
+  return url
+}
+
+function normalizeMediaUrls(panel) {
+  return {
+    ...panel,
+    videoUrl: absolutizeMediaUrl(panel.videoUrl),
+    posterImage: absolutizeMediaUrl(panel.posterImage),
+  }
+}
+
 export function loadHeroStore() {
   const raw = localStorage.getItem(HERO_STORAGE_KEY)
   const parsed = raw ? safeParse(raw) : null
@@ -67,6 +89,31 @@ export function loadHeroStore() {
   return { published, draft }
 }
 
+export async function loadHeroStoreFromApi() {
+  const response = await fetch(`${API_BASE_URL}/hero`)
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Could not load hero content.')
+  }
+
+  const defaults = buildDefaultHeroPanels()
+  const data = result.data || {}
+  const published = enrichAll(
+    Array.isArray(data.published) && data.published.length
+      ? data.published.map(normalizeMediaUrls)
+      : defaults,
+  )
+  const draft = enrichAll(
+    Array.isArray(data.draft) && data.draft.length
+      ? data.draft.map(normalizeMediaUrls)
+      : published.map((p) => ({ ...p })),
+  )
+
+  const store = { published, draft }
+  saveHeroStore(store)
+  return store
+}
+
 export function saveHeroStore({ published, draft }) {
   const payload = {
     version: 1,
@@ -77,13 +124,32 @@ export function saveHeroStore({ published, draft }) {
   localStorage.setItem(HERO_STORAGE_KEY, JSON.stringify(payload))
 }
 
-export function publishDraft(draft) {
+async function requestHero(path, body, method = 'POST') {
+  const response = await fetch(`${API_BASE_URL}/hero${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders(),
+    },
+    body: JSON.stringify(body),
+  })
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Could not save hero content.')
+  }
+  return result.data
+}
+
+export async function publishDraft(draft) {
   const next = sortPanels(draft).map((p, i) => ({ ...p, order: i }))
   saveHeroStore({ published: next.map((p) => ({ ...p })), draft: next.map((p) => ({ ...p })) })
+  await requestHero('/publish', { draft: next })
   return next
 }
 
-export function saveDraftOnly(draft) {
+export async function saveDraftOnly(draft) {
   const { published } = loadHeroStore()
-  saveHeroStore({ published, draft: sortPanels(draft).map((p, i) => ({ ...p, order: i })) })
+  const nextDraft = sortPanels(draft).map((p, i) => ({ ...p, order: i }))
+  saveHeroStore({ published, draft: nextDraft })
+  await requestHero('/draft', { draft: nextDraft }, 'PUT')
 }

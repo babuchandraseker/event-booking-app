@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import HeroPanel from './HeroPanel'
-import { useHeroContent } from '../../context/HeroContentContext.jsx'
+import { useHeroContent } from '../../hooks/useHeroContent.js'
+import { scrollToThemeInGallery } from '../../lib/hero/scrollToThemeInGallery.js'
 
 function useLgUp() {
   const [lg, setLg] = useState(false)
@@ -15,16 +16,6 @@ function useLgUp() {
   return lg
 }
 
-export function scrollToThemeInGallery(themeKey) {
-  document.getElementById('themes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  window.setTimeout(() => {
-    document.querySelector(`.theme-card[data-theme="${themeKey}"]`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    })
-  }, 420)
-}
-
 function splitGridTemplate(count, hovered, reduceMotion) {
   if (reduceMotion || count <= 0) return count > 0 ? Array(count).fill('1fr').join(' ') : '1fr'
   if (count === 1) return '1fr'
@@ -36,7 +27,7 @@ function splitGridTemplate(count, hovered, reduceMotion) {
   return weights.map((w) => `${w}fr`).join(' ')
 }
 
-export default function CinematicSplitHero({ onBook }) {
+export default function CinematicSplitHero() {
   const { ready, visiblePanelsForSite } = useHeroContent()
   const panels = visiblePanelsForSite
   const count = panels.length
@@ -46,6 +37,7 @@ export default function CinematicSplitHero({ onBook }) {
   const [hovered, setHovered] = useState(null)
   const [mobileSlide, setMobileSlide] = useState(0)
   const mobileScrollRef = useRef(null)
+  const activeMobileSlide = count > 0 ? Math.min(mobileSlide, count - 1) : 0
 
   const gridTemplate = useMemo(
     () => splitGridTemplate(count, hovered, reduceMotion),
@@ -61,11 +53,6 @@ export default function CinematicSplitHero({ onBook }) {
   const scrollThemesTop = useCallback(() => {
     document.getElementById('themes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
-
-  useEffect(() => {
-    if (count === 0) return
-    setMobileSlide((s) => Math.min(s, count - 1))
-  }, [count])
 
   useEffect(() => {
     if (isLg || count === 0) return
@@ -163,9 +150,9 @@ export default function CinematicSplitHero({ onBook }) {
             >
               <HeroPanel
                 panel={panel}
-                isExpanded={mobileSlide === i}
+                isExpanded={activeMobileSlide === i}
                 isDimmed={false}
-                showExploreCta={mobileSlide === i}
+                showExploreCta={activeMobileSlide === i}
                 onExplore={() => scrollToThemeInGallery(panel.themeKey)}
                 onHoverStart={() => {}}
                 onHoverEnd={() => {}}
@@ -178,7 +165,7 @@ export default function CinematicSplitHero({ onBook }) {
             <span
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                mobileSlide === i ? 'w-8 bg-amber-200/90' : 'w-2 bg-white/25'
+                activeMobileSlide === i ? 'w-8 bg-amber-200/90' : 'w-2 bg-white/25'
               }`}
               aria-hidden
             />
@@ -191,7 +178,7 @@ export default function CinematicSplitHero({ onBook }) {
           <button
             type="button"
             className="btn btn-primary btn-hero shadow-[0_12px_40px_rgba(200,168,75,0.35)]"
-            onClick={() => onBook?.()}
+            onClick={scrollThemesTop}
           >
             <span>✦</span> Book your day
           </button>

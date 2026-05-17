@@ -25,6 +25,8 @@ const store = {
     },
   ],
   reviews: [],
+  gallery: [],
+  heroContent: [],
   contactMessages: [],
   settings: [
     {

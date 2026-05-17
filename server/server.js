@@ -13,6 +13,8 @@ const contactRoutes = require("./src/routes/contactRoutes");
 const reviewRoutes = require("./src/routes/reviewRoutes");
 const settingsRoutes = require("./src/routes/settingsRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
+const galleryRoutes = require("./src/routes/galleryRoutes");
+const heroRoutes = require("./src/routes/heroRoutes");
 const { notFound, errorHandler } = require("./src/middleware/errorMiddleware");
 
 const app = express();
@@ -39,7 +41,7 @@ app.use(
     },
   })
 );
-app.use(express.json({ limit: "8mb" }));
+app.use(express.json({ limit: "180mb" }));
 app.use(morgan("dev"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -65,6 +67,8 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/gallery", galleryRoutes);
+app.use("/api/hero", heroRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

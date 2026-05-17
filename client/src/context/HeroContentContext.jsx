@@ -1,16 +1,7 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { loadHeroStore, publishDraft, saveDraftOnly } from '../lib/hero/heroPanelRepository.js'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { HeroContentContext } from './HeroContentContextValue.js'
+import { loadHeroStore, loadHeroStoreFromApi, publishDraft, saveDraftOnly } from '../lib/hero/heroPanelRepository.js'
 import { panelToDisplayFields, resolveHeroMediaUrl, revokeAllHeroBlobs } from '../lib/hero/resolveHeroMediaUrl.js'
-
-const HeroContentContext = createContext(null)
 
 async function resolvePanel(panel) {
   const [videoSrc, poster] = await Promise.all([
@@ -21,8 +12,9 @@ async function resolvePanel(panel) {
 }
 
 export function HeroContentProvider({ children }) {
-  const [publishedRaw, setPublishedRaw] = useState([])
-  const [draftRaw, setDraftRaw] = useState([])
+  const initialStore = useMemo(() => loadHeroStore(), [])
+  const [publishedRaw, setPublishedRaw] = useState(initialStore.published)
+  const [draftRaw, setDraftRaw] = useState(initialStore.draft)
   const [resolvedPublished, setResolvedPublished] = useState([])
   const [resolvedDraft, setResolvedDraft] = useState([])
   const [ready, setReady] = useState(false)
@@ -35,14 +27,45 @@ export function HeroContentProvider({ children }) {
     setDraftRaw(draft)
   }, [])
 
+  const reloadFromApi = useCallback(async () => {
+    const { published, draft } = await loadHeroStoreFromApi()
+    setPublishedRaw(published)
+    setDraftRaw(draft)
+  }, [])
+
   useEffect(() => {
-    reloadFromStorage()
-  }, [reloadFromStorage])
+    let cancelled = false
+    const isAdmin = window.location.pathname.includes('/control-panel-7x9')
+
+    async function load() {
+      try {
+        const { published, draft } = await loadHeroStoreFromApi()
+        if (cancelled) return
+        setPublishedRaw(published)
+        setDraftRaw(draft)
+      } catch {
+        // Keep local defaults/local draft if the API is unavailable.
+      }
+    }
+
+    load()
+    if (isAdmin) return () => {
+      cancelled = true
+    }
+
+    const timer = window.setInterval(load, 5000)
+    window.addEventListener('focus', load)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+      window.removeEventListener('focus', load)
+    }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
     revokeAllHeroBlobs()
-    setReady(false)
     const pubSorted = [...publishedRaw].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     const draftSorted = [...draftRaw].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     ;(async () => {
@@ -71,8 +94,13 @@ export function HeroContentProvider({ children }) {
     if (saveTimer.current) window.clearTimeout(saveTimer.current)
     saveTimer.current = window.setTimeout(() => {
       saveDraftOnly(nextDraft)
-      setSaveStatus('saved')
-      window.setTimeout(() => setSaveStatus('idle'), 1600)
+        .then(() => {
+          setSaveStatus('saved')
+          window.setTimeout(() => setSaveStatus('idle'), 1600)
+        })
+        .catch(() => {
+          setSaveStatus('idle')
+        })
     }, 420)
   }, [])
 
@@ -113,8 +141,8 @@ export function HeroContentProvider({ children }) {
     [scheduleDraftPersist],
   )
 
-  const publishLive = useCallback(() => {
-    const next = publishDraft(draftRaw)
+  const publishLive = useCallback(async () => {
+    const next = await publishDraft(draftRaw)
     setPublishedRaw(next)
     setDraftRaw(next.map((p) => ({ ...p })))
     setSaveStatus('saved')
@@ -138,6 +166,7 @@ export function HeroContentProvider({ children }) {
       resolvedDraft,
       visiblePanelsForSite,
       reloadFromStorage,
+      reloadFromApi,
       updateDraftPanel,
       setDraftPanels,
       reorderDraft,
@@ -153,6 +182,7 @@ export function HeroContentProvider({ children }) {
       resolvedDraft,
       visiblePanelsForSite,
       reloadFromStorage,
+      reloadFromApi,
       updateDraftPanel,
       setDraftPanels,
       reorderDraft,
@@ -162,10 +192,4 @@ export function HeroContentProvider({ children }) {
   )
 
   return <HeroContentContext.Provider value={value}>{children}</HeroContentContext.Provider>
-}
-
-export function useHeroContent() {
-  const ctx = useContext(HeroContentContext)
-  if (!ctx) throw new Error('useHeroContent must be used within HeroContentProvider')
-  return ctx
 }

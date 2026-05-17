@@ -16,13 +16,18 @@ if (hasFirebaseConfig && !admin.apps.length) {
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     }),
+    ...(process.env.FIREBASE_STORAGE_BUCKET ? { storageBucket: process.env.FIREBASE_STORAGE_BUCKET } : {}),
   });
 
   db = admin.firestore();
 }
 
+const bucket = db && process.env.FIREBASE_STORAGE_BUCKET ? admin.storage().bucket() : null;
+
 module.exports = {
   admin,
+  bucket,
   db,
   isFirebaseEnabled: Boolean(db),
+  isFirebaseStorageEnabled: Boolean(bucket),
 };
