@@ -58,6 +58,7 @@ function normalizeBooking(booking) {
     id: booking.id || '',
     name: booking.name || '',
     phone: booking.phone || '',
+    email: booking.email || '',
     theme: booking.theme || booking.eventType || formatPackageName(packageId),
     packageId,
     packageName: booking.packageTitle || booking.package || formatPackageName(packageId),
@@ -187,7 +188,7 @@ export default function Bookings() {
 
   const filtered = useMemo(() => {
     return bookings.filter(b => {
-      const searchable = [b.id, b.name, b.phone, b.theme, b.packageName, b.slot, b.paymentStatus, b.status, b.notes, ...b.addons]
+      const searchable = [b.id, b.name, b.phone, b.email, b.theme, b.packageName, b.slot, b.paymentStatus, b.status, b.notes, ...b.addons]
         .join(' ')
         .toLowerCase()
       const q = search.toLowerCase()
@@ -369,6 +370,7 @@ export default function Bookings() {
                         <td style={styles.td}>
                           <div style={styles.guestName}>{b.name}</div>
                           <div style={styles.guestPhone}>{b.phone}</div>
+                          {b.email && <div style={styles.guestEmail}>{b.email}</div>}
                         </td>
                         <td style={styles.td}>
                           <span style={styles.themeCell}>{b.theme}</span>
@@ -415,6 +417,7 @@ function BookingDetails({ booking }) {
   const details = [
     ['Customer name', booking.name],
     ['Phone number', booking.phone],
+    ['Email', booking.email || '-'],
     ['Theme', booking.theme],
     ['Package', booking.packageName],
     ['Add-ons', booking.addons.length > 0 ? booking.addons.join(', ') : '-'],
@@ -520,6 +523,7 @@ const styles = {
   idCell: { fontFamily: 'monospace', fontSize: 11.5, color: 'var(--text-muted)', background: 'var(--bg-4)', padding: '2px 8px', borderRadius: 4 },
   guestName: { color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.3 },
   guestPhone: { color: 'var(--text-muted)', fontSize: 12, marginTop: 2 },
+  guestEmail: { color: 'var(--text-muted)', fontSize: 11.5, marginTop: 2, overflowWrap: 'anywhere' },
   themeCell: { color: 'var(--text-secondary)', fontSize: 13 },
   dateVal: { color: 'var(--text-primary)', fontWeight: 500, fontSize: 13 },
   slotVal: { color: 'var(--text-muted)', fontSize: 12, marginTop: 2 },

@@ -4,20 +4,23 @@ const BASE_PRICES = { romantic: 4999, birthday: 6499, surprise: 5999, '': 0 };
 const GUEST_MULT = { '2': 1, '4': 1.2, '6': 1.4, '10': 1.6, '15': 2, '20+': 2.5 };
 const DUR_MULT = { '1': 0.8, '2': 1, '3': 1.4, '4': 1.7 };
 const ADDON_PRICES = {
-  'Flower bouquet': 799, 'Cake': 999, 'Photographer': 1999,
-  'Fog machine': 599, 'LED lights': 499, 'DJ & Music': 2499,
-  'Photo booth': 1499, 'Welcome drinks': 699
+  'Room Filled with Balloon': 350,
+  'Flower bouquet': 300,
+  '15 photo hanging': 250,
+  'Entry video & 15min group photos': 350,
+  'Fog entry': 500,
+  'Red carpet path': 300,
+  'Candle Path Way': 500
 };
 
 const ADDONS = [
+  { value: 'Room Filled with Balloon', label: '🎈 Room Filled with Balloon' },
   { value: 'Flower bouquet', label: '💐 Flower bouquet' },
-  { value: 'Cake', label: '🎂 Cake' },
-  { value: 'Photographer', label: '📸 Photographer' },
-  { value: 'Fog machine', label: '🌫️ Fog machine' },
-  { value: 'LED lights', label: '💡 LED lights' },
-  { value: 'DJ & Music', label: '🎵 DJ & Music' },
-  { value: 'Photo booth', label: '🤳 Photo booth' },
-  { value: 'Welcome drinks', label: '🥂 Welcome drinks' },
+  { value: '15 photo hanging', label: '🖼️ 15 photo hanging' },
+  { value: 'Entry video & 15min group photos', label: '🎬 Entry video & 15min group photos' },
+  { value: 'Fog entry', label: '🌫️ Fog entry' },
+  { value: 'Red carpet path', label: '🟥 Red carpet path' },
+  { value: 'Candle Path Way', label: '🕯️ Candle Path Way' },
 ];
 
 export default function PriceEstimator() {

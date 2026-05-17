@@ -72,8 +72,22 @@ export default function RomanticScrollytelling() {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
   const heartsRef = useRef(createHearts(35));
+  const progressRef = useRef(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  /* ── Scroll progress bar ── */
+  useEffect(() => {
+    const onScroll = () => {
+      if (!progressRef.current) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+      progressRef.current.style.width = `${progress * 100}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -152,6 +166,10 @@ export default function RomanticScrollytelling() {
 
   return (
     <div className="sst-page" data-theme="romantic">
+      {/* Cinematic elements */}
+      <div ref={progressRef} className="sst-progress-bar" />
+      <div className="sst-letterbox-top" />
+      <div className="sst-letterbox-bottom" />
       <canvas ref={canvasRef} className="sst-particles" />
 
       <nav className="sst-nav">
@@ -159,9 +177,8 @@ export default function RomanticScrollytelling() {
         <div className="sst-nav-brand">
           <span className="sst-nav-name">Velvet Nights</span>
           <span className="sst-nav-dot">·</span>
-          <span className="sst-nav-theme">Roses & Candlelight</span>
+          <span className="sst-nav-theme">Roses &amp; Candlelight</span>
         </div>
-        <button className="sst-nav-cta" onClick={handleBookNow}>Reserve — ₹4,999</button>
       </nav>
 
       <section className="sst-intro">
@@ -212,7 +229,6 @@ export default function RomanticScrollytelling() {
 
       <div className="sst-footer-nav">
         <button className="sst-btn-ghost" onClick={() => navigate(-1)}>← Go Back</button>
-        <button className="sst-btn-primary" onClick={handleBookNow}>Reserve Now</button>
       </div>
     </div>
   );

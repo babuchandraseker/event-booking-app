@@ -37,13 +37,14 @@ function resolveImageUrl(url) {
 }
 
 function mapApiReview(review, index) {
+  if (!review) return null
   return {
     stars: Number(review.rating || 5),
-    quote: review.message,
+    quote: review.message || '',
     avatar: '',
     photo: resolveImageUrl(review.imageUrl),
-    name: review.customerName,
-    event: review.eventType,
+    name: review.customerName || 'Guest',
+    event: review.eventType || 'Event',
     key: review.id != null ? String(review.id) : `api-${index}`,
   }
 }
@@ -62,8 +63,9 @@ export default function CustomerReviewsSection() {
     fetch(`${API_BASE_URL}/reviews`)
       .then((response) => response.json())
       .then((result) => {
-        if (!ignore && result.success && result.data.length > 0) {
-          setReviews(result.data.map((review, i) => mapApiReview(review, i)))
+        if (!ignore && result.success && Array.isArray(result.data)) {
+          const mapped = result.data.map((review, i) => mapApiReview(review, i)).filter(Boolean)
+          if (mapped.length > 0) setReviews(mapped)
         }
       })
       .catch(() => {})
@@ -82,7 +84,10 @@ export default function CustomerReviewsSection() {
   }, [reviews.length])
 
   const active = reviews[index] || reviews[0]
-  const starString = (n) => '\u2605'.repeat(Math.min(5, Math.max(1, n)))
+  const starString = (n) => {
+    const count = Math.min(5, Math.max(1, Math.floor(Number(n) || 5)))
+    return '★'.repeat(count)
+  }
 
   const showReview = (nextIndex) => {
     setIndex(nextIndex)

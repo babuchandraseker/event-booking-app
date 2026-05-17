@@ -30,6 +30,7 @@ import Settings from "./admin/Settings";
 import Gallery from "./admin/Gallery";
 import HeroSectionAdmin from "./admin/HeroSectionAdmin";
 import ProtectedRoute from "./admin/ProtectedRoute";
+import { useReveal } from "./hooks/useReveal";
 
 const BASE = "/control-panel-7x9";
 
@@ -63,6 +64,7 @@ function HomePage({ onStartBooking }) {
 
 export default function App() {
   const [wizardOpen, setWizardOpen] = useState(false);
+  useReveal();
 
   const handleStartBooking = () => {
     setWizardOpen(true);

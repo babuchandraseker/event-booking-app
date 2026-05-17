@@ -3,6 +3,7 @@ const {
   createBooking,
   deleteBooking,
   getBooking,
+  getSlotAvailability,
   listBookings,
   updateBooking,
   updateBookingStatus,
@@ -17,6 +18,7 @@ const bookingCreateLimiter = createRateLimiter({
   message: "Too many booking attempts. Please try again later.",
 });
 
+router.get("/availability/slots", getSlotAvailability);
 router.route("/").get(requireAdminAuth, listBookings).post(bookingCreateLimiter, createBooking);
 router.route("/:id").get(requireAdminAuth, getBooking).patch(requireAdminAuth, updateBooking).delete(requireAdminAuth, deleteBooking);
 router.patch("/:id/status", requireAdminAuth, updateBookingStatus);
