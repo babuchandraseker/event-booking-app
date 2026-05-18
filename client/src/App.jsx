@@ -28,6 +28,7 @@ import Reviews from "./admin/Reviews";
 import Settings from "./admin/Settings";
 import Gallery from "./admin/Gallery";
 import HeroSectionAdmin from "./admin/HeroSectionAdmin";
+import Themes from "./admin/Themes";
 import ProtectedRoute from "./admin/ProtectedRoute";
 import { useReveal } from "./hooks/useReveal";
 
@@ -145,6 +146,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        
+        <Route
+          path={`${BASE}/themes`}
+          element={
+           <ProtectedRoute>
+              <Themes />
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path={BASE} element={<Navigate to={`${BASE}/login`} replace />} />
         <Route path={`${BASE}/*`} element={<Navigate to={`${BASE}/login`} replace />} />
 

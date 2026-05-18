@@ -2112,15 +2112,60 @@ img, video { max-width: 100%; display: block; }
 
 /* ---- Addon Card (animated) ---- */
 .addon-card {
-  width: 260px;
+  width: 280px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(145deg, var(--surface) 0%, var(--violet-void) 100%);
   border: 1px solid rgba(200,168,75,0.1);
   overflow: hidden;
   flex-shrink: 0;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.5s,
               box-shadow 0.5s;
+}
+
+/* Full-background card variant — height driven by image aspect ratio */
+.addon-card-fullbg {
+  position: relative;
+  width: 280px;
+  background: #0a0a0f;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Image fills full width, natural height — no cropping */
+.addon-bg-media {
+  position: relative !important;
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain;
+  object-position: center top;
+  z-index: 0;
+  filter: brightness(1.05) saturate(1.08);
+}
+
+/* Gradient overlay — sits over image at bottom only, for text legibility */
+.addon-bg-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(
+    to bottom,
+    rgba(5,5,7,0.0)  0%,
+    rgba(5,5,7,0.5)  45%,
+    rgba(5,5,7,0.78) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Text sits at bottom of card, directly over the image — no box, no background */
+.addon-body-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 3;
+  padding: 18px 16px 16px;
+  background: none;
 }
 
 .addon-card-animated {
@@ -2302,7 +2347,7 @@ img, video { max-width: 100%; display: block; }
   border-color: var(--gold-dark);
 }
 
-/* ---- Bottom gradient overlay on image ---- */
+/* ---- Bottom gradient overlay on image (legacy, kept for non-fullbg cards) ---- */
 .addon-cinemagraph::after {
   content: '';
   position: absolute;
@@ -2329,35 +2374,123 @@ img, video { max-width: 100%; display: block; }
 
 .addon-name {
   font-family: var(--font-display);
-  font-size: 1.2rem;
-  margin-bottom: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,1), 0 2px 20px rgba(0,0,0,0.8);
   transition: color 0.3s;
+  line-height: 1.3;
 }
 .addon-card:hover .addon-name {
   color: var(--gold-light);
 }
 
 .addon-desc {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-  line-height: 1.6;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.88);
+  text-shadow: 0 1px 6px rgba(0,0,0,1);
+  margin: 0 0 10px;
+  line-height: 1.5;
 }
 
+/* Price — plain text, no pill/box */
 .addon-price {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--gold-light);
-  font-weight: 500;
+  text-shadow: 0 1px 8px rgba(0,0,0,1);
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: rgba(201,168,76,0.08);
-  border: 1px solid rgba(201,168,76,0.15);
-  transition: background 0.3s, border-color 0.3s;
+  background: none;
+  border: none;
+  padding: 0;
 }
 .addon-card:hover .addon-price {
-  background: rgba(201,168,76,0.15);
-  border-color: rgba(201,168,76,0.3);
+  background: none;
+  border: none;
+  color: #f0d060;
+}
+
+/* ---- Price when addon is free in selected package ---- */
+.addon-price--free-badge {
+  color: #4ade80;
+  background: none;
+  border: none;
+  text-shadow: 0 1px 8px rgba(0,0,0,1), 0 0 12px rgba(74,222,128,0.4);
+}
+.addon-card:hover .addon-price--free-badge {
+  background: none;
+  border: none;
+  color: #6effa0;
+}
+
+/* ---- Package inclusion badge (top-left of card) ---- */
+.addon-pkg-included-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(5,5,7,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(74,222,128,0.4);
+  color: #4ade80;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  animation: addonBadgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes addonBadgePop {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.addon-pkg-included-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px #4ade80, 0 0 12px rgba(74,222,128,0.5);
+  animation: addonDotPulse 2s ease-in-out infinite;
+}
+
+@keyframes addonDotPulse {
+  0%, 100% { box-shadow: 0 0 4px #4ade80, 0 0 8px rgba(74,222,128,0.4); }
+  50%       { box-shadow: 0 0 8px #4ade80, 0 0 20px rgba(74,222,128,0.7); }
+}
+
+/* Subtle green border glow on included cards */
+.addon-card--pkg-included {
+  border-color: rgba(74,222,128,0.25) !important;
+  box-shadow: 0 0 0 1px rgba(74,222,128,0.1), inset 0 0 30px rgba(74,222,128,0.04);
+}
+.addon-card--pkg-included:hover {
+  border-color: rgba(74,222,128,0.5) !important;
+  box-shadow: 0 0 20px rgba(74,222,128,0.15), 0 20px 50px rgba(0,0,0,0.5) !important;
+}
+
+/* Inline legend dot in subtitle */
+.addons-pkg-hint {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.85em;
+}
+.addons-pkg-dot-inline {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  vertical-align: middle;
+  box-shadow: 0 0 6px #4ade80;
+  animation: addonDotPulse 2s ease-in-out infinite;
 }
 
 /* ========================================
@@ -9458,149 +9591,306 @@ textarea.detail-input { resize: vertical; min-height: 80px; }
   line-height: 1.65;
 }
 
-.pkg-addons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  justify-content: center;
+/* ── 2-Up Slider wrapper ── */
+.addon-slider-wrapper {
+  position: relative;
+  padding: 0 56px; /* space for nav buttons */
 }
 
-/* ── Individual Add-on Card ── */
-.addon-card {
+/* Clips the sliding track */
+.addon-slider-viewport {
+  overflow: hidden;
+  border-radius: 16px;
+  width: 100%;
+}
+
+/* Flex row of all cards — slides via translateX */
+.addon-slider-track-2up {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ── Prev / Next nav buttons ── */
+.addon-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-calc(50% + 20px)); /* shift up a bit above dots */
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.3);
+  background: rgba(8,8,15,0.9);
+  color: var(--gold-light);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addon-slider-btn--prev { left: 0; }
+.addon-slider-btn--next { right: 0; }
+
+.addon-slider-btn:hover:not(:disabled) {
+  background: rgba(201,168,76,0.15);
+  border-color: var(--gold);
+  box-shadow: 0 0 24px rgba(201,168,76,0.3);
+  transform: translateY(-calc(50% + 20px)) scale(1.1);
+}
+.addon-slider-btn:disabled { opacity: 0.2; cursor: default; }
+
+/* ── Dot navigation ── */
+.addon-slider-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.addon-slider-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(201,168,76,0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Active: gold pill spanning 2 dots worth */
+.addon-slider-dot--active {
+  background: var(--gold);
+  width: 20px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(201,168,76,0.5);
+}
+
+/* Free addon dot: green */
+.addon-slider-dot--free { background: rgba(74,222,128,0.3); }
+.addon-slider-dot--free.addon-slider-dot--active {
+  background: #4ADE80;
+  box-shadow: 0 0 8px rgba(74,222,128,0.6);
+}
+
+/* ── Green "included in package" indicator ── */
+.addon-pkg-indicator {
+  position: absolute;
+  top: 10px; left: 10px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 100px;
+  background: rgba(74,222,128,0.13);
+  border: 1px solid rgba(74,222,128,0.3);
+  backdrop-filter: blur(6px);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4ADE80;
+  white-space: nowrap;
+}
+
+.addon-pkg-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #4ADE80;
+  box-shadow: 0 0 6px #4ADE80;
+  flex-shrink: 0;
+  animation: pkgDotPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pkgDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1);    box-shadow: 0 0 6px #4ADE80; }
+  50%       { opacity: 0.5; transform: scale(0.6); box-shadow: 0 0 12px #4ADE80; }
+}
+
+.addon-green-hint { color: #4ADE80; font-weight: 500; }
+
+
+
+/* ── Individual Add-on Card (3-D, scoped to slider viewport) ── */
+.addon-slider-viewport .addon-card {
   position: relative;
   border-radius: var(--radius-md);
   border: 1px solid rgba(201,168,76,0.12);
   background: rgba(15,15,26,0.7);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
   user-select: none;
+  height: 300px;           /* full-bleed image card */
+  transition:
+    transform 0.35s cubic-bezier(0.16,1,0.3,1),
+    border-color 0.35s,
+    box-shadow 0.35s;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-.addon-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(201,168,76,0.35);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+/* 3D tilt base ── smooth fallback when not hovered */
+.addon-slider-viewport .addon-card--3d {
+  transform-origin: center center;
 }
 
-.addon-card--checked {
-  border-color: rgba(201,168,76,0.55) !important;
-  box-shadow: 0 0 0 1px rgba(201,168,76,0.25), 0 12px 40px rgba(0,0,0,0.4);
+.addon-slider-viewport .addon-card:hover {
+  border-color: rgba(201,168,76,0.4);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(201,168,76,0.08),
+    0 0 40px rgba(201,168,76,0.08);
 }
 
-.addon-card--free {
+.addon-slider-viewport .addon-card--checked {
+  border-color: rgba(201,168,76,0.6) !important;
+  box-shadow:
+    0 0 0 2px rgba(201,168,76,0.3),
+    0 16px 48px rgba(0,0,0,0.45),
+    0 0 32px rgba(201,168,76,0.15) !important;
+}
+
+.addon-slider-viewport .addon-card--free {
   cursor: default;
-  border-color: rgba(74,222,128,0.2) !important;
+  border-color: rgba(74,222,128,0.25) !important;
 }
 
-.addon-card--free .addon-card--checked {
-  box-shadow: 0 0 0 1px rgba(74,222,128,0.2);
+.addon-slider-viewport .addon-card--free:hover {
+  border-color: rgba(74,222,128,0.4) !important;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.55),
+    0 0 32px rgba(74,222,128,0.1);
 }
 
-.addon-img-wrap {
-  position: relative;
-  height: 120px;
-  background: rgba(30,26,60,0.6);
+/* Addon is part of the selected package (paid tier) */
+.addon-slider-viewport .addon-card--in-pkg {
+  border-color: rgba(201,168,76,0.28) !important;
+}
+
+.addon-slider-viewport .addon-img-wrap {
+  position: absolute;   /* fill the whole card */
+  inset: 0;
+  background: rgba(10,8,20,1);
   overflow: hidden;
 }
 
-.addon-img {
+.addon-slider-viewport .addon-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.7;
-  transition: opacity 0.3s;
+  opacity: 0.82;        /* visible as full background */
+  transition: opacity 0.4s, transform 0.55s cubic-bezier(0.16,1,0.3,1);
 }
 
-.addon-card:hover .addon-img { opacity: 0.85; }
+.addon-slider-viewport .addon-card:hover .addon-img {
+  opacity: 1;
+  transform: scale(1.06);
+}
 
-.addon-img--placeholder {
+.addon-slider-viewport .addon-img--placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  background: rgba(30,26,60,0.8);
+  font-size: 3rem;
+  background: rgba(30,26,60,0.9);
 }
 
-.addon-img-overlay {
+/* Strong bottom-to-top gradient so text is always readable */
+.addon-slider-viewport .addon-img-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(5,5,7,0.8) 0%, transparent 60%);
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.97) 0%,
+    rgba(0,0,0,0.75) 35%,
+    rgba(0,0,0,0.25) 65%,
+    rgba(0,0,0,0.05) 100%
+  );
+  z-index: 2;
 }
 
-.addon-checkbox {
+.addon-slider-viewport .addon-checkbox {
   position: absolute;
   top: 10px; right: 10px;
-  width: 22px; height: 22px;
+  width: 26px; height: 26px;
   border-radius: 50%;
-  border: 1.5px solid rgba(201,168,76,0.3);
-  background: rgba(5,5,7,0.7);
-  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(201,168,76,0.35);
+  background: rgba(5,5,12,0.75);
+  backdrop-filter: blur(6px);
   color: var(--gold);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
+  z-index: 5;
 }
 
-.addon-checkbox--checked {
+.addon-slider-viewport .addon-checkbox--checked {
   background: var(--gold);
   border-color: var(--gold);
   color: var(--black);
   font-weight: 700;
-  font-size: 0.65rem;
+  box-shadow: 0 0 10px rgba(201,168,76,0.5);
 }
 
-.addon-free-badge {
-  position: absolute;
-  top: 10px; left: 10px;
-  padding: 2px 8px;
-  border-radius: 100px;
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: rgba(74,222,128,0.12);
-  color: #4ADE80;
-  border: 1px solid rgba(74,222,128,0.25);
+.addon-slider-viewport .addon-body {
+  position: absolute;   /* overlay text at the bottom */
+  bottom: 0; left: 0; right: 0;
+  padding: 16px 18px 18px;
+  z-index: 3;
 }
 
-.addon-body {
-  padding: 14px 16px 18px;
-}
 
-.addon-icon {
-  font-size: 1.4rem;
+.addon-slider-viewport .addon-icon {
+  font-size: 1.5rem;
   margin-bottom: 6px;
+  line-height: 1;
 }
 
-.addon-name {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  line-height: 1.3;
-}
-
-.addon-desc {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 10px;
-}
-
-.addon-price {
+.addon-slider-viewport .addon-name {
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--gold-light);
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  line-height: 1.3;
 }
 
-.addon-price--free {
+.addon-slider-viewport .addon-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.addon-slider-viewport .addon-price {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.addon-slider-viewport .addon-rupee-sym {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.addon-slider-viewport .addon-price--free {
   color: #4ADE80;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 /* ── Sticky Summary Bar ── */

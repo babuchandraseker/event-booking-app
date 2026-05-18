@@ -1,6 +1,8 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import ThemeCard from './ThemeCard';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const SLOT_MAP = {
@@ -8,7 +10,8 @@ const SLOT_MAP = {
   slot4: '4:00 PM',  slot5: '6:00 PM',  slot6: '8:00 PM',
 };
 
-const themes = [
+// Fallback themes — used if the API is unreachable
+const FALLBACK_THEMES = [
   {
     key: 'romantic',
     tag: '🌹 Romantic',
@@ -37,6 +40,35 @@ const themes = [
   },
 ];
 
+/**
+ * Convert an API theme object to the shape ThemeCard expects.
+ */
+function normalizeForCard(t) {
+  return {
+    key: t.key || t.id,
+    tag: t.tag || t.title,
+    title: t.title,
+    desc: t.desc,
+    features: Array.isArray(t.features)
+      ? t.features
+      : typeof t.features === 'string'
+      ? t.features.split(',').map((f) => f.trim()).filter(Boolean)
+      : [],
+    img: t.img || '',
+    emoji: t.emoji || '',
+    ...(t.emoji && !t.img
+      ? {
+          mediaStyle: {
+            width: '100%', height: '100%',
+            background: 'linear-gradient(135deg,#1a0a2e,#2d1b4e,#1a0a2e)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '6rem',
+          },
+        }
+      : {}),
+  };
+}
+
 // Read booking context from sessionStorage
 function getBookingContext() {
   try {
@@ -51,6 +83,25 @@ function getBookingContext() {
 export default function ThemeSection({ onBook }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
+  const [themes, setThemes] = useState(FALLBACK_THEMES);
+
+  useEffect(() => {
+    let ignore = false;
+    fetch(`${API_BASE_URL}/themes`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (ignore) return;
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          // Only show active themes on the public page
+          const active = data.data.filter((t) => t.active !== false);
+          setThemes(active.map(normalizeForCard));
+        }
+      })
+      .catch(() => {
+        // Silently fall back to hardcoded defaults — no console noise in production
+      });
+    return () => { ignore = true; };
+  }, []);
 
   const ctx = getBookingContext();
   const dateStr = ctx?.date
@@ -73,7 +124,6 @@ export default function ThemeSection({ onBook }) {
             Every theme is a world of its own — designed to immerse, delight, and leave an imprint that lasts long after the evening ends.
           </p>
 
-          {/* Booking context banner */}
           {(dateStr || slotStr) && (
             <motion.div
               className="themes-booking-ctx"

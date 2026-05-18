@@ -15,6 +15,7 @@ const settingsRoutes = require("./src/routes/settingsRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
 const galleryRoutes = require("./src/routes/galleryRoutes");
 const heroRoutes = require("./src/routes/heroRoutes");
+const themeRoutes = require("./src/routes/themeRoutes");
 const { notFound, errorHandler } = require("./src/middleware/errorMiddleware");
 
 const app = express();
@@ -69,6 +70,7 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/hero", heroRoutes);
+app.use("/api/themes", themeRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -12,6 +12,8 @@ export const DEFAULT_PACKAGES = [
       { name: 'Satin Sash Ribbon', free: true, note: 'Based upon your Occasion' },
       { name: 'Unlimited Music Songs', free: true },
     ],
+    // Addons available to purchase for this package
+    freeAddonNames: [],
     addons: [
       { name: 'Room Filled with Balloon', price: 350 },
       { name: 'Flower Bouquet', price: 300 },
@@ -39,6 +41,13 @@ export const DEFAULT_PACKAGES = [
       { name: 'Flower Bouquet', free: true },
       { name: '15 Photo Hanging', free: true },
       { name: 'Entry Video & 15min Group Photos', free: true },
+    ],
+    // These addon names come FREE — used by getPackageAddons for green dot logic
+    freeAddonNames: [
+      'Room Filled with Balloon',
+      'Flower Bouquet',
+      '15 Photo Hanging',
+      'Entry Video & 15min Group Photos',
     ],
     addons: [
       { name: 'Fog Entry', price: 500 },
@@ -68,6 +77,17 @@ export const DEFAULT_PACKAGES = [
       { name: 'Candle Path Way', free: true },
       { name: 'Cake 1/2 KG', free: true },
     ],
+    // ALL addons are free in Platinum
+    freeAddonNames: [
+      'Room Filled with Balloon',
+      'Flower Bouquet',
+      '15 Photo Hanging',
+      'Entry Video & 15min Group Photos',
+      'Fog Entry',
+      'Red Carpet Path',
+      'Candle Path Way',
+      'Cake 1/2 KG',
+    ],
     addons: [],
     active: true,
   },
@@ -80,6 +100,8 @@ export function formatMoney(value) {
 }
 
 export function normalizePackage(pkg, fallback = {}) {
+  // Always take price/title/maxGuests from API if present, but
+  // keep included + freeAddonNames from fallback (source of truth for green dot logic)
   return {
     ...fallback,
     ...pkg,
@@ -87,7 +109,9 @@ export function normalizePackage(pkg, fallback = {}) {
     title: pkg.title || fallback.title,
     price: Number(pkg.price ?? fallback.price ?? 0),
     maxGuests: Number(pkg.maxGuests ?? fallback.maxGuests ?? 1),
-    included: Array.isArray(pkg.included) ? pkg.included : (fallback.included || []),
+    // Always use fallback's included and freeAddonNames — never overwrite from API
+    included: fallback.included || [],
+    freeAddonNames: fallback.freeAddonNames || [],
     addons: Array.isArray(pkg.addons) ? pkg.addons : (fallback.addons || []),
     active: pkg.active !== false,
   }

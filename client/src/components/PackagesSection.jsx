@@ -1,64 +1,75 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PACKAGES, fetchPackages, formatMoney } from '../data/packageCatalog';
+import { useBooking } from '../context/BookingContext';
 
-const ADDON_META = {
-  'Room Filled with Balloon': {
+/* ── The 7 common add-ons shared across all packages ── */
+const COMMON_ADDONS = [
+  {
     id: 'balloons',
+    name: 'Room Filled with Balloon',
+    price: 350,
     img: '/addons/balloons.png',
-    video: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.mp4',
     icon: '🎈',
     desc: 'Transform your room into a sea of celebration balloons.',
   },
-  'Flower Bouquet': {
+  {
     id: 'bouquet',
+    name: 'Flower Bouquet',
+    price: 300,
     img: '/addons/bouquet_gen.png',
-    video: 'https://media.giphy.com/media/26tP4gFBQewkLnMv6/giphy.mp4',
     icon: '💐',
     desc: 'Fresh hand-crafted floral bouquet to cherish the moment.',
   },
-  '15 Photo Hanging': {
+  {
     id: 'photo_hanging',
+    name: '15 Photo Hanging',
+    price: 250,
     img: '/addons/photo_hanging.png',
-    video: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.mp4',
     icon: '🖼️',
     desc: 'Display your favourite 15 memories on a lit string wall.',
   },
-  'Entry Video & 15min Group Photos': {
+  {
     id: 'entry_video',
+    name: 'Entry Video & 15min Group Photos',
+    price: 350,
     img: '/addons/photographer.png',
-    video: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.mp4',
     icon: '🎬',
     desc: 'Capture your grand entry on video plus 15 min group photo session.',
   },
-  'Fog Entry': {
+  {
     id: 'fog',
+    name: 'Fog Entry',
+    price: 500,
     img: '/addons/fog_gen.png',
-    video: 'https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.mp4',
     icon: '🌫️',
     desc: 'Dramatic fog machine entry for a breathtaking entrance.',
   },
-  'Red Carpet Path': {
+  {
     id: 'red_carpet',
+    name: 'Red Carpet Path',
+    price: 300,
     img: '/addons/red_carpet.png',
-    video: 'https://media.giphy.com/media/3o6fJ1BM7R2EBRDnxK/giphy.mp4',
     icon: '🟥',
     desc: 'Walk in like a star with a VIP red carpet entrance.',
   },
-  'Candle Path Way': {
+  {
     id: 'candle_path',
+    name: 'Candle Path Way',
+    price: 500,
     img: '/addons/candle_path.png',
-    video: 'https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.mp4',
     icon: '🕯️',
     desc: 'Romantic tealight candles lining your path into the room.',
   },
-  'Cake 1/2 KG': {
+  {
     id: 'cake',
+    name: 'Cake 1/2 KG',
+    price: 450,
     img: '/addons/cake.png',
     icon: '🎂',
-    desc: 'Delicious half-kg celebration cake.',
+    desc: 'Delicious half-kg custom celebration cake for your special day.',
   },
-};
+];
 
 const PACKAGE_COLORS = {
   basic: 'silver',
@@ -72,47 +83,47 @@ const PACKAGE_ICONS = {
   luxury: '👑',
 };
 
-function getAddonKey(addon) {
-  return addon.id || ADDON_META[addon.name]?.id || addon.name;
+/* 3D coverflow position for each card offset from active */
+function getSliderCardStyle(offset) {
+  const abs = Math.abs(offset);
+  if (abs > 2) return { display: 'none' };
+  const sign = offset === 0 ? 0 : offset > 0 ? 1 : -1;
+  const xPct  = [0, 110, 200][abs] * sign;
+  const rotY  = [0,  30,  50][abs] * -sign;
+  const scale = [1, 0.82, 0.64][abs];
+  const opacity = [1, 0.58, 0.28][abs];
+  const zIndex  = [10, 6, 2][abs];
+  return {
+    transform: `translateX(${xPct}%) rotateY(${rotY}deg) scale(${scale})`,
+    opacity,
+    zIndex,
+    transition: 'transform 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.55s',
+    pointerEvents: abs > 1 ? 'none' : 'auto',
+  };
 }
 
 function getPackageAddons(pkg) {
   if (!pkg) return [];
-
-  const included = (pkg.included || [])
-    .filter((item) => ADDON_META[item.name])
-    .map((item) => ({
-      ...item,
-      ...ADDON_META[item.name],
-      key: getAddonKey(item),
-      price: Number(item.price || 0),
-      included: true,
-    }));
-
-  const paid = (pkg.addons || []).map((addon) => ({
+  // Use explicit freeAddonNames list — immune to API data variations
+  const freeNames = new Set(pkg.freeAddonNames || []);
+  return COMMON_ADDONS.map((addon) => ({
     ...addon,
-    ...(ADDON_META[addon.name] || {}),
-    key: getAddonKey(addon),
-    price: Number(addon.price || 0),
-    included: false,
+    key: addon.id,
+    included: freeNames.has(addon.name),
   }));
-
-  const seen = new Set();
-  return [...included, ...paid].filter((addon) => {
-    const key = addon.key || addon.name;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
 }
 
 export default function PackagesSection({ themeKey, selectedPackageId = null, onSelectPackage }) {
   const navigate = useNavigate();
+  const { setSelectedPackageId } = useBooking();
   const gridRef = useRef(null);
+  const viewportRef = useRef(null);
 
   const [packages, setPackages] = useState(DEFAULT_PACKAGES);
   const [selectedPkg, setSelectedPkg] = useState(selectedPackageId);
   const [selectedAddons, setSelectedAddons] = useState([]);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [cardWidth, setCardWidth] = useState(280);
 
   /* ── Fetch packages from API, fall back to defaults ── */
   useEffect(() => {
@@ -143,6 +154,20 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
     return () => observer.disconnect();
   }, [packages]);
 
+  /* ── Measure viewport to compute 2-up card width ── */
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const measure = () => {
+      const gap = 24;
+      setCardWidth(Math.floor((el.offsetWidth - gap) / 2));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [selectedPkg]); // re-measure when addon section appears
+
   /* ── Derived state ── */
   const pkgData = useMemo(
     () => (selectedPkg ? (packages.find((pkg) => pkg.id === selectedPkg) || null) : null),
@@ -159,6 +184,11 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
   const addonTotal = selectedAddonItems.reduce((sum, addon) => sum + Number(addon.price || 0), 0);
   const grandTotal = Number(pkgData?.price || 0) + addonTotal;
 
+  /* ── Slider computed values ── */
+  const GAP = 24;
+  const maxSlide = Math.max(0, packageAddons.length - 2);
+  const trackX = -(activeSlide * (cardWidth + GAP));
+
   /* ── Handlers ── */
   const toggleAddon = useCallback((key) => {
     setSelectedAddons((prev) =>
@@ -169,6 +199,8 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
   const handleSelectPackage = (pkgId) => {
     setSelectedPkg(pkgId);
     setSelectedAddons([]);
+    setActiveSlide(0);
+    setSelectedPackageId(pkgId);
     onSelectPackage?.(pkgId);
     setTimeout(() => {
       document.getElementById('pkg-addons-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -299,87 +331,127 @@ export default function PackagesSection({ themeKey, selectedPackageId = null, on
           </div>
         )}
 
-        {/* ── Add-Ons Section (only shown after package selection) ── */}
+        {/* ── Add-Ons Section ── */}
         {selectedPkg && (
           <div className="pkg-addons-wrapper" id="pkg-addons-section">
             <div className="pkg-addons-header">
               <div className="section-label">Personalise Your Experience</div>
               <h3 className="pkg-addons-title">Add-<em>Ons</em></h3>
               <p className="pkg-addons-subtitle">
-                Enhance your celebration with premium extras.
-                Items already included in your package are highlighted in green.
+                Swipe through premium extras. <span className="addon-green-hint">🟢 Green dot = included free in your package.</span>
               </p>
             </div>
 
-            <div className="pkg-addons-grid">
-              {packageAddons.map((addon) => {
-                const isFree = addon.included;
-                const isChecked = isFree || selectedAddons.includes(addon.key);
-                const hasImage = Boolean(addon.img);
-                const hasVideo = Boolean(addon.video);
+            {/* ── 2-Up Slider ── */}
+            <div className="addon-slider-wrapper">
 
-                return (
-                  <div
-                    key={addon.key}
-                    className={`addon-card${isChecked ? ' addon-card--checked' : ''}${isFree ? ' addon-card--free' : ''}`}
-                    onClick={() => !isFree && toggleAddon(addon.key)}
-                    role="checkbox"
-                    aria-checked={isChecked}
-                    tabIndex={isFree ? -1 : 0}
-                    onKeyDown={(e) => {
-                      if ((e.key === 'Enter' || e.key === ' ') && !isFree) {
-                        e.preventDefault();
-                        toggleAddon(addon.key);
-                      }
-                    }}
-                  >
-                    <div className="addon-img-wrap">
-                      {hasVideo ? (
-                        <video
-                          className="addon-img addon-video"
-                          src={addon.video}
-                          poster={addon.img || undefined}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          preload="auto"
-                          onError={(e) => {
-                            // Fallback to image if video fails
-                            const img = document.createElement('img');
-                            img.src = addon.img;
-                            img.alt = addon.name;
-                            img.className = 'addon-img';
-                            img.loading = 'lazy';
-                            e.target.parentNode.replaceChild(img, e.target);
-                          }}
-                        />
-                      ) : hasImage ? (
-                        <img src={addon.img} alt={addon.name} className="addon-img" loading="lazy" />
-                      ) : (
-                        <div className="addon-img addon-img--placeholder">{addon.icon || '+'}</div>
-                      )}
-                      <div className="addon-img-overlay" />
-                      <div className={`addon-checkbox${isChecked ? ' addon-checkbox--checked' : ''}`}>
-                        {isChecked ? '✓' : '+'}
-                      </div>
-                      {isFree && <div className="addon-free-badge">Included Free</div>}
-                    </div>
-                    <div className="addon-body">
-                      <div className="addon-icon">{addon.icon || '*'}</div>
-                      <div className="addon-name">{addon.name}</div>
-                      <div className="addon-desc">{addon.desc || 'Available as part of this celebration package.'}</div>
-                      <div className="addon-price">
-                        {isFree ? (
-                          <span className="addon-price--free">Free with your package</span>
-                        ) : (
-                          <>Rs {formatMoney(addon.price)}</>
+              {/* Prev */}
+              <button
+                className="addon-slider-btn addon-slider-btn--prev"
+                onClick={() => setActiveSlide(p => Math.max(0, p - 1))}
+                disabled={activeSlide === 0}
+                aria-label="Previous add-on"
+              >&#8249;</button>
+
+              {/* Viewport */}
+              <div className="addon-slider-viewport" ref={viewportRef}>
+                <div
+                  className="addon-slider-track-2up"
+                  style={{ transform: `translateX(${trackX}px)` }}
+                >
+                  {packageAddons.map((addon) => {
+                    const isFree = addon.included;
+                    const isChecked = isFree || selectedAddons.includes(addon.key);
+
+                    const handleTilt = (e) => {
+                      const card = e.currentTarget;
+                      const rect = card.getBoundingClientRect();
+                      const rx = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 7;
+                      const ry =  ((e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2)) * 9;
+                      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) scale(1.02)`;
+                    };
+                    const handleTiltReset = (e) => { e.currentTarget.style.transform = ''; };
+
+                    return (
+                      <div
+                        key={addon.key}
+                        style={{ width: cardWidth, flexShrink: 0 }}
+                        className={`addon-card addon-card--3d${
+                          isChecked ? ' addon-card--checked' : ''
+                        }${isFree ? ' addon-card--free' : ''}`}
+                        onClick={() => !isFree && toggleAddon(addon.key)}
+                        role="checkbox"
+                        aria-checked={isChecked}
+                        tabIndex={0}
+                        onMouseMove={handleTilt}
+                        onMouseLeave={handleTiltReset}
+                        onKeyDown={(e) => {
+                          if ((e.key === 'Enter' || e.key === ' ') && !isFree) {
+                            e.preventDefault();
+                            toggleAddon(addon.key);
+                          }
+                          if (e.key === 'ArrowRight') setActiveSlide(p => Math.min(maxSlide, p + 1));
+                          if (e.key === 'ArrowLeft')  setActiveSlide(p => Math.max(0, p - 1));
+                        }}
+                      >
+                        {/* Green indicator — only for free/included addons */}
+                        {isFree && (
+                          <div className="addon-pkg-indicator">
+                            <span className="addon-pkg-dot" />
+                            Included in {pkgData?.title}
+                          </div>
                         )}
+
+                        <div className="addon-img-wrap">
+                          <img src={addon.img} alt={addon.name} className="addon-img" loading="lazy" />
+                          <div className="addon-img-overlay" />
+                          <div className={`addon-checkbox${isChecked ? ' addon-checkbox--checked' : ''}`}>
+                            {isChecked ? '✓' : '+'}
+                          </div>
+                        </div>
+
+                        <div className="addon-body">
+                          <div className="addon-icon">{addon.icon}</div>
+                          <div className="addon-name">{addon.name}</div>
+                          <div className="addon-desc">{addon.desc}</div>
+                          <div className="addon-price">
+                            {isFree ? (
+                              <span className="addon-price--free">✓ Free with {pkgData?.title}</span>
+                            ) : (
+                              <><span className="addon-rupee-sym">Rs</span> {formatMoney(addon.price)}</>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Next */}
+              <button
+                className="addon-slider-btn addon-slider-btn--next"
+                onClick={() => setActiveSlide(p => Math.min(maxSlide, p + 1))}
+                disabled={activeSlide >= maxSlide}
+                aria-label="Next add-on"
+              >&#8250;</button>
+
+              {/* Dot nav */}
+              <div className="addon-slider-dots" role="tablist">
+                {packageAddons.map((addon, i) => (
+                  <button
+                    key={addon.key}
+                    className={`addon-slider-dot${
+                      i >= activeSlide && i <= activeSlide + 1 ? ' addon-slider-dot--active' : ''
+                    }${addon.included ? ' addon-slider-dot--free' : ''}`}
+                    onClick={() => setActiveSlide(Math.min(i, maxSlide))}
+                    role="tab"
+                    aria-selected={i >= activeSlide && i <= activeSlide + 1}
+                    aria-label={addon.name}
+                    title={addon.name}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         )}
