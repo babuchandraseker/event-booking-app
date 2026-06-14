@@ -1,6 +1,5 @@
 {
   "framework": "vite",
-  "nodeVersion": "22.x",
   "outputDirectory": "dist",
   "installCommand": "npm install --include=dev",
   "rewrites": [
