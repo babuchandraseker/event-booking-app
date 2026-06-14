@@ -1,0 +1,705 @@
+/**
+ * Real moments · Real emotions — DARK LUXURY gallery redesign
+ * Anthracite black · Deep violet · Gold accents · Cinematic atmosphere
+ * Scoped to .rc-section--luxury only (navbar/admin untouched)
+ */
+
+/* ── Section base ── */
+.rc-section.rc-section--luxury {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  height: auto;
+  padding: clamp(4rem, 8vw, 6rem) 0 clamp(4.5rem, 9vw, 6.5rem);
+  background: #0d0b14 !important;
+  box-shadow: none !important;
+}
+
+/* Main deep background gradient */
+.rc-section--luxury::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 50%, rgba(72, 30, 120, 0.38) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 50% at 85% 20%, rgba(90, 40, 140, 0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 100%, rgba(50, 20, 90, 0.3) 0%, transparent 55%),
+    linear-gradient(175deg, #130e22 0%, #0d0b14 40%, #0a0810 100%);
+}
+
+/* Gold light streak — top */
+.rc-section--luxury::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 0%, rgba(215, 172, 40, 0.0) 10%, rgba(215, 172, 40, 0.45) 40%, rgba(240, 216, 120, 0.6) 50%, rgba(215, 172, 40, 0.45) 60%, rgba(215, 172, 40, 0.0) 90%, transparent 100%);
+  box-shadow: 0 0 24px 2px rgba(215, 172, 40, 0.18);
+}
+
+/* Disable old ambient */
+.rc-section--luxury .rc-ambient {
+  display: none;
+}
+
+.rc-section--luxury .rc-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  overflow: visible;
+}
+
+/* ── Floral corner SVG decorations ── */
+.rc-section--luxury .rc-floral-tl,
+.rc-section--luxury .rc-floral-br {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.22;
+  width: clamp(180px, 18vw, 280px);
+  height: auto;
+}
+
+.rc-section--luxury .rc-floral-tl {
+  top: -20px;
+  left: -20px;
+  transform: rotate(0deg);
+}
+
+.rc-section--luxury .rc-floral-br {
+  bottom: -20px;
+  right: -20px;
+  transform: rotate(180deg);
+}
+
+/* ── Gold light streaks ── */
+.rc-section--luxury .rc-gold-streak {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 100px;
+  will-change: opacity;
+}
+
+.rc-section--luxury .rc-gold-streak-1 {
+  top: 18%;
+  left: -5%;
+  width: 35%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(215, 172, 40, 0.35), transparent);
+  transform: rotate(-12deg);
+  box-shadow: 0 0 16px rgba(215, 172, 40, 0.12);
+}
+
+.rc-section--luxury .rc-gold-streak-2 {
+  bottom: 22%;
+  right: -5%;
+  width: 30%;
+  height: 1px;
+  background: linear-gradient(270deg, transparent, rgba(215, 172, 40, 0.3), transparent);
+  transform: rotate(-8deg);
+  box-shadow: 0 0 14px rgba(215, 172, 40, 0.1);
+}
+
+/* ── Sparkle particles ── */
+.rc-section--luxury .rc-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rc-section--luxury .rc-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240, 216, 120, 0.9) 0%, rgba(215, 172, 40, 0.5) 40%, transparent 70%);
+  animation: rc-particle-drift 10s ease-in-out infinite;
+}
+
+.rc-section--luxury .rc-particle:nth-child(1) { width: 3px; height: 3px; top: 12%; left: 10%; }
+.rc-section--luxury .rc-particle:nth-child(2) { width: 2px; height: 2px; top: 25%; right: 15%; animation-delay: 1.8s; opacity: 0.7; }
+.rc-section--luxury .rc-particle:nth-child(3) { width: 4px; height: 4px; top: 60%; left: 6%; animation-delay: 3.2s; }
+.rc-section--luxury .rc-particle:nth-child(4) { width: 2px; height: 2px; bottom: 28%; right: 8%; animation-delay: 0.8s; opacity: 0.6; }
+.rc-section--luxury .rc-particle:nth-child(5) { width: 3px; height: 3px; bottom: 18%; left: 48%; animation-delay: 4s; opacity: 0.8; }
+
+@keyframes rc-particle-drift {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-16px) scale(1.2); opacity: 0.9; }
+}
+
+/* ── Header ── */
+.rc-section--luxury .rc-header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  transform: none !important;
+}
+
+.rc-section--luxury .rc-label-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.rc-section--luxury .rc-label-text {
+  color: rgba(215, 172, 40, 0.8) !important;
+  letter-spacing: 0.38em;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rc-section--luxury .rc-label-icon {
+  color: rgba(215, 172, 40, 0.65);
+  font-size: 0.5rem;
+}
+
+.rc-section--luxury .rc-heading {
+  font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+  font-size: clamp(2.2rem, 5.5vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 1.1rem;
+}
+
+.rc-section--luxury .rc-heading-prefix {
+  display: block;
+  color: #f0ecff;
+  text-shadow: 0 0 60px rgba(140, 80, 200, 0.3);
+}
+
+.rc-section--luxury .rc-heading-em {
+  display: block;
+  font-style: italic;
+  background: linear-gradient(135deg, #f0d878 0%, #d7ac28 40%, #c8971a 70%, #e8c84a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 18px rgba(215, 172, 40, 0.4));
+}
+
+.rc-section--luxury .rc-subheading {
+  max-width: 36rem;
+  margin: 0 auto 1.5rem;
+  font-size: clamp(0.88rem, 1.8vw, 1rem);
+  line-height: 1.8;
+  color: rgba(180, 160, 210, 0.7) !important;
+  font-weight: 400;
+}
+
+.rc-section--luxury .rc-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.rc-section--luxury .rc-divider-line {
+  width: clamp(50px, 10vw, 90px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(215, 172, 40, 0.5), transparent);
+  box-shadow: 0 0 12px rgba(215, 172, 40, 0.2);
+  display: inline-block;
+}
+
+.rc-section--luxury .rc-divider-gem {
+  color: #d7ac28;
+  font-size: 0.45rem;
+  text-shadow: 0 0 12px rgba(215, 172, 40, 0.6);
+}
+
+/* ── Gallery grid ── */
+.rc-section--luxury .rc-gallery-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-rows: auto;
+  gap: clamp(0.75rem, 1.4vw, 1.1rem);
+  overflow: visible;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.rc-section--luxury .rc-gallery-grid .rc-grid-featured {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  min-height: clamp(440px, 54vw, 560px);
+}
+
+.rc-section--luxury .rc-gallery-side {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.1vw, 0.9rem);
+  min-height: clamp(440px, 54vw, 560px);
+}
+
+.rc-section--luxury .rc-gallery-side .rc-card {
+  min-height: 0;
+  height: 100%;
+}
+
+/* ── Card base ── */
+.rc-section--luxury .rc-card {
+  position: relative;
+  min-height: 100%;
+  border-radius: 16px !important;
+  background: linear-gradient(145deg, #1a1228, #120d1e) !important;
+  border: 1px solid rgba(215, 172, 40, 0.18) !important;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(215, 172, 40, 0.08) inset,
+    0 0 0 0 rgba(215, 172, 40, 0) !important;
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: box-shadow, border-color;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+.rc-section--luxury .rc-card:hover {
+  transform: translateZ(0) !important;
+  border-color: rgba(215, 172, 40, 0.5) !important;
+  box-shadow:
+    0 0 0 1px rgba(215, 172, 40, 0.22),
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(100, 40, 160, 0.25),
+    0 0 20px rgba(215, 172, 40, 0.14) !important;
+}
+
+/* Gold glow border effect on hover */
+.rc-section--luxury .rc-card-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: transparent;
+  border: 1px solid transparent;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 10;
+  background-clip: padding-box;
+  box-shadow: 0 0 24px rgba(215, 172, 40, 0.3), inset 0 0 24px rgba(90, 40, 140, 0.15);
+}
+
+.rc-section--luxury .rc-card:hover .rc-card-glow {
+  opacity: 1;
+}
+
+/* Featured glow is always slightly visible */
+.rc-section--luxury .rc-featured-glow {
+  opacity: 0.3;
+}
+
+.rc-section--luxury .rc-card:hover .rc-featured-glow {
+  opacity: 1;
+}
+
+/* ── Media layer ── */
+.rc-section--luxury .rc-card-media {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.rc-section--luxury .rc-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.rc-section--luxury .rc-card:hover .rc-card-img {
+  transform: scale(1.06);
+}
+
+/* Fallback placeholder */
+.rc-section--luxury .rc-card-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e1330, #2d1a50);
+}
+
+.rc-section--luxury .rc-card-emoji {
+  font-size: 2rem;
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+/* ── Hover overlay — small cards ── */
+.rc-section--luxury .rc-card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 20%, rgba(10, 6, 20, 0.55) 100%) !important;
+  transition: opacity 0.35s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.85rem;
+}
+
+.rc-section--luxury .rc-card:hover .rc-card-overlay {
+  opacity: 1;
+}
+
+.rc-section--luxury .rc-card-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* ── Always-visible bottom label on small cards ── */
+.rc-section--luxury .rc-card-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.5rem 0.55rem;
+  background: linear-gradient(0deg, rgba(10, 6, 22, 0.92) 0%, rgba(18, 10, 35, 0.75) 60%, transparent 100%);
+  border-top: none;
+  opacity: 1 !important;
+}
+
+.rc-section--luxury .rc-tag-static {
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(215, 172, 40, 0.85) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  text-transform: uppercase;
+}
+
+.rc-section--luxury .rc-card-icon {
+  font-size: 0.68rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.rc-section--luxury .rc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(215, 172, 40, 0.15) !important;
+  border: 1px solid rgba(215, 172, 40, 0.35) !important;
+  color: #d7ac28 !important;
+}
+
+.rc-section--luxury .rc-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(240, 236, 255, 0.92);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.rc-section--luxury .rc-card-caption {
+  font-size: 0.72rem;
+  color: rgba(180, 160, 210, 0.75);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ── Featured card ── */
+.rc-section--luxury .rc-featured-card {
+  min-height: 100%;
+  border: 1px solid rgba(215, 172, 40, 0.28) !important;
+  box-shadow:
+    0 8px 48px rgba(0, 0, 0, 0.65),
+    0 0 60px rgba(80, 30, 130, 0.2),
+    0 0 0 1px rgba(215, 172, 40, 0.12) inset !important;
+}
+
+.rc-section--luxury .rc-featured-card .rc-card-media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Cinematic gradient overlay on featured */
+.rc-section--luxury .rc-featured-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    170deg,
+    rgba(10, 6, 20, 0.08) 0%,
+    rgba(20, 10, 40, 0.2) 45%,
+    rgba(8, 4, 18, 0.88) 100%
+  ) !important;
+}
+
+/* Featured content */
+.rc-section--luxury .rc-featured-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rc-section--luxury .rc-tag-featured {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(215, 172, 40, 0.18) !important;
+  border: 1px solid rgba(215, 172, 40, 0.45) !important;
+  color: #d7ac28 !important;
+  font-size: 0.54rem;
+  letter-spacing: 0.18em;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.rc-section--luxury .rc-featured-title {
+  font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+  color: #ffffff !important;
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+.rc-section--luxury .rc-featured-subtitle {
+  color: rgba(200, 185, 230, 0.82) !important;
+  font-size: 0.86rem;
+  max-width: 30rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Tags/chips below subtitle */
+.rc-section--luxury .rc-featured-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.rc-section--luxury .rc-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(220, 210, 240, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+/* Gold CTA button */
+.rc-section--luxury .rc-featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #f0d878 0%, #d7ac28 45%, #c78d17 100%) !important;
+  color: #0d0b14 !important;
+  box-shadow:
+    0 6px 28px rgba(215, 172, 40, 0.38),
+    0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: box-shadow 0.3s ease, transform 0.25s ease !important;
+  margin-top: 0.2rem;
+  width: fit-content;
+  will-change: transform, box-shadow;
+}
+
+.rc-section--luxury .rc-featured-cta:hover {
+  box-shadow:
+    0 10px 40px rgba(215, 172, 40, 0.55),
+    0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.rc-section--luxury .rc-featured-cta:active {
+  transform: translateY(0) !important;
+}
+
+/* ── Featured badge ── */
+.rc-section--luxury .gc-featured-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 6;
+  background: linear-gradient(135deg, rgba(215, 172, 40, 0.95), rgba(199, 141, 23, 0.9));
+  border-radius: 5px;
+  padding: 0.22rem 0.55rem;
+  box-shadow: 0 4px 14px rgba(215, 172, 40, 0.35);
+}
+
+.rc-section--luxury .gc-featured-badge span {
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0d0b14;
+}
+
+/* ── Footer strip ── */
+.rc-section--luxury .rc-memory-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(2.5rem, 5vw, 3.25rem);
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(215, 172, 40, 0.15);
+  text-align: center;
+}
+
+.rc-section--luxury .rc-memory-footer-icon {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+.rc-section--luxury .rc-memory-footer-text {
+  font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+  font-size: clamp(0.95rem, 2vw, 1.18rem);
+  font-style: italic;
+  color: rgba(200, 185, 230, 0.7) !important;
+}
+
+/* ── Loading skeletons ── */
+.rc-section--luxury .rc-gallery-loading {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1rem;
+  min-height: 500px;
+}
+
+.rc-section--luxury .rc-gallery-skeleton {
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(40, 25, 65, 0.5) 0%,
+    rgba(80, 50, 120, 0.2) 50%,
+    rgba(40, 25, 65, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  animation: rc-shimmer-dark 1.8s ease infinite;
+  border: 1px solid rgba(215, 172, 40, 0.1);
+}
+
+@keyframes rc-shimmer-dark {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Desktop/mobile visibility ── */
+.rc-gallery-desktop { display: grid; }
+.rc-gallery-mobile { display: none; }
+
+/* ── Tablet ── */
+@media (max-width: 960px) {
+  .rc-section--luxury .rc-gallery-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .rc-section--luxury .rc-gallery-grid .rc-grid-featured {
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 360px;
+  }
+
+  .rc-section--luxury .rc-gallery-side {
+    grid-column: 1;
+    grid-row: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    min-height: 280px;
+  }
+
+  .rc-section--luxury .rc-gallery-side .rc-card {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .rc-section--luxury .rc-gallery-loading {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .rc-section--luxury {
+    padding: 3rem 0 3.75rem;
+  }
+
+  .rc-gallery-desktop { display: none !important; }
+  .rc-gallery-mobile { display: block !important; }
+
+  .rc-section--luxury .rc-floral-tl,
+  .rc-section--luxury .rc-floral-br {
+    width: 120px;
+    opacity: 0.14;
+  }
+
+  .rc-section--luxury .rc-memory-footer {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .rc-section--luxury .rc-particle {
+    animation: none;
+  }
+  .rc-section--luxury .rc-card:hover .rc-card-img {
+    transform: none;
+  }
+  .rc-section--luxury .rc-gallery-skeleton {
+    animation: none;
+  }
+  .rc-section--luxury .rc-featured-cta:hover {
+    transform: none !important;
+  }
+}

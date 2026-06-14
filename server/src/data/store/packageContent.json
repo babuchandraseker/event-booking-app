@@ -1,0 +1,281 @@
+[
+  {
+    "id": "basic",
+    "title": "Silver",
+    "price": 1699,
+    "duration": "1.5 hours",
+    "maxGuests": 7,
+    "popular": false,
+    "included": [
+      {
+        "name": "Balloon Decor",
+        "free": true,
+        "note": "Customised Rs 1,000"
+      },
+      {
+        "name": "Crown",
+        "free": true
+      },
+      {
+        "name": "Satin Sash Ribbon",
+        "free": true,
+        "note": "Based on occasion"
+      },
+      {
+        "name": "Unlimited Music Songs",
+        "free": true
+      }
+    ],
+    "addons": [
+      {
+        "name": "Room Filled with Balloon",
+        "price": 350,
+        "desc": "Transform your room into a sea of celebration balloons.",
+        "img": "/addons/balloons.png"
+      },
+      {
+        "name": "Flower Bouquet",
+        "price": 300,
+        "desc": "Fresh hand-crafted floral bouquet to cherish the moment.",
+        "img": "/addons/bouquet_gen.png"
+      },
+      {
+        "name": "15 Photo Hanging",
+        "price": 250,
+        "desc": "Display your favourite 15 memories on a lit string wall.",
+        "img": "/addons/photo_hanging.png"
+      },
+      {
+        "name": "Entry Video & 15min Group Photos",
+        "price": 350,
+        "desc": "Capture your grand entry on video plus 15 min group photo session.",
+        "img": "/addons/photographer.png"
+      },
+      {
+        "name": "Fog Entry",
+        "price": 500,
+        "desc": "Dramatic fog machine entry for a breathtaking entrance.",
+        "img": "/addons/fog_gen.png"
+      },
+      {
+        "name": "Red Carpet Path",
+        "price": 300,
+        "desc": "Walk in like a star with a VIP red carpet entrance.",
+        "img": "/addons/red_carpet.png"
+      },
+      {
+        "name": "Candle Path Way",
+        "price": 500,
+        "desc": "Romantic tealight candles lining your path into the room.",
+        "img": "/addons/candle_path.png"
+      }
+    ],
+    "active": true,
+    "createdAt": "2026-06-10T18:21:00.987Z",
+    "updatedAt": "2026-06-10T18:21:00.987Z"
+  },
+  {
+    "id": "premium",
+    "title": "Gold",
+    "price": 2700,
+    "duration": "1.5 hours",
+    "maxGuests": 7,
+    "popular": true,
+    "included": [
+      {
+        "name": "Balloon Decor",
+        "free": true,
+        "note": "Customised Rs 1,000"
+      },
+      {
+        "name": "Crown",
+        "free": true
+      },
+      {
+        "name": "Satin Sash Ribbon",
+        "free": true,
+        "note": "Based on occasion"
+      },
+      {
+        "name": "Unlimited Music Songs",
+        "free": true
+      },
+      {
+        "name": "Room Filled with Balloon",
+        "free": true
+      },
+      {
+        "name": "Flower Bouquet",
+        "free": true
+      },
+      {
+        "name": "15 Photo Hanging",
+        "free": true
+      },
+      {
+        "name": "Entry Video & 15min Group Photos",
+        "free": true
+      }
+    ],
+    "addons": [
+      {
+        "name": "Room Filled with Balloon",
+        "price": 350,
+        "desc": "Transform your room into a sea of celebration balloons.",
+        "img": "/addons/balloons.png"
+      },
+      {
+        "name": "Flower Bouquet",
+        "price": 300,
+        "desc": "Fresh hand-crafted floral bouquet to cherish the moment.",
+        "img": "/addons/bouquet_gen.png"
+      },
+      {
+        "name": "15 Photo Hanging",
+        "price": 250,
+        "desc": "Display your favourite 15 memories on a lit string wall.",
+        "img": "/addons/photo_hanging.png"
+      },
+      {
+        "name": "Entry Video & 15min Group Photos",
+        "price": 350,
+        "desc": "Capture your grand entry on video plus 15 min group photo session.",
+        "img": "/addons/photographer.png"
+      },
+      {
+        "name": "Fog Entry",
+        "price": 500,
+        "desc": "Dramatic fog machine entry for a breathtaking entrance.",
+        "img": "/addons/fog_gen.png"
+      },
+      {
+        "name": "Red Carpet Path",
+        "price": 300,
+        "desc": "Walk in like a star with a VIP red carpet entrance.",
+        "img": "/addons/red_carpet.png"
+      },
+      {
+        "name": "Candle Path Way",
+        "price": 500,
+        "desc": "Romantic tealight candles lining your path into the room.",
+        "img": "/addons/candle_path.png"
+      }
+    ],
+    "active": true,
+    "createdAt": "2026-06-10T18:21:00.987Z",
+    "updatedAt": "2026-06-10T18:21:00.987Z"
+  },
+  {
+    "id": "luxury",
+    "title": "Platinum",
+    "price": 4500,
+    "duration": "1.5 hours",
+    "maxGuests": 10,
+    "popular": false,
+    "included": [
+      {
+        "name": "Balloon Decor",
+        "free": true,
+        "note": "Customised Rs 1,000"
+      },
+      {
+        "name": "Crown",
+        "free": true
+      },
+      {
+        "name": "Satin Sash Ribbon",
+        "free": true,
+        "note": "Based on occasion"
+      },
+      {
+        "name": "Unlimited Music Songs",
+        "free": true
+      },
+      {
+        "name": "Room Filled with Balloon",
+        "free": true
+      },
+      {
+        "name": "Flower Bouquet",
+        "free": true
+      },
+      {
+        "name": "15 Photo Hanging",
+        "free": true
+      },
+      {
+        "name": "Entry Video & 15min Group Photos",
+        "free": true
+      },
+      {
+        "name": "Fog Entry",
+        "free": true
+      },
+      {
+        "name": "Red Carpet Path",
+        "free": true
+      },
+      {
+        "name": "Candle Path Way",
+        "free": true
+      },
+      {
+        "name": "Cake 1/2 KG",
+        "free": true
+      }
+    ],
+    "addons": [
+      {
+        "name": "Room Filled with Balloon",
+        "price": 350,
+        "desc": "Transform your room into a sea of celebration balloons.",
+        "img": "/addons/balloons.png"
+      },
+      {
+        "name": "Flower Bouquet",
+        "price": 300,
+        "desc": "Fresh hand-crafted floral bouquet to cherish the moment.",
+        "img": "/addons/bouquet_gen.png"
+      },
+      {
+        "name": "15 Photo Hanging",
+        "price": 250,
+        "desc": "Display your favourite 15 memories on a lit string wall.",
+        "img": "/addons/photo_hanging.png"
+      },
+      {
+        "name": "Entry Video & 15min Group Photos",
+        "price": 350,
+        "desc": "Capture your grand entry on video plus 15 min group photo session.",
+        "img": "/addons/photographer.png"
+      },
+      {
+        "name": "Fog Entry",
+        "price": 500,
+        "desc": "Dramatic fog machine entry for a breathtaking entrance.",
+        "img": "/addons/fog_gen.png"
+      },
+      {
+        "name": "Red Carpet Path",
+        "price": 300,
+        "desc": "Walk in like a star with a VIP red carpet entrance.",
+        "img": "/addons/red_carpet.png"
+      },
+      {
+        "name": "Candle Path Way",
+        "price": 500,
+        "desc": "Romantic tealight candles lining your path into the room.",
+        "img": "/addons/candle_path.png"
+      },
+      {
+        "name": "Cake 1/2 KG",
+        "price": 450,
+        "desc": "Delicious half-kg custom celebration cake for your special day.",
+        "img": "/addons/cake.png"
+      }
+    ],
+    "active": true,
+    "createdAt": "2026-06-10T18:21:00.987Z",
+    "updatedAt": "2026-06-10T18:21:00.987Z"
+  }
+]

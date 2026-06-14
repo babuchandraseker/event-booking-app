@@ -1,0 +1,447 @@
+/**
+ * Soft luxury light atmosphere — lavender, violet, gold
+ * Loaded after style.css; scoped to .home-cinematic-root where possible.
+ */
+
+@keyframes cinematic-ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0);
+    /* removed scale(1.04) — translates only, no layout/repaint */
+    opacity: 0.65;
+  }
+}
+
+@keyframes cinematic-gold-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    /* removed scale() — was forcing full repaint of 90vmax element */
+  }
+  50% {
+    opacity: 0.38;
+  }
+}
+
+@keyframes cinematic-shimmer {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateX(220%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes cinematic-float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ── Homepage root ── */
+.home-cinematic-root {
+  position: relative;
+  isolation: isolate;
+}
+
+.cinematic-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cinematic-atmosphere__violet {
+  position: absolute;
+  width: 140vmax;
+  height: 140vmax;
+  top: -35vmax;
+  left: -25vmax;
+  background: radial-gradient(
+    closest-side,
+    rgba(130, 56, 179, 0.12) 0%,
+    rgba(239, 231, 247, 0.28) 42%,
+    transparent 70%
+  );
+  /* filter: blur removed — was triggering GPU raster on a massive element */
+  animation: cinematic-ambient-drift 36s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.cinematic-atmosphere__gold {
+  position: absolute;
+  width: 90vmax;
+  height: 90vmax;
+  bottom: -20vmax;
+  right: -15vmax;
+  background: radial-gradient(
+    closest-side,
+    rgba(215, 172, 40, 0.1) 0%,
+    rgba(247, 241, 250, 0.2) 40%,
+    transparent 68%
+  );
+  animation: cinematic-gold-pulse 28s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.cinematic-atmosphere__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(247, 241, 250, 0.35) 0%,
+    transparent 22%,
+    transparent 55%,
+    rgba(239, 231, 247, 0.45) 100%
+  );
+}
+
+.cinematic-atmosphere__orbs {
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image: radial-gradient(
+      circle at 12% 25%,
+      rgba(215, 172, 40, 0.08) 0,
+      transparent 0.35%
+    ),
+    radial-gradient(circle at 88% 18%, rgba(215, 172, 40, 0.06) 0, transparent 0.4%),
+    radial-gradient(circle at 40% 88%, rgba(130, 56, 179, 0.09) 0, transparent 0.45%),
+    radial-gradient(circle at 72% 62%, rgba(215, 172, 40, 0.05) 0, transparent 0.35%),
+    radial-gradient(circle at 22% 70%, rgba(72, 24, 117, 0.07) 0, transparent 0.5%);
+  background-size: 100% 100%;
+  animation: cinematic-float-slow 22s ease-in-out infinite;
+}
+
+.home-cinematic-root > .noise-overlay {
+  z-index: 10000;
+}
+
+.home-cinematic-root .navbar {
+  z-index: 1000;
+}
+
+.site-main--below-hero,
+.site-main--cinematic {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Navbar: soft glass (non-home pages; home uses navbar-hero-layout.css) ── */
+.navbar:not(.scrolled) {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.5) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-bottom: 1px solid rgba(35, 7, 69, 0.08);
+  box-shadow: 0 4px 18px rgba(35, 7, 69, 0.04);
+}
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px) saturate(125%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  border-bottom: 1px solid rgba(35, 7, 69, 0.1);
+  box-shadow: 0 1px 0 rgba(35, 7, 69, 0.06), 0 8px 24px rgba(35, 7, 69, 0.06);
+}
+
+/* Homepage navbar — see navbar-hero-layout.css (no white default bar) */
+
+.nav-logo-tagline {
+  color: var(--text-muted);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.35s ease;
+}
+
+.nav-links a:hover {
+  color: var(--violet-deep);
+  text-shadow: none;
+}
+
+/* ── Typography hierarchy ── */
+.section-title {
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(130, 56, 179, 0.08);
+}
+
+.section-title em {
+  text-shadow: 0 0 32px rgba(215, 172, 40, 0.15);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.rc-heading::before {
+  background: radial-gradient(
+    ellipse 70% 65% at 50% 45%,
+    rgba(130, 56, 179, 0.12) 0%,
+    rgba(215, 172, 40, 0.06) 42%,
+    transparent 70%
+  );
+}
+
+/* ── Buttons ── */
+.btn {
+  box-shadow: 0 6px 24px rgba(72, 24, 117, 0.08);
+}
+
+.btn-primary {
+  box-shadow: 0 10px 36px rgba(215, 172, 40, 0.28), 0 2px 8px rgba(72, 24, 117, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 16px 48px rgba(215, 172, 40, 0.36), 0 0 56px rgba(130, 56, 179, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline:hover {
+  box-shadow: 0 0 0 1px rgba(215, 172, 40, 0.22), 0 12px 36px rgba(72, 24, 117, 0.1),
+    0 0 40px rgba(130, 56, 179, 0.08);
+}
+
+.btn-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(247, 241, 250, 0.65) 100%);
+  border: 1px solid rgba(215, 172, 40, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 28px rgba(72, 24, 117, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--violet-deep);
+}
+
+.btn-glass:hover {
+  border-color: rgba(215, 172, 40, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 12px 36px rgba(72, 24, 117, 0.12),
+    0 0 36px rgba(130, 56, 179, 0.1);
+}
+
+/* ── Glass cards ── */
+.glass-card {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 20px 50px rgba(72, 24, 117, 0.1),
+    0 0 48px rgba(130, 56, 179, 0.06);
+  border-color: rgba(215, 172, 40, 0.22);
+}
+
+.glass-card:hover {
+  border-color: rgba(215, 172, 40, 0.38);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 1) inset, 0 24px 56px rgba(72, 24, 117, 0.14),
+    0 0 60px rgba(130, 56, 179, 0.1);
+}
+
+/* ── Theme cards ── */
+.theme-card {
+  box-shadow: 0 8px 32px rgba(72, 24, 117, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.theme-card:hover {
+  box-shadow: 0 0 0 1px rgba(215, 172, 40, 0.2), 0 28px 64px rgba(72, 24, 117, 0.16),
+    0 0 44px rgba(215, 172, 40, 0.14), 0 0 80px rgba(130, 56, 179, 0.1);
+}
+
+.theme-card-media-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(46, 24, 72, 0.75) 0%,
+    rgba(72, 24, 117, 0.3) 48%,
+    transparent 78%
+  );
+}
+
+/* ── Section ambience ── */
+.how-section {
+  box-shadow: inset 0 1px 0 rgba(215, 172, 40, 0.12);
+}
+
+.how-section::before {
+  background: radial-gradient(ellipse 95% 55% at 50% 45%, rgba(130, 56, 179, 0.1) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(215, 172, 40, 0.06) 0%, transparent 55%);
+}
+
+.trust-section::before {
+  background: radial-gradient(ellipse 85% 50% at 50% 25%, rgba(130, 56, 179, 0.12) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 35% at 85% 75%, rgba(215, 172, 40, 0.08) 0%, transparent 58%);
+}
+
+.rc-section {
+  box-shadow: inset 0 1px 0 rgba(215, 172, 40, 0.1);
+}
+
+.home-cinematic-root .rc-ambient {
+  background: radial-gradient(ellipse 85% 50% at 50% -5%, rgba(130, 56, 179, 0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 40% at 12% 85%, rgba(215, 172, 40, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 32% at 92% 58%, rgba(72, 24, 117, 0.1) 0%, transparent 52%);
+}
+
+.rc-card {
+  box-shadow: 0 10px 36px rgba(72, 24, 117, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.rc-card:hover {
+  box-shadow: 0 16px 44px rgba(72, 24, 117, 0.14), 0 0 0 1px rgba(215, 172, 40, 0.18),
+    0 0 40px rgba(130, 56, 179, 0.1);
+}
+
+.rc-card-overlay {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(72, 24, 117, 0.12) 40%,
+    rgba(46, 24, 72, 0.55) 100%
+  );
+}
+
+/* ── Footer ── */
+footer {
+  color: var(--text-on-deep);
+}
+
+footer .footer-brand-name,
+footer .footer-col-title {
+  color: var(--gold-light);
+}
+
+footer .footer-brand-desc,
+footer .footer-links a,
+footer .footer-contact-action,
+footer .footer-contact-meta {
+  color: rgba(247, 241, 250, 0.78);
+}
+
+footer .footer-links a:hover,
+footer .footer-contact-action:hover {
+  color: var(--gold-light);
+}
+
+footer::after {
+  background: radial-gradient(ellipse 70% 45% at 25% 0%, rgba(130, 56, 179, 0.2) 0%, transparent 58%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, rgba(215, 172, 40, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(61, 0, 102, 0.15) 0%, transparent 40%);
+}
+
+.footer-bottom {
+  border-top-color: rgba(215, 172, 40, 0.22);
+  color: rgba(247, 241, 250, 0.65);
+}
+
+.social-link {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(215, 172, 40, 0.28);
+  color: rgba(247, 241, 250, 0.88);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--gold);
+}
+
+/* ── Trust stats ── */
+.trust-stat {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(247, 241, 250, 0.82) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 8px 28px rgba(72, 24, 117, 0.08);
+}
+
+.trust-stat:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 0 32px rgba(130, 56, 179, 0.12);
+}
+
+/* ── Hero cinematic split ── */
+.home-cinematic-root .cinematic-hero-wrap {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-atmosphere__violet,
+  .cinematic-atmosphere__gold,
+  .cinematic-atmosphere__orbs {
+    animation: none;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:hover::before {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   GLOBAL LUXURY ENHANCEMENTS v2
+   Section depth · Heading glows · Gold accent highlights
+   ================================================================ */
+
+/* Visible glow on all major section headings */
+.themes-section--luxury .themes-heading {
+  text-shadow: 0 2px 50px rgba(90,32,144,0.35), 0 0 100px rgba(201,137,26,0.12);
+}
+.faq-luxury-title {
+  text-shadow: 0 2px 40px rgba(90,32,144,0.30), 0 0 80px rgba(212,175,55,0.10);
+}
+.reviews-lux-section .reviews-magic-title {
+  text-shadow: 0 2px 40px rgba(90,30,160,0.30), 0 0 80px rgba(212,175,55,0.10);
+}
+
+/* Gold accent text drop shadows — more visible */
+.themes-section--luxury .themes-heading-accent {
+  filter: drop-shadow(0 2px 24px rgba(201,137,26,0.60)) drop-shadow(0 0 48px rgba(201,137,26,0.25)) !important;
+}
+.faq-luxury-title em {
+  filter: drop-shadow(0 2px 20px rgba(212,175,55,0.65)) drop-shadow(0 0 40px rgba(212,175,55,0.28)) !important;
+}
+.reviews-lux-section .reviews-magic-title__em {
+  filter: drop-shadow(0 2px 20px rgba(215,172,40,0.65)) drop-shadow(0 0 40px rgba(215,172,40,0.28)) !important;
+}
+
+/* Gradient section transitions — seamless cinematic flow */
+.themes-section--luxury {
+  box-shadow: 0 80px 120px -40px rgba(9,4,15,0.95) inset;
+}
+.wcu-section {
+  box-shadow: 0 -60px 100px -40px rgba(15,11,20,0.9) inset;
+}
+.faq-luxury-section {
+  box-shadow: 0 -60px 100px -40px rgba(14,6,32,0.95) inset;
+}
+.reviews-magic-section.reviews-lux-section {
+  box-shadow: 0 -60px 100px -40px rgba(15,11,20,0.9) inset;
+}
+
+/* WCU heading glow */
+.wcu-section h2 {
+  text-shadow: 0 2px 50px rgba(100,45,200,0.30), 0 0 80px rgba(212,175,55,0.10);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themes-section--luxury .themes-heading-accent,
+  .faq-luxury-title em,
+  .reviews-lux-section .reviews-magic-title__em {
+    filter: none !important;
+    animation: none !important;
+  }
+}

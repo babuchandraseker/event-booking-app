@@ -1,0 +1,494 @@
+/**
+ * Mobile-only luxury hero & navbar (max-width: 1023px).
+ * Desktop (lg+) is intentionally untouched — scope all rules below the breakpoint.
+ */
+
+.home-cinematic-root .nav-logo-name--mobile {
+  display: none;
+}
+
+.home-cinematic-root .cinematic-hero__subtext--mobile {
+  display: none;
+}
+
+.home-cinematic-root .hero-mobile-availability-below {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .home-cinematic-root {
+    --nav-height: 64px;
+    --mobile-hero-pad-x: 1rem;
+    --mobile-hero-pad-bottom: 1.35rem;
+  }
+
+  /* ── Navbar: split brand + gold hamburger ── */
+  .home-cinematic-root .nav-logo-name--desktop {
+    display: none !important;
+  }
+
+  .home-cinematic-root .nav-logo-name--mobile {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.05rem;
+    line-height: 1.05;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  .home-cinematic-root .nav-logo-line1 {
+    font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+    font-size: clamp(1.05rem, 4.8vw, 1.35rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #fff6dc 0%, #f8e4a8 28%, #d7ac28 58%, #c78d17 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 18px rgba(215, 172, 40, 0.35));
+  }
+
+  .home-cinematic-root .nav-logo-line2 {
+    font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+    font-size: clamp(0.72rem, 3.2vw, 0.88rem);
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: 0.14em;
+    color: rgba(215, 172, 40, 0.92);
+    text-shadow: 0 0 20px rgba(215, 172, 40, 0.25);
+  }
+
+  .home-cinematic-root .navbar-col--brand {
+    max-width: calc(100% - 3.75rem);
+  }
+
+  .home-cinematic-root .nav-cta .feedback-widget--nav,
+  .home-cinematic-root .nav-help-btn {
+    display: none !important;
+  }
+
+  .home-cinematic-root .hamburger {
+    display: inline-flex !important;
+    width: 2.65rem;
+    height: 2.65rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(215, 172, 40, 0.55) !important;
+    background: rgba(10, 5, 20, 0.55) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    gap: 4px;
+    padding: 0;
+  }
+
+  .home-cinematic-root .hamburger span {
+    width: 1rem;
+    height: 1.5px;
+    background: #f8e4a8 !important;
+    border-radius: 1px;
+  }
+
+  /* ── Hero: full-screen cinematic canvas ── */
+  .home-cinematic-root #home.cinematic-hero--immersive {
+    min-height: 100svh;
+    height: 100svh;
+    max-height: 100svh;
+  }
+
+  .home-cinematic-root .cinematic-hero__particles {
+    opacity: 0.35;
+  }
+
+  .home-cinematic-root .cinematic-hero__blend-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 7, 20, 0.55) 0%,
+      rgba(35, 7, 69, 0.2) 28%,
+      rgba(15, 7, 20, 0.35) 52%,
+      rgba(10, 5, 20, 0.88) 78%,
+      rgba(8, 4, 14, 0.96) 100%
+    ) !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__depth-vignette {
+    opacity: 0.8 !important;
+    /* Simplified to single gradient on mobile — cheaper GPU decode */
+    background:
+      radial-gradient(ellipse 110% 75% at 50% 100%, rgba(8, 4, 14, 0.82) 0%, transparent 55%) !important;
+  }
+
+  /* warm-wash and bloom removed — display:none from main CSS carries through */
+  .home-cinematic-root .cinematic-hero__warm-wash,
+  .home-cinematic-root .cinematic-hero__bloom {
+    display: none !important;
+  }
+
+  /* Mobile video: stacked fade slides */
+  .home-cinematic-root .cinematic-hero__mobile-videos {
+    position: absolute;
+    inset: 0;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-slide {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.9s;
+    pointer-events: none;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-slide.is-active {
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-dots {
+    position: absolute;
+    bottom: calc(var(--mobile-hero-pad-bottom) + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 8;
+    display: flex;
+    gap: 0.4rem;
+    pointer-events: none;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-video-label {
+    position: absolute;
+    top: calc(var(--nav-height) + 0.65rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9;
+    pointer-events: none;
+    text-align: center;
+    font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+    font-size: clamp(1.15rem, 4.5vw, 1.45rem);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #fff8e8 0%, #f8e4a8 35%, #d7ac28 70%, #e8c45a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 24px rgba(215, 172, 40, 0.45));
+    animation: mobile-label-fade 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes mobile-label-fade {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .home-cinematic-root .hero-panel__chip-label {
+    display: none !important;
+  }
+
+  .home-cinematic-root .hero-panel--split .hero-panel__video--split {
+    animation: none !important;
+  }
+
+  .home-cinematic-root .hero-panel--split:not(.hero-panel--active) .hero-panel__video--split {
+    opacity: 0;
+  }
+
+  .home-cinematic-root .hero-panel--split.hero-panel--active .hero-panel__video--split {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  /* Hide availability inside hero on mobile */
+  .home-cinematic-root .cinematic-hero__foreground > .hero-availability-float {
+    display: none !important;
+  }
+
+  /* Foreground: bottom-left copy + bottom buttons */
+  .home-cinematic-root .cinematic-hero__foreground {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding:
+      calc(var(--nav-height) + 2.75rem)
+      var(--mobile-hero-pad-x)
+      var(--mobile-hero-pad-bottom);
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .home-cinematic-root .cinematic-hero__content {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+    align-self: flex-start;
+    pointer-events: auto;
+  }
+
+  .home-cinematic-root .cinematic-hero__content-inner {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .home-cinematic-root .cinematic-hero__heading {
+    font-size: clamp(1.45rem, 6.2vw, 1.85rem) !important;
+    line-height: 1.12 !important;
+    margin: 0 0 0.55rem !important;
+    text-align: left;
+  }
+
+  .home-cinematic-root .cinematic-hero__heading-white,
+  .home-cinematic-root .cinematic-hero__heading-line-second {
+    white-space: normal;
+    display: block;
+  }
+
+  .home-cinematic-root .cinematic-hero__heading-white {
+    color: #ffffff !important;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.65);
+  }
+
+  .home-cinematic-root .cinematic-hero__heading-purple {
+    color: rgba(239, 217, 247, 0.92) !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__subtext--desktop {
+    display: none !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__subtext--mobile {
+    display: block !important;
+    font-size: 0.78rem !important;
+    line-height: 1.55 !important;
+    max-width: 17.5rem;
+    margin: 0 0 0.85rem !important;
+    color: rgba(239, 217, 247, 0.88) !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .home-cinematic-root .cinematic-hero__hl {
+    color: #d7ac28 !important;
+    font-weight: 600;
+  }
+
+  .home-cinematic-root .cinematic-hero__features {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem 0.65rem !important;
+    width: 100%;
+    max-width: 18.5rem;
+    margin: 0 0 1rem !important;
+    padding: 0;
+  }
+
+  .home-cinematic-root .cinematic-hero__feature {
+    padding: 0.38rem 0.45rem !important;
+    border-radius: 100px !important;
+    border: 1px solid rgba(215, 172, 40, 0.22) !important;
+    background: rgba(10, 5, 20, 0.42) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .home-cinematic-root .cinematic-hero__feature-icon {
+    width: 1.55rem !important;
+    height: 1.55rem !important;
+    border: 1px solid rgba(215, 172, 40, 0.4) !important;
+    background: rgba(15, 7, 20, 0.5) !important;
+    color: #d7ac28 !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__feature-icon svg {
+    width: 0.72rem;
+    height: 0.72rem;
+  }
+
+  .home-cinematic-root .cinematic-hero__feature-label {
+    font-size: 0.58rem !important;
+    color: rgba(239, 217, 247, 0.9) !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__actions {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem !important;
+    margin-top: 0.15rem;
+    padding-bottom: 0.15rem;
+  }
+
+  .home-cinematic-root .cinematic-hero__btn-primary {
+    width: 100%;
+    justify-content: center;
+    padding: 0.82rem 1.25rem !important;
+    font-size: 0.68rem !important;
+    color: #0a050f !important;
+    background: linear-gradient(135deg, #f0d878 0%, #d7ac28 48%, #c78d17 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 10px 28px rgba(215, 172, 40, 0.28) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    min-height: 2.75rem;
+  }
+
+  .home-cinematic-root .cinematic-hero__btn-outline {
+    width: 100%;
+    justify-content: center;
+    padding: 0.78rem 1.25rem !important;
+    font-size: 0.66rem !important;
+    color: #ffffff !important;
+    background: rgba(10, 5, 20, 0.55) !important;
+    border: 1px solid rgba(215, 172, 40, 0.45) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    min-height: 2.65rem;
+  }
+
+  /* Below-hero availability (glass dark) */
+  .home-cinematic-root .hero-mobile-availability-below {
+    display: block;
+    padding: 1.75rem var(--mobile-hero-pad-x, 1rem) 2.25rem;
+    margin: 0;
+    background: linear-gradient(180deg, rgba(8, 4, 14, 0.98) 0%, #0f0714 100%);
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 22rem;
+    align-self: center;
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__card {
+    border: 1px solid rgba(215, 172, 40, 0.22) !important;
+    background: linear-gradient(
+      155deg,
+      rgba(51, 19, 100, 0.90) 0%,
+      rgba(35, 7, 69, 0.95) 55%,
+      rgba(26, 8, 43, 0.97) 100%
+    ) !important;
+    /* Reduced from blur(20px) saturate(140%) → blur(6px) — 3x cheaper on low-end Android */
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    box-shadow:
+      0 20px 48px rgba(0, 0, 0, 0.35),
+      0 0 32px rgba(130, 56, 179, 0.12) !important;
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__title,
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__title em,
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__date {
+    color: var(--lux-lavender, #efd9f7) !important;
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__day,
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__footnote {
+    color: rgba(239, 217, 247, 0.55) !important;
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below .hero-availability-float__row {
+    background: rgba(15, 7, 20, 0.5) !important;
+    border-color: rgba(215, 172, 40, 0.14) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-cinematic-root .nav-logo-name--mobile {
+    display: none !important;
+  }
+
+  .home-cinematic-root .nav-logo-name--desktop {
+    display: inline !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__subtext--mobile {
+    display: none !important;
+  }
+
+  .home-cinematic-root .hero-mobile-availability-below {
+    display: none !important;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-video-label,
+  .home-cinematic-root .cinematic-hero__mobile-dots {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .home-cinematic-root .cinematic-hero__mobile-slide {
+    transition: opacity 0.35s ease;
+  }
+
+  .home-cinematic-root .cinematic-hero__mobile-video-label {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   HERO — THUMBNAIL BAR OVERLAP FIX (mobile)
+   Push foreground content up so buttons don't sit behind thumbnails
+   Thumbnail bar: pb-5 (20px) + h-14 active card (56px) ≈ 80px total
+   ================================================================ */
+@media (max-width: 1023px) {
+
+  /* Override the --mobile-hero-pad-bottom to clear the thumbnail bar */
+  .home-cinematic-root {
+    --mobile-hero-pad-bottom: 5.5rem; /* ~88px — clears 80px thumb bar + 8px breathing room */
+  }
+
+  /* Thumbnail bar: ensure it's always above foreground content */
+  .home-cinematic-root .hero-thumb-btn,
+  .home-cinematic-root [class*="hero-thumb"] {
+    position: relative;
+    z-index: 25;
+  }
+
+  /* The outer thumbnail wrapper — keep above foreground */
+  .home-cinematic-root .cinematic-hero > div[class*="absolute bottom-0"] {
+    z-index: 25;
+  }
+}
+
+/* Very small phones: tighten slightly */
+@media (max-width: 380px) {
+  .home-cinematic-root {
+    --mobile-hero-pad-bottom: 5rem;
+  }
+}
+
+/* Direct override — beats the var() reference */
+@media (max-width: 1023px) {
+  .home-cinematic-root .cinematic-hero__foreground {
+    padding-bottom: 5.5rem !important; /* clears ~80px thumbnail bar */
+  }
+}
+@media (max-width: 380px) {
+  .home-cinematic-root .cinematic-hero__foreground {
+    padding-bottom: 5rem !important;
+  }
+}

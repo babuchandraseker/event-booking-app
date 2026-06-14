@@ -1,0 +1,966 @@
+/* ================================================================
+   CTA CINEMATIC LUXURY — Premium Booking Section
+   Deep anthracite · Royal violet · Metallic gold
+   ================================================================ */
+
+/* ── Section shell ── */
+.cta-lux-section {
+  position: relative;
+  padding: clamp(80px, 10vw, 140px) 0;
+  background: #0f0b14;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Deep cinematic backdrop ── */
+.cta-lux-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta-lux-backdrop__radial--center {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    rgba(90, 30, 160, 0.18) 0%,
+    rgba(50, 15, 100, 0.12) 35%,
+    transparent 65%
+  );
+}
+
+.cta-lux-backdrop__radial--left {
+  position: absolute;
+  left: -10%;
+  top: 10%;
+  width: 40%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse 100% 100%,
+    rgba(200, 168, 75, 0.06) 0%,
+    transparent 65%
+  );
+}
+
+.cta-lux-backdrop__radial--right {
+  position: absolute;
+  right: -10%;
+  bottom: 10%;
+  width: 40%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse 100% 100%,
+    rgba(130, 56, 179, 0.09) 0%,
+    transparent 65%
+  );
+}
+
+/* Light streaks */
+.cta-lux-backdrop__streak {
+  position: absolute;
+  pointer-events: none;
+}
+
+.cta-lux-backdrop__streak--1 {
+  top: 15%;
+  left: 5%;
+  width: 30%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 168, 75, 0.18), transparent);
+  transform: rotate(-8deg);
+}
+
+.cta-lux-backdrop__streak--2 {
+  bottom: 20%;
+  right: 5%;
+  width: 25%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(130, 56, 179, 0.15), transparent);
+  transform: rotate(6deg);
+}
+
+/* ── Floating gold particles ── */
+.cta-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cta-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(215, 172, 40, 0.9), rgba(200, 140, 20, 0.4));
+  box-shadow: 0 0 4px rgba(215, 172, 40, 0.5);
+  animation: ctaParticleDrift linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes ctaParticleDrift {
+  0%   { transform: translateY(0) scale(1);   opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-60px) scale(0.6); opacity: 0; }
+}
+
+/* ── Layout container ── */
+.cta-lux-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+
+/* ── Main card ── */
+.cta-lux-card {
+  position: relative;
+  background: linear-gradient(
+    145deg,
+    rgba(22, 10, 38, 0.92) 0%,
+    rgba(15, 7, 22, 0.96) 40%,
+    rgba(20, 8, 35, 0.94) 100%
+  );
+  border: 1px solid rgba(200, 168, 75, 0.2);
+  border-radius: 28px;
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 72px);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(200, 168, 75, 0.06),
+    0 40px 100px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(90, 30, 160, 0.12),
+    inset 0 1px 0 rgba(200, 168, 75, 0.1);
+}
+
+/* Border glow layer */
+.cta-lux-card__border-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  pointer-events: none;
+  background: transparent;
+  box-shadow:
+    inset 0 0 60px rgba(200, 168, 75, 0.04),
+    inset 0 0 120px rgba(90, 30, 160, 0.05);
+  z-index: 0;
+}
+
+/* Cinematic spotlight from above */
+.cta-lux-card__spotlight {
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 80%;
+  background: radial-gradient(
+    ellipse 100% 100%,
+    rgba(200, 168, 75, 0.07) 0%,
+    rgba(130, 56, 179, 0.04) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Floral corner decorations ── */
+.cta-floral {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  width: clamp(90px, 12vw, 160px);
+  height: clamp(90px, 12vw, 160px);
+}
+
+.cta-floral--tl {
+  top: 0;
+  left: 0;
+}
+
+.cta-floral--br {
+  bottom: 0;
+  right: 0;
+}
+
+/* ── Content wrapper ── */
+.cta-lux-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Section label ── */
+.cta-lux-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(200, 168, 75, 0.85);
+}
+
+.cta-lux-label__line {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 168, 75, 0.6));
+}
+
+.cta-lux-label__line:last-child {
+  background: linear-gradient(270deg, transparent, rgba(200, 168, 75, 0.6));
+}
+
+.cta-lux-label__diamond {
+  font-size: 0.5rem;
+  color: rgba(200, 168, 75, 0.7);
+}
+
+/* ── Headline ── */
+.cta-lux-title {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #f0e8ff;
+  text-shadow:
+    0 0 60px rgba(130, 56, 179, 0.25),
+    0 4px 32px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0;
+}
+
+.cta-lux-title em {
+  display: block;
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(
+    135deg,
+    #fff8e8 0%,
+    #f8e4a8 25%,
+    #d7ac28 55%,
+    #c88d17 80%,
+    #e8c55a 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 40px rgba(215, 172, 40, 0.45));
+}
+
+/* ── Ornamental rule ── */
+.cta-lux-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px auto 22px;
+  width: fit-content;
+}
+
+.cta-lux-rule__line {
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 168, 75, 0.55), transparent);
+  box-shadow: 0 0 8px rgba(200, 168, 75, 0.2);
+}
+
+.cta-lux-rule__gem {
+  font-size: 0.45rem;
+  color: rgba(200, 168, 75, 0.7);
+  transform: rotate(45deg);
+  display: block;
+  filter: drop-shadow(0 0 4px rgba(200, 168, 75, 0.5));
+}
+
+/* ── Description ── */
+.cta-lux-desc {
+  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.8;
+  color: rgba(220, 205, 240, 0.75);
+  max-width: 520px;
+  margin: 0 auto 40px;
+}
+
+/* ── Feature highlights row ── */
+.cta-lux-features {
+  display: flex;
+  gap: clamp(16px, 3vw, 40px);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.cta-lux-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(200, 168, 75, 0.12);
+  transition: border-color 0.35s ease, background 0.35s ease;
+}
+
+.cta-lux-feature:hover {
+  border-color: rgba(200, 168, 75, 0.3);
+  background: rgba(200, 168, 75, 0.05);
+}
+
+.cta-lux-feature--gold .cta-lux-feature__title {
+  color: #d7ac28;
+  text-shadow: 0 0 12px rgba(215, 172, 40, 0.35);
+}
+
+.cta-lux-feature__icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(200, 168, 75, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(200, 168, 75, 0.85);
+}
+
+.cta-lux-feature__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cta-lux-feature__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.cta-lux-feature__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(220, 205, 240, 0.95);
+  line-height: 1.2;
+}
+
+.cta-lux-feature__sub {
+  font-size: 0.72rem;
+  color: rgba(180, 160, 210, 0.6);
+  letter-spacing: 0.01em;
+}
+
+/* ── CTA Buttons ── */
+.cta-lux-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.cta-lux-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px clamp(22px, 3vw, 40px);
+  border-radius: 999px;
+  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* Primary — gold metallic */
+.cta-lux-btn--primary {
+  background: linear-gradient(
+    135deg,
+    #f5e4a8 0%,
+    #d7ac28 40%,
+    #c78d17 70%,
+    #e8c55a 100%
+  );
+  border: none;
+  color: #0a050f;
+  box-shadow:
+    0 0 40px rgba(215, 172, 40, 0.5),
+    0 12px 36px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cta-lux-btn--primary:hover {
+  box-shadow:
+    0 0 60px rgba(215, 172, 40, 0.7),
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cta-lux-btn__sparkle {
+  font-size: 0.65rem;
+  opacity: 0.85;
+}
+
+/* Inner shimmer glow on hover */
+.cta-lux-btn__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.18) 55%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.cta-lux-btn--primary:hover .cta-lux-btn__glow {
+  opacity: 1;
+}
+
+/* Glass / WhatsApp */
+.cta-lux-btn--glass {
+  background: rgba(15, 7, 22, 0.6);
+  border: 1.5px solid rgba(200, 168, 75, 0.45);
+  color: rgba(220, 205, 240, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 24px rgba(130, 56, 179, 0.2),
+    inset 0 0 0 1px rgba(130, 56, 179, 0.15);
+}
+
+.cta-lux-btn--glass:hover {
+  border-color: rgba(200, 168, 75, 0.75);
+  color: rgba(200, 168, 75, 0.95);
+  box-shadow:
+    0 0 36px rgba(200, 168, 75, 0.25),
+    0 0 20px rgba(130, 56, 179, 0.25);
+}
+
+/* Outline */
+.cta-lux-btn--outline {
+  background: rgba(15, 7, 22, 0.4);
+  border: 1.5px solid rgba(130, 56, 179, 0.45);
+  color: rgba(210, 190, 240, 0.88);
+  box-shadow:
+    0 0 20px rgba(130, 56, 179, 0.18),
+    inset 0 0 0 1px rgba(200, 168, 75, 0.08);
+}
+
+.cta-lux-btn--outline:hover {
+  border-color: rgba(200, 168, 75, 0.55);
+  color: rgba(200, 168, 75, 0.95);
+  box-shadow:
+    0 0 32px rgba(200, 168, 75, 0.22),
+    0 0 20px rgba(130, 56, 179, 0.2);
+}
+
+.cta-lux-btn__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Contact footer ── */
+.cta-lux-contact {}
+
+.cta-lux-contact__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.cta-lux-contact__divider-line {
+  display: block;
+  flex: 1;
+  max-width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 168, 75, 0.3));
+}
+
+.cta-lux-contact__divider-line:last-child {
+  background: linear-gradient(270deg, transparent, rgba(200, 168, 75, 0.3));
+}
+
+.cta-lux-contact__divider-gem {
+  font-size: 0.6rem;
+  color: rgba(200, 168, 75, 0.5);
+  filter: drop-shadow(0 0 4px rgba(200, 168, 75, 0.4));
+}
+
+.cta-lux-contact__items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.cta-lux-contact__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: rgba(180, 160, 210, 0.65);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  letter-spacing: 0.01em;
+}
+
+.cta-lux-contact__item:hover {
+  color: rgba(200, 168, 75, 0.9);
+}
+
+.cta-lux-contact__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: rgba(200, 168, 75, 0.6);
+  flex-shrink: 0;
+}
+
+.cta-lux-contact__icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cta-lux-contact__sep {
+  color: rgba(200, 168, 75, 0.2);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .cta-lux-card {
+    border-radius: 20px;
+  }
+
+  .cta-lux-features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-lux-feature {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  .cta-lux-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-lux-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cta-floral {
+    width: 70px;
+    height: 70px;
+    opacity: 0.7;
+  }
+
+  .cta-lux-contact__items {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cta-lux-contact__sep {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cta-lux-features {
+    gap: 12px;
+  }
+
+  .cta-lux-feature {
+    padding: 12px 16px;
+  }
+}
+
+/* ── Reduce-motion: strip animations ── */
+@media (prefers-reduced-motion: reduce) {
+  .cta-particle {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ================================================================
+   CTA SECTION — MOBILE OPTIMIZATION (320px–767px)
+   Compact · Elegant · Cinematic luxury feel preserved
+   ================================================================ */
+
+@media (max-width: 767px) {
+
+  /* ── Section shell: significantly tighter ── */
+  .cta-lux-section {
+    padding: clamp(40px, 8vw, 64px) 0;
+  }
+
+  /* ── Container: tight side padding ── */
+  .cta-lux-container {
+    padding: 0 clamp(12px, 4vw, 20px);
+  }
+
+  /* ── Main card: compact padding, tighter radius ── */
+  .cta-lux-card {
+    border-radius: 18px !important;
+    padding: clamp(28px, 6vw, 40px) clamp(18px, 5vw, 28px) !important;
+  }
+
+  /* Reduce heavy box-shadow layers on mobile */
+  .cta-lux-card {
+    box-shadow:
+      0 0 0 1px rgba(200, 168, 75, 0.06),
+      0 20px 60px rgba(0, 0, 0, 0.55),
+      0 0 40px rgba(90, 30, 160, 0.1),
+      inset 0 1px 0 rgba(200, 168, 75, 0.08) !important;
+  }
+
+  /* Disable GPU-heavy spotlight layer on mobile */
+  .cta-lux-card__spotlight {
+    display: none;
+  }
+
+  /* ── Floral corners: smaller on mobile ── */
+  .cta-floral {
+    width: 56px !important;
+    height: 56px !important;
+    opacity: 0.5 !important;
+  }
+
+  /* ── Label ── */
+  .cta-lux-label {
+    margin-bottom: 18px;
+    font-size: 0.58rem;
+    gap: 8px;
+  }
+
+  .cta-lux-label__line {
+    width: 24px;
+  }
+
+  /* ── Headline: tighter sizing ── */
+  .cta-lux-title {
+    font-size: clamp(1.9rem, 8vw, 2.8rem) !important;
+    line-height: 1.07;
+  }
+
+  /* ── Ornamental rule: compact ── */
+  .cta-lux-rule {
+    margin: 14px auto 14px;
+    gap: 8px;
+  }
+
+  .cta-lux-rule__line {
+    width: 40px;
+  }
+
+  /* ── Description: compact ── */
+  .cta-lux-desc {
+    font-size: clamp(0.82rem, 3.5vw, 0.92rem);
+    line-height: 1.7;
+    max-width: 94%;
+    margin-bottom: clamp(22px, 5vw, 32px);
+  }
+
+  /* ── Features: compact column layout ── */
+  .cta-lux-features {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: clamp(22px, 5vw, 32px);
+  }
+
+  .cta-lux-feature {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 14px !important;
+    border-radius: 12px;
+    justify-content: flex-start !important;
+    gap: 10px;
+  }
+
+  .cta-lux-feature__icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .cta-lux-feature__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .cta-lux-feature__title {
+    font-size: 0.78rem;
+  }
+
+  .cta-lux-feature__sub {
+    font-size: 0.65rem;
+  }
+
+  /* ── CTA Buttons: compact ── */
+  .cta-lux-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px;
+    margin-bottom: clamp(22px, 5vw, 32px);
+    width: 100%;
+  }
+
+  .cta-lux-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    /* Slightly shorter button height */
+    padding: 13px clamp(18px, 5vw, 28px) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.09em;
+  }
+
+  .cta-lux-btn__sparkle {
+    font-size: 0.6rem;
+  }
+
+  /* Disable GPU-heavy backdrop-filter on glass button for mobile perf */
+  .cta-lux-btn--glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* ── Contact footer: compact ── */
+  .cta-lux-contact__divider {
+    margin-bottom: 14px;
+  }
+
+  .cta-lux-contact__items {
+    flex-direction: column !important;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .cta-lux-contact__sep {
+    display: none;
+  }
+
+  .cta-lux-contact__item {
+    font-size: 0.75rem;
+  }
+
+  /* Hide particles on mobile for performance */
+  .cta-particle {
+    display: none !important;
+  }
+
+  /* Reduce streak decorations */
+  .cta-lux-backdrop__streak {
+    opacity: 0.5;
+  }
+}
+
+/* Extra tight: 320–380px */
+@media (max-width: 380px) {
+  .cta-lux-title {
+    font-size: clamp(1.65rem, 9vw, 2rem) !important;
+  }
+
+  .cta-lux-card {
+    padding: 24px 14px clamp(20px, 5vw, 28px) !important;
+    border-radius: 14px !important;
+  }
+
+  .cta-lux-desc {
+    font-size: 0.8rem;
+    max-width: 100%;
+  }
+
+  .cta-lux-btn {
+    padding: 11px 16px !important;
+    font-size: 0.68rem !important;
+  }
+}
+
+/* ================================================================
+   CTA SECTION — MOBILE v2: Feature cards HORIZONTAL row
+   3 mini-cards side by side, compact, no vertical stacking
+   ================================================================ */
+
+@media (max-width: 767px) {
+
+  /* ── Section: tighter ── */
+  .cta-lux-section {
+    padding: clamp(36px, 7vw, 56px) 0;
+  }
+
+  .cta-lux-container {
+    padding: 0 clamp(12px, 4vw, 20px);
+  }
+
+  .cta-lux-card {
+    border-radius: 16px !important;
+    padding: clamp(24px, 5vw, 36px) clamp(14px, 4vw, 24px) !important;
+    /* Lighter shadow for mobile perf */
+    box-shadow:
+      0 0 0 1px rgba(200,168,75,0.06),
+      0 16px 48px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(200,168,75,0.08) !important;
+  }
+
+  /* Disable heavy GPU layers */
+  .cta-lux-card__spotlight { display: none; }
+  .cta-particle { display: none !important; }
+  .cta-lux-backdrop__streak { opacity: 0.35; }
+
+  /* Floral corners: smaller */
+  .cta-floral {
+    width: 50px !important;
+    height: 50px !important;
+    opacity: 0.45 !important;
+  }
+
+  /* Label */
+  .cta-lux-label { margin-bottom: 14px; font-size: 0.56rem; gap: 7px; }
+  .cta-lux-label__line { width: 20px; }
+
+  /* Headline */
+  .cta-lux-title {
+    font-size: clamp(1.75rem, 7.5vw, 2.6rem) !important;
+    line-height: 1.08;
+  }
+
+  /* Ornamental rule */
+  .cta-lux-rule { margin: 12px auto 12px; gap: 7px; }
+  .cta-lux-rule__line { width: 32px; }
+
+  /* Description */
+  .cta-lux-desc {
+    font-size: clamp(0.8rem, 3.2vw, 0.9rem);
+    line-height: 1.65;
+    max-width: 96%;
+    margin-bottom: clamp(18px, 4vw, 26px);
+  }
+
+  /* ════════════════════════════════════════
+     FEATURE CARDS — 3 horizontal mini-cards
+     ════════════════════════════════════════ */
+  .cta-lux-features {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    margin-bottom: clamp(18px, 4vw, 26px) !important;
+    width: 100%;
+  }
+
+  .cta-lux-feature {
+    /* Equal-width thirds, not full-width */
+    flex: 1 1 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    /* Stack icon + text vertically in the compact card */
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: center !important;
+    padding: 10px 6px 10px !important;
+    border-radius: 11px;
+    gap: 7px !important;
+    /* Ensure min readable width */
+    min-width: 0;
+  }
+
+  .cta-lux-feature__icon {
+    width: 28px !important;
+    height: 28px !important;
+    flex-shrink: 0;
+  }
+
+  .cta-lux-feature__icon svg { width: 13px !important; height: 13px !important; }
+
+  .cta-lux-feature__text {
+    align-items: center !important;
+    gap: 2px;
+  }
+
+  .cta-lux-feature__title {
+    font-size: 0.68rem !important;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .cta-lux-feature__sub {
+    font-size: 0.58rem !important;
+    line-height: 1.3;
+  }
+
+  /* ── CTA buttons: balanced — NOT full-width stretching ── */
+  .cta-lux-actions {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 9px !important;
+    margin-bottom: clamp(18px, 4vw, 26px) !important;
+    width: 100%;
+  }
+
+  .cta-lux-btn {
+    /* Center-aligned, max 320px — not edge-to-edge */
+    width: 100% !important;
+    max-width: 320px !important;
+    justify-content: center !important;
+    padding: 12px clamp(16px, 4vw, 28px) !important;
+    font-size: 0.71rem !important;
+    letter-spacing: 0.08em;
+  }
+
+  /* Disable heavy backdrop on glass button */
+  .cta-lux-btn--glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Contact footer: compact */
+  .cta-lux-contact__divider { margin-bottom: 12px; }
+  .cta-lux-contact__items { flex-direction: column !important; gap: 7px; align-items: center; }
+  .cta-lux-contact__sep { display: none; }
+  .cta-lux-contact__item { font-size: 0.72rem; }
+}
+
+/* Very small 320–380px */
+@media (max-width: 380px) {
+  .cta-lux-title { font-size: clamp(1.55rem, 8.5vw, 1.95rem) !important; }
+  .cta-lux-card { padding: 20px 12px !important; border-radius: 13px !important; }
+  .cta-lux-feature { padding: 8px 4px 8px !important; }
+  .cta-lux-feature__title { font-size: 0.6rem !important; }
+  .cta-lux-feature__sub { font-size: 0.52rem !important; }
+  .cta-lux-btn { font-size: 0.65rem !important; padding: 10px 14px !important; }
+}

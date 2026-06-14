@@ -1,0 +1,18 @@
+/**
+ * Global shell — zero-gap root, dark base
+ */
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: #0f0714;
+  color: #efd9f7;
+}
+
+#root {
+  min-height: 100%;
+}

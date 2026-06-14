@@ -1,0 +1,79 @@
+/* ── Cinematic Hero — Performance-optimized ── */
+
+/* Static grain: SVG data URI, no animation, single compositing layer */
+.cinematic-hero__grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  /* Removed mix-blend-mode: multiply — eliminated GPU blend layer */
+}
+
+.cinematic-hero--immersive .cinematic-hero__grain {
+  opacity: 0.04;
+}
+
+/* ── Background GPU layer: one promoted layer for all bg content ── */
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform: translateZ(0);          /* promote to GPU layer once */
+  backface-visibility: hidden;
+  will-change: opacity;              /* hint for opacity transitions */
+  contain: layout paint;
+  overflow: hidden;
+  /* SWIPE FIX: background layer is purely visual — must never intercept touch.
+     Without this, Android Chrome/Samsung Internet swallows touchstart on the
+     GPU-composited layer and events never reach the sectionRef swipe listener. */
+  pointer-events: none;
+}
+
+/* ── Video wrapper: opacity-only transitions, hardware-accelerated ── */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.35s ease;
+  will-change: opacity;
+  backface-visibility: hidden;
+}
+
+/* ── Single <video> element ── */
+.hero-video-el {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* No filter, no transform, no will-change here — parent handles compositing */
+  /* SWIPE FIX: <video> elements on Android Chrome and Samsung Internet
+     intercept all touch events (for native long-press menu, controls, etc.)
+     even when controls are hidden. This prevents touchstart from bubbling
+     to the parent section where useSwipeGesture is listening.
+     pointer-events: none is safe here — all interaction is handled by the
+     section-level swipe listeners and the BlockedOverlay button. */
+  pointer-events: none;
+}
+
+/* ── Thumbnail buttons: no scale animation, opacity only ── */
+.hero-thumb-btn {
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+  /* Removed scale(1.05) — saves a compositing layer per thumb */
+}
+
+/* ── Nav arrows: opacity + color only, no scale ── */
+.hero-nav-arrow {
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  /* Removed hover:scale-110 */
+}
+
+/* Snap scrollbar (if used) */
+.cinematic-hero-snap::-webkit-scrollbar { display: none; }
+.cinematic-hero-snap { -ms-overflow-style: none; }
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-wrap { transition: none; }
+  .hero-thumb-btn  { transition: none; }
+}
