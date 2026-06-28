@@ -1,0 +1,133 @@
+/**
+ * Why Choose Us + FAQ — unified desktop section, shared floral background.
+ * Mobile: background only (layout unchanged). Desktop: single split section.
+ */
+
+.why-faq-united {
+  position: relative;
+}
+
+/* ── Mobile / tablet: floral background only (layout unchanged) ── */
+@media (max-width: 1023px) {
+  #why-us.why-us-section {
+    background: #ebe3f5 url('/images/why-faq-merged-bg.png') center center / cover no-repeat !important;
+  }
+
+  .why-faq-united .faq-section {
+    background: #ebe3f5 url('/images/why-faq-merged-bg.png') center center / cover no-repeat !important;
+  }
+}
+
+/* ── Desktop: one continuous split section ── */
+@media (min-width: 1024px) {
+  .why-faq-united {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: clamp(3.25rem, 4.5vw, 4.75rem) 0;
+    overflow: hidden;
+    background-color: #ebe3f5;
+    background-image:
+      radial-gradient(ellipse 88% 72% at 50% 42%, rgba(255, 255, 255, 0.42) 0%, rgba(247, 241, 250, 0.2) 48%, transparent 72%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(235, 227, 245, 0.08) 50%, rgba(220, 205, 240, 0.12) 100%),
+      url('/images/why-faq-merged-bg.png');
+    background-size: cover, cover, cover;
+    background-position: center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+  }
+
+  .why-faq-united::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    bottom: 6%;
+    width: 1px;
+    transform: translateX(-50%);
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(215, 172, 40, 0.35) 12%,
+      rgba(215, 172, 40, 0.55) 50%,
+      rgba(215, 172, 40, 0.35) 88%,
+      transparent 100%
+    );
+    box-shadow: 0 0 16px rgba(215, 172, 40, 0.2);
+  }
+
+  .why-faq-united::after {
+    content: '◆';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
+    font-size: 0.5rem;
+    line-height: 1;
+    color: #d7ac28;
+    text-shadow: 0 0 12px rgba(215, 172, 40, 0.55);
+  }
+
+  .why-faq-united > #why-us,
+  .why-faq-united > .faq-section {
+    position: relative;
+    z-index: 2;
+    background: none !important;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible;
+  }
+
+  .why-faq-united #why-us .why-us-ambient {
+    display: none !important;
+  }
+
+  .why-faq-united #why-us .container {
+    max-width: none;
+    width: 100%;
+    padding-left: clamp(1.5rem, 2.8vw, 2.75rem);
+    padding-right: clamp(1.25rem, 2.2vw, 2rem);
+  }
+
+  .why-faq-united .faq-section .container {
+    max-width: none;
+    width: 100%;
+    padding-left: clamp(1.25rem, 2.2vw, 2rem);
+    padding-right: clamp(1.5rem, 2.8vw, 2.75rem);
+  }
+
+  .why-faq-united #why-us header {
+    margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .why-faq-united .faq-section .mx-auto.mb-12 {
+    margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .why-faq-united .faq-panel {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .why-faq-united #why-us [class*='max-w-[1180px]'] {
+    max-width: 100%;
+  }
+
+  .why-faq-united #why-us h2 {
+    font-size: clamp(2rem, 2.8vw, 3.25rem);
+  }
+
+  .why-faq-united .faq-section .section-title {
+    font-size: clamp(2rem, 2.8vw, 3.25rem);
+  }
+}

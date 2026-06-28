@@ -1,0 +1,364 @@
+/**
+ * Header + hero architecture — navbar overlays hero, zero gap
+ */
+
+.home-cinematic-root {
+  --nav-height: 72px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: #0f0714;
+}
+
+.home-cinematic-root .site-main--below-hero {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Navbar: fixed glass bar, full width ── */
+.home-cinematic-root .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+  margin: 0;
+  padding: 0 clamp(0.65rem, 1.5vw, 1rem);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  background: rgba(10, 5, 20, 0.45) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: none !important;
+  border-bottom: 1px solid rgba(215, 172, 40, 0.1) !important;
+  box-shadow: 0 4px 24px rgba(15, 7, 20, 0.35) !important;
+}
+
+.home-cinematic-root .navbar.scrolled {
+  background: rgba(20, 10, 30, 0.72) !important;
+}
+
+.home-cinematic-root .navbar-inner {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Brand: top-left | Links: viewport center | Actions: top-right */
+.home-cinematic-root .navbar-col--brand {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.home-cinematic-root .navbar-col--center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  max-width: min(52vw, 520px);
+  pointer-events: none;
+}
+
+.home-cinematic-root .navbar-col--center .nav-links {
+  pointer-events: auto;
+}
+
+.home-cinematic-root .navbar-col--actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.home-cinematic-root .nav-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+}
+
+.home-cinematic-root .nav-logo-name {
+  font-size: clamp(0.95rem, 2.2vw, 1.55rem);
+  line-height: 1.15;
+  white-space: nowrap;
+  max-width: none;
+  overflow: visible;
+}
+
+.home-cinematic-root .nav-logo-tagline {
+  display: none;
+}
+
+.home-cinematic-root .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-cinematic-root .nav-links a,
+.home-cinematic-root .nav-link {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(239, 217, 247, 0.92);
+  white-space: nowrap;
+}
+
+.home-cinematic-root .nav-links a:hover,
+.home-cinematic-root .nav-link:hover {
+  color: #d7ac28;
+}
+
+.home-cinematic-root .nav-cta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: 0 !important;
+  margin-left: 0 !important;
+}
+
+.home-cinematic-root .nav-help-btn,
+.home-cinematic-root .navbar .btn-glass {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(215, 172, 40, 0.2) !important;
+  color: rgba(239, 217, 247, 0.92) !important;
+  box-shadow: none !important;
+}
+
+.home-cinematic-root .hamburger span {
+  background: rgba(239, 217, 247, 0.92);
+}
+
+/* ── Hero: exactly one viewport, content layered on top ── */
+.home-cinematic-root #home.cinematic-hero--immersive {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #0f0714;
+}
+
+.home-cinematic-root .cinematic-hero__stage {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.home-cinematic-root .cinematic-hero__video-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  z-index: 0;
+}
+
+.home-cinematic-root .cinematic-hero__video-grid,
+.home-cinematic-root .cinematic-hero__video-grid .grid {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.home-cinematic-root .cinematic-hero__mobile-videos {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.home-cinematic-root .cinematic-hero__mobile-videos .cinematic-hero-snap {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.home-cinematic-root .hero-panel__video,
+.home-cinematic-root .hero-panel__video--split {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlays — inside stage, full bleed */
+.home-cinematic-root .cinematic-hero__blend-overlay,
+.home-cinematic-root .cinematic-hero__warm-wash,
+.home-cinematic-root .cinematic-hero__bloom,
+.home-cinematic-root .cinematic-hero__depth-vignette,
+.home-cinematic-root .cinematic-hero__light-leak {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home-cinematic-root .cinematic-hero__blend-overlay {
+  z-index: 6;
+  background: linear-gradient(
+    90deg,
+    rgba(35, 7, 69, 0.88) 0%,
+    rgba(51, 19, 100, 0.5) 24%,
+    rgba(35, 7, 69, 0.15) 50%,
+    rgba(26, 8, 43, 0.4) 75%,
+    rgba(15, 7, 20, 0.7) 100%
+  );
+}
+
+/* Foreground: absolute overlay — does NOT expand layout height */
+.home-cinematic-root .cinematic-hero__foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  margin: 0;
+  min-height: 0;
+  height: 100%;
+  padding: var(--nav-height) clamp(1rem, 2.5vw, 1.5rem) clamp(1.25rem, 3vh, 2rem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.home-cinematic-root .cinematic-hero__foreground > * {
+  pointer-events: auto;
+}
+
+@media (min-width: 1024px) {
+  .home-cinematic-root .cinematic-hero__foreground {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .home-cinematic-root .cinematic-hero__content {
+    padding: 0 0 0 clamp(0.5rem, 4vw, 4rem);
+    min-height: 0;
+  }
+}
+
+.home-cinematic-root .cinematic-atmosphere__veil {
+  background: linear-gradient(180deg, transparent 0%, transparent 30%, rgba(15, 7, 20, 0.4) 100%);
+}
+
+/* ── Tablet / mobile ── */
+@media (max-width: 1023px) {
+  .home-cinematic-root {
+    --nav-height: 64px;
+  }
+
+  .home-cinematic-root .navbar-col--brand {
+    max-width: calc(100% - 7.5rem);
+  }
+
+  .home-cinematic-root .navbar-col--center {
+    display: none;
+  }
+
+  .home-cinematic-root .navbar-col--actions {
+    right: 0;
+  }
+
+  .home-cinematic-root .cinematic-hero__foreground {
+    justify-content: flex-end;
+    padding-bottom: 1.5rem;
+  }
+
+  .home-cinematic-root .cinematic-hero__blend-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 7, 20, 0.25) 0%,
+      transparent 30%,
+      rgba(35, 7, 69, 0.5) 65%,
+      rgba(15, 7, 20, 0.92) 100%
+    );
+  }
+}
+
+@media (max-width: 639px) {
+  .home-cinematic-root .nav-help-btn {
+    display: none;
+  }
+}
+
+/* Global three-column navbar structure */
+.navbar-inner {
+  box-sizing: border-box;
+}
+
+.navbar-col {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.navbar-col--brand {
+  flex: 0 1 auto;
+  justify-content: flex-start;
+  min-width: max-content;
+}
+
+.navbar-col--center {
+  flex: 0 0 auto;
+  justify-content: center;
+}
+
+.navbar-col--actions {
+  flex: 1 1 0;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .navbar-col--center {
+    display: none;
+  }
+}

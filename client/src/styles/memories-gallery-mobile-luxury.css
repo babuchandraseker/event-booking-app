@@ -1,0 +1,598 @@
+/**
+ * Mobile-only luxury gallery — Real moments · Real emotions
+ * Dark cinematic luxury palette: deep black, royal violet, warm gold
+ * Desktop grid (.rc-gallery-desktop) stays visible from 768px up.
+ */
+
+.rc-gallery-mobile {
+  display: none;
+}
+
+.rc-gallery-loading-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* ── Section background & atmosphere — DARK LUXURY, matching site theme ── */
+  .rc-section.rc-section--luxury {
+    padding: 2.5rem 0 3rem;
+    overflow-x: clip;
+    /* FIXED: Match the dark cinematic palette used across the site */
+    background: #0d0b14 !important;
+  }
+
+  /* FIXED: Dark cinematic gradient overlay — violet + black, no light pink/grey */
+  .rc-section--luxury::before {
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%,   rgba(72, 24, 117, 0.52) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 15% 60%,  rgba(42, 15, 71, 0.42) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 85% 55%,  rgba(42, 15, 71, 0.42) 0%, transparent 65%),
+      radial-gradient(ellipse 85% 55% at 50% 105%, rgba(17, 7, 32, 0.88) 0%, transparent 70%),
+      linear-gradient(180deg, #09040f 0%, #110720 40%, #1a0a2e 70%, #0d0b14 100%);
+  }
+
+  /* Gold top edge streak — matches desktop */
+  .rc-section--luxury::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 0%, rgba(215,172,40,0) 10%, rgba(215,172,40,0.45) 40%, rgba(240,216,120,0.65) 50%, rgba(215,172,40,0.45) 60%, rgba(215,172,40,0) 90%, transparent 100%);
+    box-shadow: 0 0 24px 2px rgba(215,172,40,0.18);
+  }
+
+  .rc-section--luxury .rc-container {
+    padding: 0 1.15rem;
+    overflow: visible;
+  }
+
+  /* Hide desktop grid; show mobile experience */
+  .rc-gallery-desktop,
+  .rc-gallery-loading:not(.rc-gallery-loading-mobile) {
+    display: none !important;
+  }
+
+  .rc-gallery-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    width: 100%;
+    margin-top: 0.15rem;
+  }
+
+  .rc-gallery-loading-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rc-gallery-loading-mobile .rc-gallery-skeleton--featured {
+    min-height: 22rem;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(28,9,51,0.9), rgba(42,15,71,0.8));
+  }
+
+  .rc-gallery-loading-mobile .rc-gallery-skeleton--marquee {
+    min-height: 7.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(22,8,40,0.9), rgba(28,9,51,0.8));
+  }
+
+  /* ── Mobile heading — dark palette ── */
+  .rc-section--luxury .rc-header {
+    margin-bottom: 1.65rem;
+    padding: 0 0.15rem;
+  }
+
+  .rc-section--luxury .rc-label-wrap {
+    margin-bottom: 0.65rem;
+  }
+
+  .rc-section--luxury .rc-label-text {
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    color: rgba(217, 168, 50, 0.85);
+  }
+
+  .rc-section--luxury .rc-heading {
+    font-size: clamp(1.85rem, 8.2vw, 2.35rem);
+    line-height: 1.14;
+    margin-bottom: 0.75rem;
+  }
+
+  .rc-section--luxury .rc-heading-prefix {
+    color: rgba(255, 255, 255, 0.94);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 24px rgba(90, 32, 144, 0.55);
+  }
+
+  .rc-section--luxury .rc-heading-em {
+    margin-top: 0.12rem;
+    font-size: clamp(1.9rem, 8.5vw, 2.4rem);
+    font-weight: 500;
+    background: linear-gradient(120deg, #f8e9c0 0%, #d9a832 28%, #f0cc68 55%, #c9891a 78%, #f8e9c0 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 14px rgba(215, 172, 40, 0.4));
+    animation: rc-mob-gold-shimmer 5s ease-in-out infinite;
+  }
+
+  @keyframes rc-mob-gold-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+  }
+
+  .rc-section--luxury .rc-subheading {
+    font-size: 0.88rem;
+    line-height: 1.62;
+    max-width: 20rem;
+    margin-bottom: 1rem;
+    /* FIXED: Light text for dark background */
+    color: rgba(210, 185, 245, 0.72) !important;
+    padding: 0 0.25rem;
+  }
+
+  .rc-section--luxury .rc-divider {
+    margin-top: 0.15rem;
+  }
+
+  .rc-section--luxury .rc-divider-line {
+    width: 3.5rem;
+    background: linear-gradient(90deg, transparent, rgba(201,137,26,0.7), transparent);
+  }
+
+  .rc-section--luxury .rc-particle {
+    opacity: 0.65;
+  }
+
+  /* ── Featured cinematic card — DARK cinematic glass ── */
+  .rc-mob-featured {
+    width: 100%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    /* Breathing room from screen edges */
+    padding: 0 0.5rem;
+  }
+
+  /* Ambient glow behind featured card */
+  .rc-mob-featured::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse,
+      rgba(120, 50, 200, 0.22) 0%,
+      rgba(201, 137, 26, 0.10) 45%,
+      transparent 70%
+    );
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rc-mob-featured-frame {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    min-height: clamp(19.5rem, 58vw, 23.5rem);
+    /* FIXED: Dark card matching site palette */
+    border: 1.5px solid rgba(201, 137, 26, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 24px 56px rgba(0, 0, 0, 0.65),
+      0 8px 24px rgba(72, 24, 117, 0.35),
+      0 0 40px rgba(201, 137, 26, 0.14);
+    background: rgba(22, 8, 40, 0.88);
+  }
+
+  /* Gold edge highlight on active featured card */
+  .rc-mob-featured-glow {
+    position: absolute;
+    inset: -1px;
+    z-index: 4;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow:
+      0 0 0 1px rgba(201, 137, 26, 0.35),
+      0 0 28px rgba(201, 137, 26, 0.2),
+      inset 0 0 16px rgba(120, 50, 200, 0.08);
+    opacity: 1;
+  }
+
+  /* Gold corner accent — top-right */
+  .rc-mob-featured-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 5;
+    background:
+      linear-gradient(225deg, rgba(201, 137, 26, 0.22) 0%, transparent 60%);
+    border-top: 1px solid rgba(201, 137, 26, 0.45);
+    border-right: 1px solid rgba(201, 137, 26, 0.45);
+    border-radius: 0 22px 0 0;
+  }
+
+  /* Gold corner accent — bottom-left */
+  .rc-mob-featured-frame::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 5;
+    background:
+      linear-gradient(45deg, rgba(201, 137, 26, 0.18) 0%, transparent 60%);
+    border-bottom: 1px solid rgba(201, 137, 26, 0.4);
+    border-left: 1px solid rgba(201, 137, 26, 0.4);
+    border-radius: 0 0 0 22px;
+  }
+
+  .rc-mob-featured-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .rc-mob-featured-slide {
+    position: absolute;
+    inset: 0;
+  }
+
+  .rc-mob-featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform-origin: center;
+    /* Slight contrast boost for cinematic feel */
+    filter: contrast(1.05) saturate(0.92);
+    animation: rc-mob-featured-zoom 8s ease-in-out infinite;
+  }
+
+  @keyframes rc-mob-featured-zoom {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  .rc-mob-featured-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #1c0933, #2a0f47, #110720);
+    font-size: 2rem;
+    color: #c9891a;
+  }
+
+  .rc-mob-featured-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(9, 4, 15, 0.12) 0%,
+      transparent 22%,
+      rgba(9, 4, 15, 0.28) 58%,
+      rgba(9, 4, 15, 0.90) 100%
+    );
+  }
+
+  .rc-mob-featured-glass {
+    position: absolute;
+    inset: auto 0 0;
+    height: 50%;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 0%, rgba(28, 9, 51, 0.08) 100%);
+  }
+
+  .rc-mob-featured-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: clamp(19.5rem, 58vw, 23.5rem);
+    padding: 1.15rem 1.1rem 1.25rem;
+    gap: 0.45rem;
+  }
+
+  .rc-mob-featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f0cc68;
+    background: rgba(9, 4, 15, 0.7);
+    border: 1px solid rgba(201, 137, 26, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 0 12px rgba(201, 137, 26, 0.15);
+  }
+
+  .rc-mob-featured-title {
+    margin: 0;
+    font-family: 'Playfair Display', var(--font-display), Georgia, serif;
+    font-size: clamp(1.28rem, 5.2vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #f8e9c0;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+    max-width: 16rem;
+  }
+
+  .rc-mob-featured-caption {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: rgba(210, 185, 245, 0.85);
+    max-width: 18rem;
+  }
+
+  .rc-mob-featured-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.35rem;
+    padding: 0.62rem 1.05rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #09040f;
+    background: linear-gradient(135deg, #f8e9c0 0%, #d9a832 40%, #c9891a 100%);
+    box-shadow:
+      0 8px 24px rgba(201, 137, 26, 0.42),
+      0 0 16px rgba(201, 137, 26, 0.2);
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  }
+
+  .rc-mob-featured-cta:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 16px rgba(201, 137, 26, 0.3);
+  }
+
+  .rc-mob-featured-cta-arrow {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .rc-mob-featured-dots {
+    position: absolute;
+    bottom: 0.55rem;
+    right: 0.85rem;
+    z-index: 5;
+    display: flex;
+    gap: 0.3rem;
+    pointer-events: none;
+  }
+
+  .rc-mob-featured-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+    transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+  }
+
+  .rc-mob-featured-dot.is-active {
+    width: 18px;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #c9891a, #f0cc68);
+    box-shadow: 0 0 10px rgba(201, 137, 26, 0.65), 0 0 20px rgba(201, 137, 26, 0.3);
+  }
+
+  /* ── Marquee small cards — dark luxury palette ── */
+  .rc-mmq {
+    position: relative;
+    width: 100%;
+    padding: 0.4rem 0 0.5rem;
+  }
+
+  .rc-mmq-viewport {
+    overflow: hidden;
+    width: 100%;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  }
+
+  .rc-mmq-track {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+    width: max-content;
+    padding: 0.35rem 0.5rem 0.65rem;
+    animation: rc-mmq-scroll 48s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes rc-mmq-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .rc-mmq-fade {
+    display: none;
+  }
+
+  .rc-mmq-card {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(7.25rem, 38vw, 8.5rem);
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    /* FIXED: Dark card matching site palette */
+    border: 1px solid rgba(201, 137, 26, 0.32);
+    background: rgba(22, 8, 40, 0.88);
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.5),
+      0 4px 12px rgba(72, 24, 117, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition:
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.45s ease,
+      box-shadow 0.45s ease;
+    touch-action: manipulation;
+  }
+
+  .rc-mmq-card:active,
+  .rc-mmq-card:focus-within {
+    transform: scale(1.04);
+    border-color: rgba(201, 137, 26, 0.58);
+    box-shadow:
+      0 0 0 1px rgba(201, 137, 26, 0.28),
+      0 14px 32px rgba(0, 0, 0, 0.55),
+      0 0 24px rgba(201, 137, 26, 0.2);
+  }
+
+  .rc-mmq-card-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    box-shadow: inset 0 0 0 1px rgba(201, 137, 26, 0.4);
+    border-radius: inherit;
+  }
+
+  .rc-mmq-card:active .rc-mmq-card-glow,
+  .rc-mmq-card:focus-within .rc-mmq-card-glow {
+    opacity: 1;
+  }
+
+  .rc-mmq-card-media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .rc-mmq-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Inactive: darker, more cinematic */
+    filter: brightness(0.82) contrast(1.05) saturate(0.88);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  }
+
+  .rc-mmq-card:active .rc-mmq-card-img,
+  .rc-mmq-card:focus-within .rc-mmq-card-img {
+    transform: scale(1.08);
+    filter: brightness(0.95) contrast(1.05) saturate(0.95);
+  }
+
+  .rc-mmq-card-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, #1c0933, #2a0f47, #110720);
+    font-size: 1.35rem;
+  }
+
+  .rc-mmq-card-shade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(9,4,15,0.05) 40%, rgba(9,4,15,0.72) 100%);
+  }
+
+  .rc-mmq-card-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.45rem 0.35rem;
+    /* FIXED: Dark label matching site palette */
+    background: linear-gradient(180deg, transparent, rgba(9, 4, 15, 0.88));
+    border-top: 1px solid rgba(201, 137, 26, 0.15);
+  }
+
+  .rc-mmq-card-icon {
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+
+  .rc-mmq-card-title {
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    /* FIXED: Gold text on dark bg */
+    color: rgba(240, 204, 104, 0.85);
+  }
+
+  .rc-section--luxury .rc-memory-footer {
+    margin-top: 1.85rem;
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .rc-mmq-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 0.25rem;
+  }
+
+  .rc-mmq-viewport {
+    mask-image: none;
+    -webkit-mask-image: none;
+    overflow: visible;
+  }
+
+  .rc-mob-featured-img {
+    animation: none;
+  }
+
+  .rc-mob-featured-frame::before,
+  .rc-mob-featured-frame::after {
+    display: none;
+  }
+
+  .rc-section--luxury .rc-particle {
+    animation: none;
+  }
+
+  .rc-mob-featured::before {
+    display: none;
+  }
+}

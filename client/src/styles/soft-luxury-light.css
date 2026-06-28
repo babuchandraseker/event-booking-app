@@ -1,0 +1,582 @@
+/**
+ * Soft Luxury Light — section overrides & polish
+ * Loaded last; preserves layout, updates visual theme only.
+ */
+
+/* ── Global cinematic atmosphere (inline in style.css) ── */
+.cinematic-atmosphere {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0%, rgba(130, 56, 179, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 40% at 0% 50%, rgba(239, 231, 247, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 100% 50%, rgba(239, 231, 247, 0.45) 0%, transparent 50%);
+}
+
+.section-transition-down,
+.section-transition-up {
+  background: linear-gradient(to bottom, transparent, var(--black));
+}
+
+.section-transition-up {
+  background: linear-gradient(to top, transparent, var(--black));
+}
+
+.gold-divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(215, 172, 40, 0.12) 20%,
+    rgba(215, 172, 40, 0.35) 50%,
+    rgba(215, 172, 40, 0.12) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Navbar mobile ── */
+.nav-mobile-menu {
+  background: rgba(255, 255, 255, 0.96) !important;
+  background-image: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(130, 56, 179, 0.08) 0%, transparent 65%) !important;
+}
+
+.nav-mobile-menu a {
+  color: var(--text-primary) !important;
+}
+
+/* ── Hero (legacy + stats) ── */
+.hero-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(247, 241, 250, 0.55) 0%,
+    rgba(239, 231, 247, 0.35) 38%,
+    rgba(130, 56, 179, 0.2) 62%,
+    rgba(72, 24, 117, 0.35) 100%
+  ) !important;
+}
+
+.hero-overlay-bottom {
+  background: linear-gradient(to top, var(--black) 0%, rgba(247, 241, 250, 0.7) 50%, transparent 100%) !important;
+}
+
+.hero-ambient {
+  background:
+    radial-gradient(ellipse 55% 40% at 15% 60%, rgba(130, 56, 179, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 55% at 85% 30%, rgba(215, 172, 40, 0.12) 0%, transparent 60%) !important;
+}
+
+/* Cinematic hero — dark luxury (homepage uses luxury-landing-theme.css) */
+#hero.cinematic-hero--immersive,
+.cinematic-hero-root {
+  background: transparent !important;
+}
+
+/* ── Packages & CTA ── */
+.pkg-section {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f1fa 40%, #efe7f7 70%, #f7f1fa 100%) !important;
+}
+
+.pkg-bg-glow {
+  background: radial-gradient(ellipse, rgba(201, 168, 76, 0.12) 0%, transparent 70%) !important;
+}
+
+.pkg-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(215, 172, 40, 0.22) !important;
+  box-shadow: 0 8px 32px rgba(72, 24, 117, 0.07), 0 2px 8px rgba(215, 172, 40, 0.06) !important;
+}
+
+.pkg-card:hover {
+  box-shadow: 0 20px 52px rgba(72, 24, 117, 0.12), 0 0 36px rgba(215, 172, 40, 0.1) !important;
+}
+
+/* Silver card light */
+.pkg-card--silver {
+  background: linear-gradient(155deg, #ffffff 0%, #f8f6fc 100%) !important;
+  border-color: rgba(180, 160, 210, 0.3) !important;
+}
+
+/* Gold card light */
+.pkg-card--gold {
+  background: linear-gradient(155deg, #fffdf5 0%, #fff8e8 100%) !important;
+  border-color: rgba(215, 172, 40, 0.35) !important;
+}
+
+/* Platinum card light */
+.pkg-card--platinum {
+  background: linear-gradient(155deg, #faf8ff 0%, #f3efff 100%) !important;
+  border-color: rgba(150, 100, 220, 0.3) !important;
+}
+
+.pkg-card--platinum .pkg-icon {
+  color: #8b5cf6 !important;
+}
+
+/* Card head border */
+.pkg-card-head {
+  border-bottom-color: rgba(215, 172, 40, 0.15) !important;
+}
+
+/* CTA button light */
+.pkg-cta-btn {
+  border-color: rgba(130, 56, 179, 0.2) !important;
+  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+.pkg-cta-btn:hover {
+  border-color: var(--gold) !important;
+  background: rgba(215, 172, 40, 0.06) !important;
+}
+
+.cta-section {
+  background: linear-gradient(180deg, var(--deep) 0%, var(--violet-rich) 100%) !important;
+}
+
+.cta-section .section-title,
+.cta-section .section-subtitle {
+  color: var(--text-on-deep);
+}
+
+.cta-section .section-subtitle {
+  color: rgba(247, 241, 250, 0.82);
+}
+
+/* ── Reviews ── */
+.reviews-magic-section:not(.reviews-lux-section) {
+  background: linear-gradient(180deg, var(--black) 0%, var(--deep) 100%) !important;
+}
+
+.review-magic-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(215, 172, 40, 0.22) !important;
+  box-shadow: 0 16px 48px rgba(72, 24, 117, 0.1) !important;
+}
+
+/* ── Real celebrations ── */
+.rc-section {
+  background: linear-gradient(180deg, var(--black) 0%, var(--deep) 50%, var(--black) 100%) !important;
+}
+
+/* ── FAQ rows ── */
+.faq-section .faq-row {
+  border-bottom-color: rgba(215, 172, 40, 0.15);
+}
+
+.faq-section .faq-trigger:hover {
+  background: rgba(130, 56, 179, 0.04);
+}
+
+/* ── Why Choose Us section shell — cinematic dark luxury ── */
+#why-us {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 50%, rgba(88, 38, 160, 0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 15% 20%, rgba(72, 28, 140, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 50% at 85% 80%, rgba(55, 18, 110, 0.10) 0%, transparent 55%),
+    linear-gradient(160deg, #0f0b14 0%, #110d18 25%, #130e1c 55%, #0f0b14 100%) !important;
+}
+
+/* ── Themes carousel ── */
+.themes-cine-arrow {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(215, 172, 40, 0.28) !important;
+  color: var(--violet-deep) !important;
+  box-shadow: 0 8px 28px rgba(72, 24, 117, 0.1);
+}
+
+.themes-cine-arrow:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(215, 172, 40, 0.45) !important;
+}
+
+.themes-cine-dot.active {
+  background: var(--gold) !important;
+}
+
+/* ── Slot availability (Tailwind inline targets) ── */
+#slots [class*='rounded-2xl'][class*='border'] {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(215, 172, 40, 0.22) !important;
+  box-shadow: 0 14px 44px rgba(72, 24, 117, 0.1) !important;
+}
+
+#slots [class*='rounded-2xl']:hover {
+  border-color: rgba(215, 172, 40, 0.38) !important;
+  box-shadow: 0 18px 52px rgba(72, 24, 117, 0.14), 0 0 32px rgba(130, 56, 179, 0.08) !important;
+}
+
+/* ── Newsletter in footer ── */
+.footer-newsletter input,
+.newsletter-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(215, 172, 40, 0.28) !important;
+  color: var(--text-on-deep) !important;
+}
+
+.footer-newsletter input::placeholder {
+  color: rgba(247, 241, 250, 0.5);
+}
+
+/* ── WhatsApp float ── */
+.whatsapp-float {
+  box-shadow: 0 10px 36px rgba(37, 211, 102, 0.35);
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(130, 56, 179, 0.25);
+  color: var(--violet-deep);
+}
+
+/* ── Add-Ons Section — light theme ── */
+.pkg-addons-wrapper {
+  border-top-color: rgba(215, 172, 40, 0.2) !important;
+}
+
+.pkg-addons-title {
+  color: var(--text-primary) !important;
+}
+
+.pkg-addons-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+/* Addon cards — light */
+.addon-card {
+  background: #ffffff !important;
+  border-color: rgba(215, 172, 40, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(72, 24, 117, 0.06) !important;
+}
+
+.addon-card:hover {
+  box-shadow: 0 12px 40px rgba(72, 24, 117, 0.12), 0 0 24px rgba(215, 172, 40, 0.1) !important;
+  border-color: rgba(215, 172, 40, 0.4) !important;
+}
+
+.addon-card--checked {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(215, 172, 40, 0.2), 0 12px 40px rgba(72, 24, 117, 0.1) !important;
+}
+
+.addon-card--free {
+  border-color: rgba(91, 191, 122, 0.4) !important;
+  background: #f8fff9 !important;
+}
+
+/* Softer image scrim so card body is readable on light bg */
+.addon-img-overlay {
+  background: linear-gradient(to top, rgba(30, 10, 50, 0.7) 0%, rgba(30, 10, 50, 0.05) 60%) !important;
+}
+
+/* Addon body text on light */
+.addon-name {
+  color: var(--text-primary) !important;
+}
+
+.addon-desc {
+  color: var(--text-secondary) !important;
+}
+
+.addon-body {
+  background: #ffffff !important;
+}
+
+/* Checkbox bubble on light */
+.addon-checkbox {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(130, 56, 179, 0.25) !important;
+  color: var(--text-muted) !important;
+}
+
+.addon-checkbox--checked {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #fff !important;
+}
+
+/* Addon slider buttons */
+.addon-slider-btn {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(215, 172, 40, 0.28) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 4px 16px rgba(72, 24, 117, 0.1) !important;
+}
+
+.addon-slider-btn:hover:not(:disabled) {
+  background: #ffffff !important;
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+}
+
+/* Slider dot nav */
+.addon-slider-dot {
+  background: rgba(130, 56, 179, 0.18) !important;
+}
+
+.addon-slider-dot--active {
+  background: var(--gold) !important;
+}
+
+.addon-slider-dot--free {
+  background: rgba(91, 191, 122, 0.45) !important;
+}
+
+.addon-mobile-dot {
+  min-width: 7px !important;
+  min-height: 7px !important;
+}
+
+.addon-mobile-dot--active {
+  min-width: 22px !important;
+}
+
+/* pkg-indicator (included free badge) */
+.addon-pkg-indicator {
+  background: rgba(91, 191, 122, 0.1) !important;
+  color: #3da862 !important;
+  border-bottom-color: rgba(91, 191, 122, 0.15) !important;
+}
+
+.addon-pkg-dot {
+  background: #5bbf7a !important;
+}
+
+/* ── Sticky Summary Bar — light theme ── */
+.pkg-summary-bar {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-top-color: rgba(215, 172, 40, 0.25) !important;
+  box-shadow: 0 -4px 32px rgba(72, 24, 117, 0.1), 0 -1px 8px rgba(215, 172, 40, 0.08) !important;
+}
+
+.pkg-summary-label {
+  color: var(--text-muted) !important;
+}
+
+.pkg-summary-value {
+  color: var(--text-secondary) !important;
+}
+
+.pkg-summary-row {
+  color: var(--text-muted) !important;
+}
+
+.pkg-summary-row--addon {
+  color: var(--text-primary) !important;
+}
+
+.pkg-summary-total span {
+  color: var(--text-muted) !important;
+}
+
+.pkg-summary-total strong {
+  color: var(--gold-dark) !important;
+}
+
+.pkg-summary-total {
+  border-left-color: rgba(215, 172, 40, 0.2) !important;
+}
+
+/* Section header label & title on light bg */
+.pkg-header .section-label,
+.pkg-addons-header .section-label {
+  color: rgba(130, 56, 179, 0.7) !important;
+}
+
+.pkg-header .section-title {
+  color: var(--text-primary) !important;
+}
+
+.pkg-header .section-subtitle,
+.pkg-addons-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+
+/* Addon green hint */
+.addon-green-hint {
+  color: #3da862 !important;
+}
+
+/* ── Package card text contrast fixes (light bg) ── */
+
+/* ── Addon slider cards — convert full-bleed dark layout → clean split card ── */
+
+.sst-page .addon-slider-viewport .addon-card {
+  background: #ffffff !important;
+  border-color: rgba(215, 172, 40, 0.22) !important;
+  box-shadow: 0 4px 20px rgba(72, 24, 117, 0.07) !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.sst-page .addon-slider-viewport .addon-card:hover {
+  box-shadow: 0 12px 40px rgba(72, 24, 117, 0.13), 0 0 20px rgba(215, 172, 40, 0.1) !important;
+  border-color: rgba(215, 172, 40, 0.42) !important;
+}
+
+.sst-page .addon-slider-viewport .addon-card--checked {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(215, 172, 40, 0.22), 0 12px 36px rgba(72, 24, 117, 0.1) !important;
+}
+
+.sst-page .addon-slider-viewport .addon-card--free {
+  background: #f8fff9 !important;
+  border-color: rgba(61, 168, 98, 0.35) !important;
+}
+
+/* Image area — fixed height, not full-bleed */
+.sst-page .addon-slider-viewport .addon-img-wrap {
+  position: relative !important;
+  inset: auto !important;
+  height: 180px !important;
+  flex-shrink: 0 !important;
+  background: #ede5f8 !important;
+}
+
+.sst-page .addon-slider-viewport .addon-img {
+  opacity: 1 !important;
+}
+
+/* Remove heavy black scrim */
+.sst-page .addon-slider-viewport .addon-img-overlay {
+  background: linear-gradient(to top, rgba(30, 10, 50, 0.15) 0%, transparent 50%) !important;
+}
+
+/* Body — normal flow below image, not absolute overlay */
+.sst-page .addon-slider-viewport .addon-body {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  padding: 14px 16px 18px !important;
+  background: #ffffff !important;
+  z-index: auto !important;
+}
+
+.sst-page .addon-slider-viewport .addon-card--free .addon-body {
+  background: #f8fff9 !important;
+}
+
+/* Text colours on white body */
+.sst-page .addon-slider-viewport .addon-name  { color: #2e1848 !important; }
+.sst-page .addon-slider-viewport .addon-desc  { color: #5e4a72 !important; }
+.sst-page .addon-slider-viewport .addon-price { color: #c78d17 !important; }
+.sst-page .addon-slider-viewport .addon-price--free { color: #3da862 !important; }
+
+/* Checkbox bubble */
+.sst-page .addon-slider-viewport .addon-checkbox {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(130, 56, 179, 0.25) !important;
+  color: #8a7a9e !important;
+}
+.sst-page .addon-slider-viewport .addon-checkbox--checked {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #fff !important;
+}
+
+/* "Included in Gold" pill */
+.sst-page .addon-slider-viewport .addon-pkg-indicator {
+  background: rgba(61, 168, 98, 0.12) !important;
+  color: #2a8a50 !important;
+  border-bottom-color: rgba(61, 168, 98, 0.15) !important;
+}
+.sst-page .addon-slider-viewport .addon-pkg-dot { background: #3da862 !important; }
+
+/* Placeholder when image missing */
+.sst-page .addon-slider-viewport .addon-img--placeholder {
+  background: #ede5f8 !important;
+}
+
+/* Slider nav arrows */
+.sst-page .addon-slider-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(215, 172, 40, 0.3) !important;
+  color: #2e1848 !important;
+  box-shadow: 0 4px 16px rgba(72, 24, 117, 0.1) !important;
+}
+.sst-page .addon-slider-btn:hover:not(:disabled) {
+  border-color: var(--gold) !important;
+  color: #c78d17 !important;
+}
+
+/* Re-declare dark text variables inside .sst-page for the light pkg-section */
+.sst-page .pkg-section {
+  --text-primary:   #2e1848;
+  --text-secondary: #5e4a72;
+  --text-muted:     #8a7a9e;
+  --gold-light:     #c78d17;
+}
+
+/* Section header titles */
+.sst-page .pkg-section .section-title,
+.sst-page .pkg-section .pkg-addons-title {
+  color: #2e1848 !important;
+}
+
+.sst-page .pkg-section .section-title em,
+.sst-page .pkg-section .pkg-addons-title em {
+  color: #c78d17 !important;
+}
+
+.sst-page .pkg-section .section-subtitle,
+.sst-page .pkg-section .pkg-addons-subtitle {
+  color: #5e4a72 !important;
+}
+
+.sst-page .pkg-section .section-label {
+  color: rgba(130, 56, 179, 0.75) !important;
+}
+
+/* Silver — dark grey/purple tones */
+.pkg-card--silver .pkg-tier       { color: #7a7a9a !important; }
+.pkg-card--silver .pkg-icon       { color: #8a7a9e !important; }
+.pkg-card--silver .pkg-amount     { color: #2e1848 !important; }
+.pkg-card--silver .pkg-rupee      { color: #5e4a72 !important; }
+.pkg-card--silver .pkg-meta       { color: #8a7a9e !important; }
+.pkg-card--silver .pkg-list-label { color: #8a7a9e !important; }
+.pkg-card--silver .pkg-item       { color: #5e4a72 !important; }
+.pkg-card--silver .pkg-free       { color: #3da862 !important; background: rgba(61,168,98,0.1) !important; border-color: rgba(61,168,98,0.25) !important; }
+.pkg-card--silver .pkg-check      { color: #3da862 !important; border-color: rgba(61,168,98,0.35) !important; background: rgba(61,168,98,0.08) !important; }
+.pkg-card--silver .pkg-note       { color: #8a7a9e !important; }
+.pkg-card--silver .pkg-cta-btn    { color: #5e4a72 !important; border-color: rgba(130,56,179,0.22) !important; }
+
+/* Gold — warm amber/brown tones */
+.pkg-card--gold .pkg-tier         { color: var(--gold-dark) !important; }
+.pkg-card--gold .pkg-amount       { color: var(--gold-dark) !important; }
+.pkg-card--gold .pkg-rupee        { color: #8a6a20 !important; }
+.pkg-card--gold .pkg-meta         { color: #7a6030 !important; }
+.pkg-card--gold .pkg-list-label   { color: #7a6030 !important; }
+.pkg-card--gold .pkg-item         { color: #4a3810 !important; }
+.pkg-card--gold .pkg-free         { color: #3da862 !important; background: rgba(61,168,98,0.1) !important; border-color: rgba(61,168,98,0.25) !important; }
+.pkg-card--gold .pkg-check        { color: #3da862 !important; }
+.pkg-card--gold .pkg-note         { color: #7a6030 !important; }
+.pkg-card--gold .pkg-cta-btn      { color: var(--gold-dark) !important; border-color: rgba(199,141,23,0.4) !important; }
+
+/* Platinum — rich purple tones */
+.pkg-card--platinum .pkg-tier       { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-icon       { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-amount     { color: #6b3fa0 !important; }
+.pkg-card--platinum .pkg-rupee      { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-meta       { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-list-label { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-item       { color: #4a2e72 !important; }
+.pkg-card--platinum .pkg-free       { color: #3da862 !important; background: rgba(61,168,98,0.1) !important; border-color: rgba(61,168,98,0.25) !important; }
+.pkg-card--platinum .pkg-check      { color: #3da862 !important; }
+.pkg-card--platinum .pkg-note       { color: #7b5ea7 !important; }
+.pkg-card--platinum .pkg-cta-btn    { color: #6b3fa0 !important; border-color: rgba(107,63,160,0.3) !important; }
+
+.pkg-card .pkg-amount--strike {
+  color: rgba(137, 95, 31, 0.58) !important;
+  font-size: clamp(1.05rem, 1.4vw, 1.28rem) !important;
+}
+
+.pkg-card .pkg-amount--offer {
+  color: var(--gold-dark) !important;
+  font-size: clamp(3rem, 4.2vw, 3.65rem) !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .pkg-card .pkg-amount--offer {
+    font-size: 2.95rem !important;
+  }
+}

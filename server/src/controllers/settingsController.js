@@ -1,0 +1,120 @@
+const createRepository = require("../services/repository");
+const asyncHandler = require("../middleware/asyncHandler");
+const createHttpError = require("../utils/httpError");
+const { requireFields } = require("../utils/validation");
+
+const settings = createRepository("settings");
+const SETTINGS_ID = "business";
+
+const defaultSettings = {
+  profileName: "Admin",
+  profileEmail: process.env.ADMIN_EMAIL || "admin@velvetnights.in",
+  businessName: "A WonderOne Suprise",
+  tagline: "Private Event Studio",
+  description: "Chennai's premier indoor private event studio, crafting unforgettable moments for every occasion. Premium, intimate, and entirely yours.",
+  city: "Chennai",
+  address: "No.3 ,Railway Colony , 1st Street ,Aminjikarai , Nelson Manickam Road ,Chennai, India, 600029",
+  openingHours: "9 AM - 11 PM",
+  phone: "+91 99999 99999",
+  whatsapp: "+91 99999 99999",
+  email: "hello@velvetnights.in",
+  instagram: "@velvetnights",
+  eventsHosted: "1200",
+  fiveStarReviews: "98",
+  addonOptions: "50",
+  yearsOfExcellence: "4",
+};
+
+const editableFields = [
+  "profileName",
+  "profileEmail",
+  "businessName",
+  "tagline",
+  "description",
+  "city",
+  "address",
+  "openingHours",
+  "phone",
+  "whatsapp",
+  "email",
+  "instagram",
+  "eventsHosted",
+  "fiveStarReviews",
+  "addonOptions",
+  "yearsOfExcellence",
+];
+
+const publicSettings = (data = {}) => {
+  const merged = { ...defaultSettings, ...data };
+  const sanitized = {};
+
+  for (const field of editableFields) {
+    sanitized[field] = merged[field] || "";
+  }
+
+  return sanitized;
+};
+
+const getStoredSettings = async () => {
+  const stored = await settings.getById(SETTINGS_ID);
+  return { ...defaultSettings, ...(stored || {}) };
+};
+
+const getBusinessSettings = asyncHandler(async (req, res) => {
+  const stored = await getStoredSettings();
+  res.json({ success: true, data: publicSettings(stored) });
+});
+
+const updateBusinessSettings = asyncHandler(async (req, res) => {
+  console.log("[Settings Update Request]", req.body);
+  console.log("[Firestore Path]", "settings/business");
+
+  const updates = {};
+
+  for (const field of editableFields) {
+    if (req.body[field] !== undefined) {
+      updates[field] = String(req.body[field]).trim();
+    }
+  }
+
+  if (!Object.keys(updates).length) {
+    throw createHttpError(400, `At least one field is required: ${editableFields.join(", ")}`);
+  }
+
+  try {
+    const saved = await settings.set(SETTINGS_ID, updates);
+    console.log("[Firestore Update Success]");
+    res.json({ success: true, data: publicSettings(saved) });
+  } catch (error) {
+    console.error("[Firestore Update Failed]", error);
+    throw error;
+  }
+});
+
+const updateAdminPassword = asyncHandler(async (req, res) => {
+  requireFields(req.body, ["currentPassword", "newPassword"]);
+
+  const stored = await getStoredSettings();
+  const currentPassword = stored.adminPassword || process.env.ADMIN_PASSWORD || "admin123";
+
+  if (req.body.currentPassword !== currentPassword) {
+    throw createHttpError(401, "Current password is incorrect");
+  }
+
+  if (String(req.body.newPassword).length < 6) {
+    throw createHttpError(400, "New password must be at least 6 characters");
+  }
+
+  await settings.set(SETTINGS_ID, {
+    adminPassword: req.body.newPassword,
+  });
+
+  res.json({ success: true, message: "Password updated" });
+});
+
+module.exports = {
+  getBusinessSettings,
+  getStoredSettings,
+  updateAdminPassword,
+  updateBusinessSettings,
+};

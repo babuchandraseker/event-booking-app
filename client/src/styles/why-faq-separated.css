@@ -1,0 +1,645 @@
+/* ============================================================
+   WHY CHOOSE US — Deep Anthracite Cinematic Luxury Section
+   ============================================================ */
+
+.wcu-section {
+  position: relative;
+  padding: clamp(5.5rem, 9vw, 9rem) 0 clamp(2rem, 4vw, 4rem);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 50%, rgba(88, 38, 160, 0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 15% 20%, rgba(72, 28, 140, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 50% at 85% 80%, rgba(55, 18, 110, 0.10) 0%, transparent 55%),
+    linear-gradient(160deg, #0f0b14 0%, #110d18 25%, #130e1c 55%, #0f0b14 100%) !important;
+}
+
+/* Subtle cinematic noise grain */
+.wcu-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top gold shimmer edge */
+.wcu-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.12) 20%,
+    rgba(212, 175, 55, 0.55) 50%,
+    rgba(212, 175, 55, 0.12) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Force light text variables inside the dark section */
+#why-us {
+  --text-primary: rgba(248, 242, 232, 0.95);
+  --text-secondary: rgba(195, 182, 215, 0.75);
+  --text-muted: rgba(170, 155, 200, 0.6);
+}
+
+/* Cinematic spotlight behind center */
+.wcu-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(100, 50, 200, 0.09) 0%,
+    rgba(80, 35, 160, 0.05) 35%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Bottom section divider - removed; seamless transition via background blend */
+.wcu-bottom-divider {
+  display: none;
+}
+
+.wcu-bottom-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.04) 40%,
+    rgba(212, 175, 55, 0.10) 55%,
+    rgba(212, 175, 55, 0.04) 70%,
+    transparent 100%
+  );
+}
+
+.wcu-bottom-divider::after {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.55rem;
+  color: rgba(212, 175, 55, 0.4);
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+  letter-spacing: 0.15em;
+}
+
+.wcu-divider-line {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.2) 25%,
+    rgba(212, 175, 55, 0.42) 50%,
+    rgba(212, 175, 55, 0.2) 75%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.18);
+}
+
+/* Bridge between sections */
+.why-faq-bridge {
+  position: relative;
+  height: clamp(40px, 5vw, 70px);
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    #0f0b14 0%,
+    rgba(15, 11, 20, 0.92) 60%,
+    rgba(14, 8, 28, 0.96) 100%
+  );
+  pointer-events: none;
+}
+
+/* ============================================================
+   FAQ — Cinematic Dark Luxury Section
+   Matches: Reviews (#0f0b14), Footer (#0c0912), Themes (#09040f)
+   Deep anthracite · subtle violet center · warm gold accents
+   ============================================================ */
+
+.faq-luxury-section {
+  position: relative;
+  padding: clamp(5rem, 7vw, 7.5rem) 0 clamp(5.5rem, 9vw, 8.5rem);
+  overflow: hidden;
+  isolation: isolate;
+  /* Base: same deep anthracite-black family as Reviews (#0f0b14) and Footer (#0c0912) */
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(72, 28, 140, 0.10) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 35% at 20% 70%, rgba(55, 18, 100, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 80% 30%, rgba(55, 18, 100, 0.07) 0%, transparent 55%),
+    linear-gradient(180deg, #0e0b15 0%, #0f0b14 30%, #100c16 65%, #0d0a12 100%);
+}
+
+/* Top edge: seamless fade FROM previous section — no hard line */
+.faq-luxury-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: clamp(90px, 12vw, 140px);
+  background: linear-gradient(180deg,
+    rgba(15, 11, 20, 1) 0%,
+    rgba(15, 11, 20, 0.6) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Subtle film-grain texture */
+.faq-luxury-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Thin cinematic gold separator — replaces the harsh white line */
+.faq-top-accent {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.08) 20%,
+    rgba(212, 175, 55, 0.30) 50%,
+    rgba(212, 175, 55, 0.08) 80%,
+    transparent 100%
+  );
+  box-shadow: none;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Cinematic soft spotlight behind heading only */
+.faq-luxury-header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 4rem);
+  position: relative;
+  z-index: 2;
+}
+
+.faq-luxury-header::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 560px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+    rgba(88, 38, 160, 0.14) 0%,
+    rgba(212, 175, 55, 0.04) 48%,
+    transparent 68%
+  );
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: -1;
+  animation: faq-spot-breathe 8s ease-in-out infinite;
+}
+
+@keyframes faq-spot-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1.0; }
+}
+
+/* Eyebrow label */
+.faq-luxury-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.faq-luxury-eyebrow-line {
+  display: inline-block;
+  width: clamp(28px, 3vw, 44px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.45));
+}
+
+.faq-luxury-eyebrow-line.right {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.45), transparent);
+}
+
+.faq-luxury-eyebrow-text {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.55);
+  font-family: var(--font-body, 'DM Sans', system-ui, sans-serif);
+}
+
+/* Heading */
+.faq-luxury-title {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: rgba(248, 242, 232, 0.94);
+  margin: 0 0 16px;
+  text-shadow: 0 2px 40px rgba(72, 28, 140, 0.20);
+}
+
+.faq-luxury-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, #F8E4A8 0%, #D7AC28 48%, #C78D17 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.35));
+}
+
+.faq-luxury-subtitle {
+  font-family: var(--font-body, 'DM Sans', system-ui, sans-serif);
+  font-size: clamp(0.84rem, 1.4vw, 0.97rem);
+  line-height: 1.72;
+  color: rgba(190, 175, 210, 0.65);
+  max-width: 38rem;
+  margin: 0 auto;
+}
+
+/* ── Accordion panel ── */
+.faq-luxury-panel {
+  max-width: 52rem;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Each item */
+.faq-luxury-item {
+  position: relative;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  overflow: hidden;
+  /* Dark glass — same depth language as Reviews cards */
+  background: linear-gradient(
+    145deg,
+    rgba(22, 14, 38, 0.72) 0%,
+    rgba(14, 10, 24, 0.80) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.12);
+  border-top-color: rgba(212, 175, 55, 0.18);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(212, 175, 55, 0.06);
+  transition:
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-top-color 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.faq-luxury-item:last-child { margin-bottom: 0; }
+
+.faq-luxury-item:hover {
+  border-color: rgba(212, 175, 55, 0.26);
+  border-top-color: rgba(212, 175, 55, 0.42);
+  background: linear-gradient(
+    145deg,
+    rgba(28, 18, 48, 0.82) 0%,
+    rgba(18, 12, 30, 0.88) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 55, 0.07),
+    0 8px 36px rgba(0, 0, 0, 0.42),
+    0 0 32px rgba(88, 38, 160, 0.08),
+    inset 0 1px 0 rgba(212, 175, 55, 0.10);
+  transform: translateY(-1px);
+}
+
+.faq-luxury-item.is-open {
+  border-color: rgba(212, 175, 55, 0.32);
+  border-top-color: rgba(212, 175, 55, 0.55);
+  background: linear-gradient(
+    145deg,
+    rgba(30, 20, 52, 0.88) 0%,
+    rgba(18, 12, 32, 0.94) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 55, 0.10),
+    0 12px 48px rgba(0, 0, 0, 0.48),
+    0 0 50px rgba(88, 38, 160, 0.10),
+    inset 0 1px 0 rgba(212, 175, 55, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Trigger button */
+.faq-luxury-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 2.2vw, 24px) clamp(20px, 2.5vw, 28px);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(0.98rem, 1.8vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(242, 236, 222, 0.86);
+  background: transparent !important;
+  border: none;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  transition: color 0.3s ease;
+}
+
+.faq-luxury-trigger:hover {
+  color: rgba(248, 232, 172, 0.96);
+  outline: none;
+}
+
+.faq-luxury-trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.30);
+  border-radius: 14px;
+}
+
+/* Icon circle */
+.faq-luxury-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: rgba(212, 175, 55, 0.75);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1;
+  background: rgba(212, 175, 55, 0.06);
+  transition:
+    border-color 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    color 0.35s ease;
+}
+
+.faq-luxury-trigger:hover .faq-luxury-icon,
+.faq-luxury-item.is-open .faq-luxury-icon {
+  border-color: rgba(212, 175, 55, 0.50);
+  background: rgba(212, 175, 55, 0.12);
+  color: rgba(212, 175, 55, 0.95);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.22);
+}
+
+/* Answer body */
+.faq-luxury-answer-wrap { overflow: hidden; }
+
+.faq-luxury-answer {
+  padding: 0 clamp(20px, 2.5vw, 28px) clamp(18px, 2.2vw, 24px);
+  font-family: var(--font-body, 'DM Sans', system-ui, sans-serif);
+  font-size: clamp(0.88rem, 1.4vw, 0.97rem);
+  line-height: 1.78;
+  color: rgba(188, 174, 208, 0.78);
+  border-top: 1px solid rgba(212, 175, 55, 0.09);
+  padding-top: 14px;
+}
+
+/* Floating edge particles */
+.faq-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 225, 155, 0.85) 0%, rgba(212, 175, 55, 0.4) 55%, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  animation: faq-pt-float 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.faq-particle:nth-child(1) { width: 3px; height: 3px; top: 12%; left: 2.5%;   animation-delay: 0s;   animation-duration: 11s; }
+.faq-particle:nth-child(2) { width: 2px; height: 2px; top: 35%; right: 3%;    animation-delay: 3.2s; animation-duration: 9.5s; }
+.faq-particle:nth-child(3) { width: 3px; height: 3px; bottom: 14%; left: 3%;  animation-delay: 6.5s; animation-duration: 10.5s; }
+.faq-particle:nth-child(4) { width: 2px; height: 2px; bottom: 22%; right: 2%; animation-delay: 1.8s; animation-duration: 13s; }
+@keyframes faq-pt-float {
+  0%, 100% { transform: translateY(0);        opacity: 0; }
+  10%       { opacity: 0.6; }
+  50%       { transform: translateY(-18px);   opacity: 0.45; }
+  90%       { opacity: 0.15; }
+}
+
+/* Bottom vignette edge */
+.faq-luxury-section .faq-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 90% 90% at 50% 50%, transparent 45%, rgba(0,0,0,0.30) 100%),
+    linear-gradient(180deg, transparent 75%, rgba(12,9,18,0.50) 100%);
+}
+@media (max-width: 640px) {
+  .wcu-section { padding: 4rem 0 3rem; }
+  .faq-luxury-section { padding: 4rem 0 4.5rem; }
+  .faq-luxury-item { border-radius: 12px; margin-bottom: 8px; }
+}
+
+.why-faq-united {
+  display: block !important;
+  grid-template-columns: none !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.why-faq-united::before,
+.why-faq-united::after { display: none !important; }
+
+.faq-luxury-section .faq-section {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* ================================================================
+   WHY CHOOSE US — LUXURY ENHANCEMENT LAYER v2 (STRONGER)
+   ================================================================ */
+
+/* Enhanced spotlight — more visible purple-gold radial */
+.wcu-spotlight {
+  width: 900px !important;
+  height: 900px !important;
+  background: radial-gradient(circle,
+    rgba(130, 60, 220, 0.18) 0%,
+    rgba(100, 45, 180, 0.10) 30%,
+    rgba(212, 175, 55, 0.06) 55%,
+    transparent 72%
+  ) !important;
+  filter: blur(80px) !important;
+  animation: wcu-spot-pulse 6s ease-in-out infinite;
+}
+@keyframes wcu-spot-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1.0; }
+}
+
+/* Animated node connection dots */
+.wcu-node-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f8e4a8 0%, #d7ac28 60%, transparent 100%);
+  box-shadow: 0 0 10px 3px rgba(212,175,55,0.7), 0 0 22px 6px rgba(212,175,55,0.35);
+  animation: wcu-dot-pulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+@keyframes wcu-dot-pulse {
+  0%, 100% { transform: scale(1);   box-shadow: 0 0 10px 3px rgba(212,175,55,0.7), 0 0 22px 6px rgba(212,175,55,0.35); opacity: 0.85; }
+  50%       { transform: scale(1.6); box-shadow: 0 0 18px 5px rgba(212,175,55,0.9), 0 0 38px 10px rgba(212,175,55,0.5), 0 0 55px 15px rgba(212,175,55,0.2); opacity: 1; }
+}
+
+/* WCU background floating gold particles */
+.wcu-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 225, 155, 0.95) 0%, rgba(212,175,55,0.5) 55%, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  animation: wcu-pt-float 11s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.wcu-particle:nth-child(1) { width: 4px; height: 4px; top: 12%; left: 4%;    animation-delay: 0s;   animation-duration: 10s; }
+.wcu-particle:nth-child(2) { width: 3px; height: 3px; top: 25%; right: 6%;   animation-delay: 2s;   animation-duration: 12s; }
+.wcu-particle:nth-child(3) { width: 4px; height: 4px; bottom: 22%; left: 8%; animation-delay: 4s;   animation-duration: 9s; }
+.wcu-particle:nth-child(4) { width: 3px; height: 3px; bottom: 15%; right: 5%; animation-delay: 1.5s; animation-duration: 11s; }
+.wcu-particle:nth-child(5) { width: 4px; height: 4px; top: 60%; left: 3%;    animation-delay: 3.5s; animation-duration: 10.5s; }
+.wcu-particle:nth-child(6) { width: 3px; height: 3px; top: 45%; right: 3%;   animation-delay: 5.5s; animation-duration: 13s; }
+@keyframes wcu-pt-float {
+  0%, 100% { transform: translateY(0) scale(1);      opacity: 0; }
+  12%       { opacity: 0.85; }
+  50%       { transform: translateY(-24px) scale(1.4); opacity: 0.7; }
+  88%       { opacity: 0.3; }
+}
+
+/* ================================================================
+   FAQ — LUXURY ENHANCEMENT LAYER v2 (STRONGER)
+   ================================================================ */
+
+/* Spotlight glow behind FAQ heading */
+.faq-luxury-header {
+  position: relative;
+}
+.faq-luxury-header::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+    rgba(140, 60, 200, 0.20) 0%,
+    rgba(212, 175, 55, 0.08) 42%,
+    transparent 68%
+  );
+  filter: blur(55px);
+  pointer-events: none;
+  z-index: -1;
+  animation: faq-hd-glow 7s ease-in-out infinite;
+}
+@keyframes faq-hd-glow {
+  0%, 100% { opacity: 0.65; }
+  50%       { opacity: 1.0; }
+}
+
+/* Gold divider lines between items */
+.faq-luxury-item + .faq-luxury-item::before {
+  content: '';
+  display: block;
+  height: 1px;
+  margin: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,0.25) 25%,
+    rgba(212,175,55,0.45) 50%,
+    rgba(212,175,55,0.25) 75%,
+    transparent 100%
+  );
+}
+
+/* Enhanced accordion hover glow */
+.faq-luxury-item:hover {
+  box-shadow:
+    0 0 0 1px rgba(212,175,55,0.18),
+    0 8px 40px rgba(0,0,0,0.45),
+    0 0 60px rgba(140,60,200,0.14),
+    inset 0 1px 0 rgba(212,175,55,0.10) !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+
+/* Open item — stronger gold glow */
+.faq-luxury-item.is-open {
+  box-shadow:
+    0 0 0 1px rgba(212,175,55,0.25),
+    0 12px 56px rgba(0,0,0,0.5),
+    0 0 80px rgba(140,60,200,0.18),
+    inset 0 1px 0 rgba(212,175,55,0.14) !important;
+}
+
+/* Edge particles */
+.faq-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248,225,155,0.9) 0%, rgba(212,175,55,0.5) 55%, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  animation: faq-pt-float 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.faq-particle:nth-child(1) { width: 4px; height: 4px; top: 10%; left: 2%;    animation-delay: 0s;   animation-duration: 11s; }
+.faq-particle:nth-child(2) { width: 3px; height: 3px; top: 30%; right: 3%;   animation-delay: 3s;   animation-duration: 9.5s; }
+.faq-particle:nth-child(3) { width: 4px; height: 4px; bottom: 12%; left: 4%; animation-delay: 6s;   animation-duration: 10s; }
+.faq-particle:nth-child(4) { width: 3px; height: 3px; bottom: 20%; right: 2%; animation-delay: 2s;  animation-duration: 12s; }
+@keyframes faq-pt-float {
+  0%, 100% { transform: translateY(0);       opacity: 0; }
+  12%       { opacity: 0.75; }
+  50%       { transform: translateY(-20px);  opacity: 0.55; }
+  88%       { opacity: 0.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wcu-particle, .wcu-node-dot, .faq-particle,
+  .wcu-spotlight, .faq-luxury-header::before { animation: none !important; }
+  .wcu-particle, .faq-particle { opacity: 0 !important; }
+}

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /control-panel
+Disallow: /control-panel-7x9
+Disallow: /control-panel-7x9/
+
+Sitemap: https://www.awonderone.com/sitemap.xml

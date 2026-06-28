@@ -1,0 +1,1087 @@
+/**
+ * Theme Experience Section — Cinematic Dark Violet + Gold Luxury
+ * Deep violet, dark plum, matte black-purple, warm gold
+ * Netflix-level premium cinematic feel
+ */
+
+/* ── Ornamental label ── */
+.themes-section--luxury .themes-label-ornament {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  font-style: italic;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 1rem !important;
+  font-weight: 400;
+  letter-spacing: 0.04em !important;
+  color: var(--te-gold-soft) !important;
+  opacity: 1 !important;
+}
+
+.themes-label-line {
+  display: inline-block;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 137, 26, 0.7), transparent);
+  flex-shrink: 0;
+}
+
+.themes-section--luxury .themes-label-ornament .themes-label-line:first-child {
+  background: linear-gradient(to right, transparent, rgba(201, 137, 26, 0.7));
+}
+
+.themes-section--luxury .themes-label-ornament .themes-label-line:last-child {
+  background: linear-gradient(to left, transparent, rgba(201, 137, 26, 0.7));
+}
+
+/* ── CSS Variables ── */
+.themes-section.themes-section--luxury {
+  --te-base:        #09040f;
+  --te-deep:        #110720;
+  --te-royal:       #1c0933;
+  --te-plum:        #2a0f47;
+  --te-violet:      #3b1566;
+  --te-purple-mid:  #5a2090;
+  --te-gold:        #c9891a;
+  --te-gold-soft:   #d9a832;
+  --te-gold-light:  #f0cc68;
+  --te-champagne:   #f8e9c0;
+  --te-text-main:   rgba(255, 255, 255, 0.93);
+  --te-text-sub:    rgba(230, 210, 255, 0.72);
+  --te-card-bg:     rgba(28, 9, 51, 0.82);
+  --te-card-border: rgba(201, 137, 26, 0.35);
+  --te-glow-gold:   rgba(217, 168, 50, 0.22);
+  --te-glow-purple: rgba(90, 32, 144, 0.45);
+  --te-shadow:      rgba(0, 0, 0, 0.7);
+
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5rem, 9vw, 7rem) 0 clamp(5.5rem, 10vw, 8rem);
+  background: var(--te-base) !important;
+  isolation: isolate;
+}
+
+/* Cinematic deep background gradient */
+.themes-section--luxury::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 0%,   rgba(58, 18, 100, 0.55) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 15% 60%,  rgba(42, 15, 71, 0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 55%,  rgba(42, 15, 71, 0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 105%, rgba(17,  7, 32, 0.85) 0%, transparent 70%),
+    linear-gradient(180deg, #09040f 0%, #110720 40%, #1c0933 75%, #09040f 100%);
+}
+
+/* Subtle vignette edges */
+.themes-section--luxury::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%);
+}
+
+.themes-section--luxury > .container,
+.themes-section--luxury > .themes-cine-stage,
+.themes-section--luxury > .themes-section__particles {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Floating Particles ── */
+.themes-section__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.themes-section__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 233, 192, 0.9) 0%, rgba(201, 137, 26, 0.4) 50%, transparent 70%);
+  opacity: 0;
+  animation: te-particle-float 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.themes-section__particle:nth-child(1) { width: 3px;  height: 3px;  top: 10%; left: 7%;   animation-delay: 0s;    animation-duration: 8s; }
+.themes-section__particle:nth-child(2) { width: 2px;  height: 2px;  top: 18%; right: 12%; animation-delay: 1.5s;  animation-duration: 10s; }
+.themes-section__particle:nth-child(3) { width: 4px;  height: 4px;  top: 55%; left: 16%;  animation-delay: 2.8s;  animation-duration: 9s; }
+.themes-section__particle:nth-child(4) { width: 2px;  height: 2px;  bottom: 25%; right: 20%; animation-delay: 0.6s;  animation-duration: 11s; }
+.themes-section__particle:nth-child(5) { width: 3px;  height: 3px;  bottom: 15%; left: 44%; animation-delay: 3.5s;  animation-duration: 8.5s; }
+.themes-section__particle:nth-child(6) { width: 2px;  height: 2px;  top: 35%;  right: 36%; animation-delay: 2.1s;  animation-duration: 12s; }
+
+@keyframes te-particle-float {
+  0%, 100% { transform: translateY(0)   scale(1);    opacity: 0;    }
+  15%       { opacity: 0.7; }
+  50%       { transform: translateY(-18px) scale(1.2); opacity: 0.55; }
+  85%       { opacity: 0.3; }
+}
+
+/* ── Header ── */
+.themes-section--luxury .themes-header {
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  text-align: center;
+}
+
+.themes-section--luxury .section-label {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--te-gold-soft) !important;
+  letter-spacing: 0.32em;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  opacity: 0.85;
+}
+
+.themes-section--luxury .section-label::before {
+  display: none !important;
+}
+
+/* Decorative flanking lines on section label */
+.themes-section--luxury .section-label::after {
+  display: none;
+}
+
+.themes-section--luxury .themes-heading {
+  margin: 0 0 1.15rem;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: clamp(2.4rem, 5.8vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.themes-section--luxury .themes-heading-prefix {
+  display: block;
+  color: var(--te-text-main);
+  text-shadow: 0 2px 32px rgba(90, 32, 144, 0.6);
+}
+
+.themes-section--luxury .themes-heading-accent {
+  display: block;
+  font-style: italic;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f8e9c0 0%, #d9a832 30%, #f0cc68 55%, #c9891a 78%, #f8e9c0 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 18px rgba(201, 137, 26, 0.45));
+  animation: te-gold-shimmer 5s ease-in-out infinite;
+}
+
+@keyframes te-gold-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.themes-section--luxury .section-subtitle {
+  max-width: 38rem;
+  margin: 0 auto !important;
+  text-align: center !important;
+  font-size: clamp(0.9rem, 1.75vw, 1.03rem) !important;
+  line-height: 1.8 !important;
+  color: var(--te-text-sub) !important;
+  letter-spacing: 0.01em;
+}
+
+.themes-section--luxury .themes-booking-ctx {
+  margin-top: 1.4rem;
+  border: 1px solid rgba(201, 137, 26, 0.3);
+  background: rgba(28, 9, 51, 0.65);
+  color: var(--te-champagne);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 50px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 0 24px rgba(201, 137, 26, 0.1), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ── Carousel Stage ── */
+.themes-section--luxury .themes-cine-stage {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  height: clamp(590px, 70vh, 680px);
+  position: relative;
+  padding-top: clamp(18px, 3vw, 34px);
+  box-sizing: border-box;
+}
+
+/* Fade-out side edges */
+.themes-section--luxury .themes-cine-stage::before,
+.themes-section--luxury .themes-cine-stage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(140px, 15vw);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.themes-section--luxury .themes-cine-stage::before {
+  left: 0;
+  background: linear-gradient(to right, var(--te-base) 0%, rgba(9, 4, 15, 0.7) 30%, transparent 100%);
+}
+
+.themes-section--luxury .themes-cine-stage::after {
+  right: 0;
+  background: linear-gradient(to left, var(--te-base) 0%, rgba(9, 4, 15, 0.7) 30%, transparent 100%);
+}
+
+/* ── Carousel Track ── */
+.themes-section--luxury .themes-cine-track {
+  position: relative;
+  width: 100%;
+  height: calc(100% - clamp(18px, 3vw, 34px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Card Wrapper positions ── */
+.themes-section--luxury .themes-cine-card {
+  position: absolute;
+  width: clamp(300px, 38vw, 460px);
+  margin-top: -238px;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+}
+
+/* ── Active card glow ── */
+.themes-section--luxury .themes-cine-card--active .theme-card {
+  border-color: rgba(201, 137, 26, 0.6) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 137, 26, 0.18),
+    0 32px 72px rgba(0, 0, 0, 0.65),
+    0 0 50px rgba(201, 137, 26, 0.18),
+    0 0 90px rgba(90, 32, 144, 0.2) !important;
+}
+
+.themes-section--luxury .themes-cine-card--left .theme-card,
+.themes-section--luxury .themes-cine-card--right .theme-card {
+  filter: brightness(0.7) saturate(0.75);
+}
+
+/* ── Theme Card Base ── */
+.themes-section--luxury .theme-card {
+  background: linear-gradient(
+    160deg,
+    rgba(38, 12, 68, 0.96)  0%,
+    rgba(22,  8, 40, 0.98)  50%,
+    rgba(28, 10, 50, 0.97) 100%
+  ) !important;
+  border: 1px solid var(--te-card-border) !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  overflow: hidden;
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.55s ease,
+    border-color 0.45s ease !important;
+}
+
+.themes-section--luxury .theme-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(201, 137, 26, 0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 137, 26, 0.12),
+    0 28px 68px rgba(0, 0, 0, 0.65),
+    0 0 40px rgba(201, 137, 26, 0.14) !important;
+}
+
+/* ── Card Media ── */
+.themes-section--luxury .theme-card-media {
+  height: clamp(195px, 26vw, 255px);
+  position: relative;
+  overflow: hidden;
+}
+
+.themes-section--luxury .theme-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.themes-section--luxury .theme-card:hover .theme-card-img {
+  transform: scale(1.07);
+}
+
+.themes-section--luxury .theme-card-media-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(9, 4, 15, 0.75)  0%,
+    rgba(28, 9, 51, 0.25) 40%,
+    transparent           72%
+  ) !important;
+}
+
+/* ── Card Tag Badge ── */
+.themes-section--luxury .theme-card-tag {
+  background: rgba(9, 4, 15, 0.72) !important;
+  border: 1px solid rgba(201, 137, 26, 0.45) !important;
+  color: var(--te-gold-light) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.75rem;
+  border-radius: 50px;
+  box-shadow: 0 0 16px rgba(201, 137, 26, 0.15);
+}
+
+/* ── Card Body ── */
+.themes-section--luxury .theme-card-body {
+  padding: 1.35rem 1.45rem 1.55rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+}
+
+.themes-section--luxury .theme-card-title {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: clamp(1.5rem, 2.6vw, 1.85rem);
+  font-weight: 600;
+  font-style: italic;
+  background: linear-gradient(
+    135deg,
+    #f5e6a3 0%,
+    #d4af37 30%,
+    #ffe680 55%,
+    #c8a020 80%,
+    #f0d060 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  filter: drop-shadow(0 1px 6px rgba(200, 160, 30, 0.35));
+}
+
+.themes-section--luxury .theme-card-desc {
+  font-size: 0.83rem;
+  line-height: 1.7;
+  color: rgba(210, 185, 245, 0.72) !important;
+  margin-bottom: 1rem;
+}
+
+.themes-section--luxury .theme-card-price {
+  display: none;
+}
+
+.themes-section--luxury .theme-card-footer {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+/* ── Feature Chips ── */
+.themes-section--luxury .feature-chip {
+  background: rgba(201, 137, 26, 0.1);
+  border: 1px solid rgba(201, 137, 26, 0.28);
+  color: rgba(240, 204, 104, 0.85);
+  font-size: 0.61rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+}
+
+/* ── Explore Button ── */
+.themes-section--luxury .theme-card__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--te-gold-soft);
+  cursor: pointer;
+  transition: color 0.3s ease, gap 0.3s ease, letter-spacing 0.3s ease;
+}
+
+.themes-section--luxury .theme-card__explore::after {
+  content: '→';
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+.themes-section--luxury .theme-card__explore:hover {
+  color: var(--te-gold-light);
+  letter-spacing: 0.18em;
+}
+
+.themes-section--luxury .theme-card__explore:hover::after {
+  transform: translateX(5px);
+}
+
+/* ── Glow border ── */
+.themes-section--luxury .theme-card-glow-border {
+  opacity: 0.25;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(201,137,26,0.4), transparent 50%, rgba(90,32,144,0.3));
+}
+
+.themes-section--luxury .themes-cine-card--active .theme-card-glow-border {
+  opacity: 0.55;
+}
+
+/* ── Arrows ── */
+.themes-section--luxury .themes-cine-arrow {
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: 1.6rem;
+  color: var(--te-champagne) !important;
+  background: rgba(28, 9, 51, 0.8) !important;
+  border: 1px solid rgba(201, 137, 26, 0.4) !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(201, 137, 26, 0.1) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50%;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    background 0.35s ease;
+  z-index: 5;
+}
+
+.themes-section--luxury .themes-cine-arrow:hover {
+  transform: translateY(-50%) scale(1.1) !important;
+  background: rgba(42, 15, 71, 0.95) !important;
+  border-color: rgba(201, 137, 26, 0.7) !important;
+  color: var(--te-gold-light) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.55),
+    0 0 24px rgba(201, 137, 26, 0.2) !important;
+}
+
+/* ── Dots ── */
+.themes-section--luxury .themes-cine-dots {
+  bottom: 1.4rem;
+  gap: 0.55rem;
+}
+
+.themes-section--luxury .themes-cine-dot {
+  width: 6px;
+  height: 6px;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 50%;
+  background: rgba(210, 185, 245, 0.25);
+  border: 1px solid rgba(201, 137, 26, 0.2);
+  transition: all 0.4s ease;
+}
+
+.themes-section--luxury .themes-cine-dot.active {
+  width: 28px !important;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #c9891a, #f0cc68) !important;
+  box-shadow: 0 0 12px rgba(201, 137, 26, 0.5), 0 0 24px rgba(201, 137, 26, 0.25);
+  border-color: transparent !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE — Full premium rewrite (320px – 768px)
+   FIX: Card clipping, spacing, premium detailing
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .themes-section--luxury {
+    padding: 3rem 0 4.5rem;
+    /* FIX: Override the desktop overflow:hidden that clips scaled cards */
+    overflow: visible !important;
+    overflow-x: clip !important;
+    /* Contain the background within the section */
+    isolation: isolate;
+  }
+
+  /* Header breathing room */
+  .themes-section--luxury .themes-header {
+    padding: 0 1.25rem;
+    margin-bottom: 1.85rem;
+  }
+
+  .themes-section--luxury .themes-heading {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
+
+  .themes-section--luxury .section-subtitle {
+    font-size: 0.875rem !important;
+    max-width: 26rem;
+    padding: 0 0.25rem;
+  }
+
+  /* ── Stage: FIX card top clipping ── */
+  .themes-section--luxury .themes-cine-stage {
+    /* FIX: Extra padding-top so scaled card never clips at top */
+    padding-top: 2.5rem;
+    /* Auto height accommodates card naturally */
+    height: auto;
+    min-height: clamp(440px, 82vw, 560px);
+    margin-top: 0.5rem;
+    /* FIX: Allow card glows to extend beyond stage bounds */
+    overflow: visible;
+  }
+
+  /* Narrow the fade-out edges on mobile */
+  .themes-section--luxury .themes-cine-stage::before,
+  .themes-section--luxury .themes-cine-stage::after {
+    width: 44px;
+    /* FIX: Clip the side fades but not the top */
+    top: 0;
+    bottom: 0;
+  }
+
+  /* ── Track: center properly, allow overflow vertically ── */
+  .themes-section--luxury .themes-cine-track {
+    align-items: center;
+    /* FIX: Enough height for scaled active card + glow */
+    min-height: clamp(420px, 75vw, 520px);
+    padding-top: 0.5rem;
+    padding-bottom: 2.5rem;
+    overflow: visible;
+  }
+
+  /* ── Cards: correct widths ── */
+  .themes-section--luxury .themes-cine-card {
+    width: clamp(262px, 82vw, 330px);
+    /* FIX: transform-origin center — no top-clip on scale-up */
+    transform-origin: center center;
+  }
+
+  /* FIX: Active card — enough clearance above for the scale glow */
+  .themes-section--luxury .themes-cine-card--active {
+    /* Push the pseudo-glow inward on mobile so it doesn't clip */
+    z-index: 3;
+  }
+
+  .themes-section--luxury .themes-cine-card--active::before {
+    inset: -14px;
+    filter: blur(14px);
+    border-radius: 26px;
+  }
+
+  /* ── Card media — proper height on mobile ── */
+  .themes-section--luxury .theme-card-media {
+    height: clamp(160px, 42vw, 210px);
+  }
+
+  /* ── Gold corner accents on mobile cards ── */
+  .themes-section--luxury .theme-card {
+    border-radius: 18px !important;
+  }
+
+  /* Top-right gold corner accent */
+  .themes-section--luxury .theme-card-glow-border {
+    opacity: 0.35;
+    border-radius: 18px;
+  }
+
+  .themes-section--luxury .themes-cine-card--active .theme-card-glow-border {
+    opacity: 0.65;
+  }
+
+  /* ── Arrows — positioned within safe area ── */
+  .themes-section--luxury .themes-cine-arrow {
+    width: 2.35rem;
+    height: 2.35rem;
+    font-size: 1.35rem;
+    /* Keep arrows above track center */
+    top: calc(50% + 1.25rem);
+  }
+
+  /* ── Dots — below track with proper spacing ── */
+  .themes-section--luxury .themes-cine-dots {
+    bottom: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  /* ── Spotlight — scale down for mobile ── */
+  .themes-cine-spotlight {
+    width: 320px;
+    height: 280px;
+    filter: blur(40px);
+  }
+
+  /* ── Floral accents — smaller on mobile ── */
+  .themes-section__floral {
+    width: clamp(68px, 14vw, 110px);
+    opacity: 0.18;
+  }
+
+  /* ── Typography improvements ── */
+  .themes-section--luxury .theme-card-title {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .themes-section--luxury .theme-card-desc {
+    font-size: 0.8rem;
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+    /* Clamp to 3 lines max */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .themes-section--luxury .theme-card-body {
+    padding: 1.1rem 1.2rem 1.3rem;
+  }
+
+  /* ── Feature chips — slightly smaller ── */
+  .themes-section--luxury .feature-chip {
+    font-size: 0.57rem;
+    padding: 0.18rem 0.52rem;
+  }
+
+  /* ── Explore button ── */
+  .themes-section--luxury .theme-card__explore {
+    font-size: 0.72rem;
+  }
+
+  /* ── Card tag badge ── */
+  .themes-section--luxury .theme-card-tag {
+    font-size: 0.58rem;
+    padding: 0.25rem 0.65rem;
+  }
+}
+
+/* ── Very small phones (320px – 480px) ── */
+@media (max-width: 480px) {
+  .themes-section--luxury {
+    padding: 2.75rem 0 4rem;
+  }
+
+  .themes-section--luxury .themes-cine-stage {
+    padding-top: 2.75rem;
+    min-height: clamp(400px, 90vw, 480px);
+  }
+
+  .themes-section--luxury .themes-cine-track {
+    min-height: clamp(380px, 85vw, 460px);
+  }
+
+  .themes-section--luxury .themes-cine-card {
+    width: clamp(248px, 88vw, 300px);
+  }
+
+  .themes-section--luxury .theme-card-media {
+    height: clamp(148px, 38vw, 182px);
+  }
+
+  .themes-section--luxury .themes-heading {
+    font-size: clamp(1.8rem, 8.5vw, 2.4rem);
+  }
+
+  /* Tighter card body on very small screens */
+  .themes-section--luxury .theme-card-body {
+    padding: 0.95rem 1rem 1.1rem;
+  }
+
+  .themes-section--luxury .theme-card-title {
+    font-size: clamp(1.15rem, 5.2vw, 1.38rem);
+    margin-bottom: 0.35rem;
+  }
+
+  /* Floral accent — very small, barely visible */
+  .themes-section__floral {
+    width: clamp(55px, 12vw, 85px);
+    opacity: 0.14;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .themes-section__particle {
+    animation: none;
+    opacity: 0.3;
+  }
+  .themes-heading-accent {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   THEMES SECTION — LUXURY ENHANCEMENT LAYER v2 (STRONGER)
+   ================================================================ */
+
+/* === VIGNETTE — darkened cinematic frame edges === */
+.themes-section--luxury .themes-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 15%, transparent 82%, rgba(0,0,0,0.35) 100%);
+}
+
+/* === FLORAL CORNER ACCENTS === */
+.themes-section__floral {
+  position: absolute;
+  width: clamp(100px, 12vw, 180px);
+  height: auto;
+  pointer-events: none;
+  opacity: 0.25;
+  z-index: 2;
+}
+.themes-section__floral--tl { top: 0; left: 0; }
+.themes-section__floral--tr { top: 0; right: 0; transform: scaleX(-1); }
+
+/* === CENTER AMBIENT SPOTLIGHT behind active card === */
+.themes-cine-spotlight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+    rgba(140, 70, 220, 0.22) 0%,
+    rgba(201, 137, 26, 0.10) 40%,
+    transparent 68%
+  );
+  filter: blur(55px);
+  pointer-events: none;
+  z-index: 1;
+  animation: te-spot-breathe 5s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+@keyframes te-spot-breathe {
+  0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 1;    transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* === PARTICLES — more visible, higher opacity, larger === */
+/* Overwrite old sizes with stronger values */
+.themes-section__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 225, 160, 1) 0%, rgba(201, 137, 26, 0.6) 50%, transparent 75%);
+  opacity: 0;
+  animation: te-particle-float2 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.themes-section__particle:nth-child(1)  { width: 4px;  height: 4px;  top: 10%; left: 7%;    animation-delay: 0s;    animation-duration: 8s; }
+.themes-section__particle:nth-child(2)  { width: 3px;  height: 3px;  top: 18%; right: 12%;  animation-delay: 1.5s;  animation-duration: 10s; }
+.themes-section__particle:nth-child(3)  { width: 5px;  height: 5px;  top: 55%; left: 16%;   animation-delay: 2.8s;  animation-duration: 9s; }
+.themes-section__particle:nth-child(4)  { width: 3px;  height: 3px;  bottom: 25%; right: 20%; animation-delay: 0.6s; animation-duration: 11s; }
+.themes-section__particle:nth-child(5)  { width: 4px;  height: 4px;  bottom: 15%; left: 44%; animation-delay: 3.5s; animation-duration: 8.5s; }
+.themes-section__particle:nth-child(6)  { width: 3px;  height: 3px;  top: 35%; right: 36%;  animation-delay: 2.1s; animation-duration: 12s; }
+.themes-section__particle:nth-child(7)  { width: 3px;  height: 3px;  top: 72%; left: 8%;    animation-delay: 1.2s; animation-duration: 10.5s; }
+.themes-section__particle:nth-child(8)  { width: 4px;  height: 4px;  top: 8%;  right: 5%;   animation-delay: 4.1s; animation-duration: 8s; }
+.themes-section__particle:nth-child(9)  { width: 3px;  height: 3px;  bottom: 8%; left: 22%; animation-delay: 0.9s; animation-duration: 11s; }
+.themes-section__particle:nth-child(10) { width: 4px;  height: 4px;  top: 42%; right: 8%;   animation-delay: 3.0s; animation-duration: 9.5s; }
+.themes-section__particle:nth-child(11) { width: 3px;  height: 3px;  top: 85%; right: 42%;  animation-delay: 5.2s; animation-duration: 8.5s; }
+.themes-section__particle:nth-child(12) { width: 5px;  height: 5px;  top: 28%; left: 48%;   animation-delay: 2.4s; animation-duration: 10s; }
+
+@keyframes te-particle-float2 {
+  0%, 100% { transform: translateY(0) scale(1);      opacity: 0; }
+  12%       { opacity: 0.9; }
+  50%       { transform: translateY(-22px) scale(1.3); opacity: 0.75; }
+  88%       { opacity: 0.4; }
+}
+
+/* === ACTIVE CARD — gradient ambient glow behind it === */
+.themes-section--luxury .themes-cine-card--active {
+  filter: none !important;
+}
+.themes-section--luxury .themes-cine-card--active::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 30px;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%,
+    rgba(201, 137, 26, 0.18) 0%,
+    rgba(120, 55, 200, 0.12) 45%,
+    transparent 72%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* === CARD HOVER — border shimmer sweep === */
+.themes-section--luxury .theme-card {
+  position: relative;
+  overflow: hidden;
+}
+.themes-section--luxury .theme-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,0.04) 40%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+  transition: left 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.themes-section--luxury .theme-card:hover::after {
+  left: 160%;
+}
+
+/* === DOT active glow enhancement === */
+.themes-section--luxury .themes-cine-dot.active {
+  box-shadow: 0 0 16px rgba(201, 137, 26, 0.8), 0 0 32px rgba(201, 137, 26, 0.4) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themes-cine-spotlight, .themes-section__particle { animation: none !important; opacity: 0 !important; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE MICRO-DETAIL ENHANCEMENTS (luxury layer)
+   ══════════════════════════════════════════════════════════ */
+
+/* Mobile: softer particles with slightly higher opacity for small screens */
+@media (max-width: 768px) {
+  .themes-section__particle:nth-child(odd) {
+    animation-duration: 7s;
+  }
+  .themes-section__particle:nth-child(even) {
+    animation-duration: 9.5s;
+  }
+
+  /* Slight depth shadow on inactive cards for better perception */
+  .themes-section--luxury .themes-cine-card--left .theme-card,
+  .themes-section--luxury .themes-cine-card--right .theme-card {
+    filter: brightness(0.62) saturate(0.68);
+  }
+
+  /* Active card — stronger gold glow on mobile */
+  .themes-section--luxury .themes-cine-card--active .theme-card {
+    box-shadow:
+      0 0 0 1px rgba(201, 137, 26, 0.22),
+      0 28px 60px rgba(0, 0, 0, 0.7),
+      0 0 44px rgba(201, 137, 26, 0.2),
+      0 0 80px rgba(90, 32, 144, 0.18) !important;
+  }
+
+  /* Mobile: shimmer sweep still runs on tap */
+  .themes-section--luxury .theme-card:active::after {
+    left: 160%;
+  }
+
+  /* Dot bar wider on mobile — easier to tap */
+  .themes-section--luxury .themes-cine-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .themes-section--luxury .themes-cine-dot.active {
+    width: 32px !important;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  /* Booking context chip — compact */
+  .themes-section--luxury .themes-booking-ctx {
+    font-size: 0.76rem;
+    padding: 0.5rem 1.1rem;
+    margin-top: 1.1rem;
+  }
+
+  /* Ornamental label lines — shorter on mobile */
+  .themes-label-line {
+    width: 36px;
+  }
+}
+
+/* ================================================================
+   THEME SECTION — MOBILE CARD OVERLAP FIX v2 (320px–768px)
+   Side cards pushed out more, proper clipping, no overlap
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+  /* Ensure stage clips side cards cleanly — no horizontal scroll */
+  .themes-section--luxury {
+    overflow: hidden !important;
+  }
+
+  .themes-section--luxury .themes-cine-stage {
+    margin-top: 0.75rem !important;
+    height: 560px !important;
+    overflow: hidden !important;
+    /* Ensure side cards clip at stage edges */
+    contain: layout style;
+  }
+
+  /* Side cards: reduce opacity more on mobile so they don't visually fight */
+  .themes-section--luxury .themes-cine-card--left .theme-card,
+  .themes-section--luxury .themes-cine-card--right .theme-card {
+    filter: brightness(0.55) saturate(0.6) !important;
+    /* Prevent any shadow bleeding into center */
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.45),
+      0 2px 8px rgba(0,0,0,0.3) !important;
+  }
+
+  /* Active card: do not scale UP on mobile — this is what causes overlap */
+  .themes-section--luxury .themes-cine-card--active {
+    /* CSS scale override — framer-motion uses inline style which wins,
+       but limiting the visual appearance via the card itself */
+  }
+
+  /* Card: ensure rounded corners + no overflow bleed */
+  .themes-section--luxury .theme-card {
+    overflow: hidden !important;
+    border-radius: 16px !important;
+  }
+
+  /* Make left/right cards not interactive on mobile touch to prevent accidental taps */
+  .themes-section--luxury .themes-cine-card--left,
+  .themes-section--luxury .themes-cine-card--right {
+    /* Still clickable but pointer events are fine — just ensure no text selection */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Arrow buttons: clear positioning so they don't overlap cards */
+  .themes-section--luxury .themes-cine-arrow {
+    /* Push arrows below the card center area */
+    top: auto !important;
+    bottom: 1.5rem !important;
+    transform: translateY(0) !important;
+    z-index: 10;
+  }
+
+  /* Dots: ensure visible below cards */
+  .themes-section--luxury .themes-cine-dots {
+    bottom: 0.4rem !important;
+    z-index: 10;
+  }
+}
+
+/* Very small phones: even tighter */
+@media (max-width: 480px) {
+  .themes-section--luxury {
+    padding-top: 4.75rem !important;
+  }
+
+  .themes-section--luxury .themes-header {
+    margin-bottom: 0.65rem !important;
+  }
+
+  .themes-section--luxury .themes-heading {
+    font-size: clamp(2rem, 9vw, 2.55rem) !important;
+    line-height: 1.04 !important;
+    margin-bottom: 0.85rem !important;
+  }
+
+  .themes-section--luxury .section-subtitle {
+    max-width: 18rem !important;
+    font-size: 0.86rem !important;
+    line-height: 1.62 !important;
+  }
+
+  /* Card stage: narrower min-height to prevent excess vertical space */
+  .themes-section--luxury .themes-cine-stage {
+    height: 500px !important;
+    min-height: 500px !important;
+    margin-top: 0 !important;
+    padding-top: 0.75rem !important;
+  }
+
+  .themes-section--luxury .themes-cine-track {
+    height: 430px !important;
+    min-height: 430px !important;
+    padding-bottom: 2.25rem !important;
+  }
+
+  /* Card: tightest sizing */
+  .themes-section--luxury .themes-cine-card {
+    width: clamp(255px, 82vw, 300px) !important;
+    margin-top: -198px !important;
+  }
+
+  .themes-section--luxury .theme-card-media {
+    height: 135px !important;
+  }
+
+  .themes-section--luxury .theme-card-body {
+    padding: 18px 20px 20px !important;
+  }
+
+  .themes-section--luxury .theme-card-title {
+    font-size: 1.5rem !important;
+    line-height: 1.14 !important;
+    margin-bottom: 0.45rem !important;
+  }
+
+  .themes-section--luxury .theme-card-desc {
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.85rem !important;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .themes-section--luxury .theme-card-features {
+    gap: 0.35rem !important;
+  }
+
+  .themes-section--luxury .feature-chip {
+    font-size: 0.62rem !important;
+    padding: 0.28rem 0.5rem !important;
+  }
+
+  .themes-section--luxury .theme-card__explore {
+    margin-top: 0.95rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* Arrow buttons on very small screens */
+  .themes-section--luxury .themes-cine-arrow {
+    width: 2rem !important;
+    height: 2rem !important;
+    font-size: 1.15rem !important;
+  }
+}
